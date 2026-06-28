@@ -1,0 +1,7 @@
+"distribution","discovery_supported_local_candidate","near_gate_candidate","negative_control_success","transfer_specialist"
+"exgaussian",0,3,3,0
+"exwald",3,0,0,0
+"invgauss",4,0,0,0
+"lognormal",2,0,0,0
+"normal",1,2,3,0
+"weibull",0,2,0,2

@@ -1,0 +1,3 @@
+"table","part","part_file","first_row","last_row","rows"
+"external_oracle_audit.csv",1,"external_oracle_audit_part001.csv",1,5000,5000
+"external_oracle_audit.csv",2,"external_oracle_audit_part002.csv",5001,5900,900

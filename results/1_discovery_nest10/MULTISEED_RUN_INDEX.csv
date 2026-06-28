@@ -1,0 +1,3 @@
+run_seed,seed,out_dir,architecture
+101,101,/srv/cluster/ga_project/results/GA_REGIME_FIRST_MULTI_SEED_20260525_190322/GA_REGIME_FIRST_20260525_190322,regime_first_multiseed_child
+202,202,/srv/cluster/ga_project/results/GA_REGIME_FIRST_MULTI_SEED_20260525_190322/GA_REGIME_FIRST_20260526_164654,regime_first_multiseed_child

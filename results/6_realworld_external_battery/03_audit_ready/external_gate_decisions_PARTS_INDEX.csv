@@ -1,0 +1,3 @@
+"table","part","part_file","first_row","last_row","rows"
+"external_gate_decisions.csv",1,"external_gate_decisions_part001.csv",1,5000,5000
+"external_gate_decisions.csv",2,"external_gate_decisions_part002.csv",5001,5900,900

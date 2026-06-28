@@ -1,0 +1,2 @@
+architecture,seeds,n_seed_runs,hpf1_scenario_frac,hpf2_scenario_frac,specialist_final_pop_size,specialist_final_gens_frac,generations_per_fold,topk_heldout_finalists,note
+regime_first_multiseed_master,"101,202",2,0.6,0.8,100,1,20,5,Each seed is a complete independent run. Master CSVs bind child outputs and add seed stability summaries.

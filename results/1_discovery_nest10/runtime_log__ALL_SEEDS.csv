@@ -1,0 +1,13 @@
+family,phase,elapsed_secs,n_configs_eval,n_scenarios,total_experiment_secs,run_seed,seed_run_id
+normal,regime_first_family,11775.15,24,576,78211.54,101,GA_REGIME_FIRST_20260525_190322
+lognormal,regime_first_family,13612.71,24,576,78211.54,101,GA_REGIME_FIRST_20260525_190322
+weibull,regime_first_family,13430.89,24,576,78211.54,101,GA_REGIME_FIRST_20260525_190322
+invgauss,regime_first_family,13355.82,24,576,78211.54,101,GA_REGIME_FIRST_20260525_190322
+exgaussian,regime_first_family,11896.31,24,576,78211.54,101,GA_REGIME_FIRST_20260525_190322
+exwald,regime_first_family,13518.53,24,576,78211.54,101,GA_REGIME_FIRST_20260525_190322
+normal,regime_first_family,11679.06,24,576,77127.38,202,GA_REGIME_FIRST_20260526_164654
+lognormal,regime_first_family,13323.71,24,576,77127.38,202,GA_REGIME_FIRST_20260526_164654
+weibull,regime_first_family,13271.14,24,576,77127.38,202,GA_REGIME_FIRST_20260526_164654
+invgauss,regime_first_family,13220.43,24,576,77127.38,202,GA_REGIME_FIRST_20260526_164654
+exgaussian,regime_first_family,11769.13,24,576,77127.38,202,GA_REGIME_FIRST_20260526_164654
+exwald,regime_first_family,13372.48,24,576,77127.38,202,GA_REGIME_FIRST_20260526_164654

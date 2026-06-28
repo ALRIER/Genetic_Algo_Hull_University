@@ -1,0 +1,9 @@
+"evidence_grade","biological_positive","biomedical_signal","education_scores","engineering_efficiency","engineering_positive","environmental_extremes","mobility_demand","positive_skew_tabular","rdatasets_admiral","rdatasets_AER","rdatasets_agridat","rdatasets_alone","rdatasets_archdata","rdatasets_asaur","rdatasets_bakeoff","rdatasets_bayesrules","rdatasets_betareg","rdatasets_boot","rdatasets_camerondata","rdatasets_causaldata","rdatasets_cluster","rdatasets_collegeScorecard","rdatasets_crch","rdatasets_crimedatasets","rdatasets_DAAG","rdatasets_dragracer","rdatasets_educationR","rdatasets_forecast","rdatasets_fpp2","rdatasets_gt","rdatasets_HistData","rdatasets_ISLR","rdatasets_OncoDataSets","rdatasets_psych","web_popularity"
+"in_regime__primary_preregistered__equal_weight_gain__descriptive",48,117,120,69,47,31,70,226,0,0,69,252,184,113,175,0,65,57,24,69,69,0,6,0,39,126,69,69,104,69,91,101,111,86,98
+"in_regime__primary_preregistered__equal_weight_gain__near_ci",0,0,0,0,0,0,0,4,0,0,0,8,0,0,2,0,2,1,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,1,0
+"in_regime__primary_preregistered__no_win__descriptive",18,0,87,0,1,17,70,132,137,12,0,0,0,25,0,5,0,47,0,0,0,12,42,12,9,8,0,0,36,0,22,8,27,36,15
+"in_regime__primary_preregistered__no_win__near_ci",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0
+"in_regime__primary_preregistered__pareto_signal__descriptive",0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,3,0,0,0,0,0,0
+"in_regime__primary_preregistered__pareto_signal__near_ci",0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,1,0,0,0,0
+"in_regime__primary_preregistered__strong_point_signal__near_ci",0,0,9,0,0,0,6,13,1,0,0,7,0,6,0,0,2,8,0,0,0,0,0,0,0,6,0,0,3,0,14,3,8,0,6
+"in_regime__primary_preregistered__strong_win__ci_confirmed",88,0,13,0,0,0,355,282,69,0,0,3,27,88,40,148,0,103,88,0,0,0,0,0,0,65,0,0,71,148,95,105,86,109,228

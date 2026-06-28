@@ -1,0 +1,7 @@
+family,architecture,evaluated_regimes,ga_regime_wins,benchmark_regime_wins,best_ga_rel_improvement_q95,best_ga_rel_improvement_mean,global_audit_runs,global_audit_passes,no_free_lunch_regime_specific_count,global_generalization_bonus_count,recovered_from_checkpoint
+normal,regime_first,3,0,3,-0.02463138595382347,-0.015745676524112913,3,0,0,0,TRUE
+lognormal,regime_first,3,2,1,0.03856476008918691,0.16763917201435544,3,0,0,0,TRUE
+weibull,regime_first,3,1,2,0.07319687223282667,0.08296706698302495,3,1,0,0,TRUE
+invgauss,regime_first,3,2,1,0.38200457455203024,0.5221227885595482,3,2,0,0,TRUE
+exgaussian,regime_first,3,0,3,-0.04872692404850387,-0.09843030615664725,3,0,0,0,TRUE
+exwald,regime_first,3,2,1,0.11489434929938991,0.2372960449940895,3,0,0,0,TRUE

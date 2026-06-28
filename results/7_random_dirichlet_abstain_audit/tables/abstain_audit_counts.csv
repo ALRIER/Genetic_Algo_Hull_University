@@ -1,0 +1,8 @@
+"metric","value"
+"audited_regime_mode_rows",34
+"confirmed_regime_mode_rows",23
+"dirichlet_signal_regime_mode_rows",11
+"audited_unique_regimes",17
+"fully_confirmed_unique_regimes",9
+"dirichlet_signal_unique_regimes",8
+"transfer_sanity_passed",1

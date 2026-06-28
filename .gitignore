@@ -1,0 +1,15 @@
+.Rhistory
+.RData
+.Rproj.user/
+*.RData
+*.rds
+*.tmp
+*.log
+__pycache__/
+.DS_Store
+
+# large raw outputs — host on OSF/Zenodo instead
+*.zip
+checkpoints/
+raw_downloads/
+per_task_outputs/

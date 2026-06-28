@@ -1,0 +1,5 @@
+"distribution","validation_mode","expanded_gate_pass_mean.n","expanded_gate_pass_mean.mean","expanded_gate_pass_mean.max"
+"exgaussian","locked_unseen_similar",3,0,0
+"normal","locked_unseen_similar",3,0,0
+"exgaussian","original_regime",3,0,0
+"normal","original_regime",3,0,0

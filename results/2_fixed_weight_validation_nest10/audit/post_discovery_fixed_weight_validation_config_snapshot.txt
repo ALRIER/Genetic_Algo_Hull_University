@@ -1,0 +1,40 @@
+List of 39
+ $ project_root                  : chr "/home/alrier/Documents/Pub # 1 & 2/Final_Results_27May2026/multiseed_6080_CODE"
+ $ discovery_root                : chr "/home/alrier/Documents/Pub # 1 & 2/Final_Results_27May2026/2026_May_25_Finals"
+ $ output_root                   : chr "/home/alrier/Documents/Pub # 1 & 2/Final_Results_27May2026/POST_DISCOVERY_FIXED_WEIGHT_VALIDATION_OUTPUT"
+ $ workers                       : int 5
+ $ reserve_cores                 : int 0
+ $ validation_seeds              : int [1:8] 303 404 505 606 707 808 909 1010
+ $ target_regimes                : int 25
+ $ negative_controls_per_family  : int 3
+ $ negative_control_families     : chr [1:2] "normal" "exgaussian"
+ $ monte_carlo_R                 : int 500
+ $ bootstrap_B                   : int 500
+ $ sample_sizes_default          : int [1:3] 300 500 1000
+ $ include_catoni                : logi TRUE
+ $ include_median_of_means       : logi TRUE
+ $ include_winsorized            : logi TRUE
+ $ include_huber_tuned           : logi TRUE
+ $ include_equal_weight_composite: logi TRUE
+ $ winsor_probs                  : num [1:3] 0.05 0.1 0.2
+ $ mom_blocks                    : int [1:3] 5 10 20
+ $ catoni_alpha_grid             : num [1:5] 0.05 0.1 0.2 0.35 0.5
+ $ huber_k_grid                  : num [1:5] 0.75 1 1.34 1.75 2
+ $ q                             : num 0.95
+ $ ci_level                      : num 0.95
+ $ require_positive_ci           : logi FALSE
+ $ run_original_regime_validation: logi TRUE
+ $ run_locked_unseen_validation  : logi TRUE
+ $ unseen_conditions_per_regime  : int 1
+ $ full_contamination_rates      : num [1:8] 0 0.01 0.02 0.05 0.1 0.15 0.2 0.3
+ $ full_outlier_scales           : num [1:9] 1.5 3 4.5 6 9 12 15 20 30
+ $ full_contamination_types      : chr [1:8] "upper_tail" "lower_tail" "symmetric_t" "point_mass" ...
+ $ use_common_random_numbers     : logi TRUE
+ $ enable_recovery               : logi TRUE
+ $ overwrite_completed_tasks     : logi FALSE
+ $ heartbeat_every_replicates    : int 50
+ $ task_checkpoint_format        : chr "rds"
+ $ export_long_squared_errors    : logi TRUE
+ $ export_task_outputs           : logi TRUE
+ $ output_formats                : chr [1:2] "csv" "parquet"
+ $ rerun_ga_search               : logi FALSE

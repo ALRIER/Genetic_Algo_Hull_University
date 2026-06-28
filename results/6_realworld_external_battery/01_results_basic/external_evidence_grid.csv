@@ -1,0 +1,16 @@
+"eligibility_layer","regime_layer","benchmark_layer","evidence_layer","ci_layer","Freq"
+"eligible","in_regime","primary_preregistered","equal_weight_gain","ci_confirmed",0
+"eligible","in_regime","primary_preregistered","no_win","ci_confirmed",0
+"eligible","in_regime","primary_preregistered","pareto_signal","ci_confirmed",0
+"eligible","in_regime","primary_preregistered","strong_point_signal","ci_confirmed",0
+"eligible","in_regime","primary_preregistered","strong_win","ci_confirmed",2211
+"eligible","in_regime","primary_preregistered","equal_weight_gain","descriptive",2774
+"eligible","in_regime","primary_preregistered","no_win","descriptive",778
+"eligible","in_regime","primary_preregistered","pareto_signal","descriptive",7
+"eligible","in_regime","primary_preregistered","strong_point_signal","descriptive",0
+"eligible","in_regime","primary_preregistered","strong_win","descriptive",0
+"eligible","in_regime","primary_preregistered","equal_weight_gain","near_ci",26
+"eligible","in_regime","primary_preregistered","no_win","near_ci",4
+"eligible","in_regime","primary_preregistered","pareto_signal","near_ci",8
+"eligible","in_regime","primary_preregistered","strong_point_signal","near_ci",92
+"eligible","in_regime","primary_preregistered","strong_win","near_ci",0
