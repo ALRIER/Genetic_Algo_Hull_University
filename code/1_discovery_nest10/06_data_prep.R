@@ -153,7 +153,7 @@ build_scenarios <- function(mode = c("full","light")) {
 
 # Computes the vector of estimator outputs for a single sample x using the global
 # estimator registry. Ensures consistent ordering and naming across modules. Non-finite values are
-# handled defensively: if an estimator fails, it falls back to the sample median to keep pipelines
+# handled with a median fallback if an estimator fails, keeping the pipeline
 # stable during large simulation sweeps.
 compute_components_vector <- function(x) {
   # defensive: remove non-finite values if they appear

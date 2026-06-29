@@ -1027,7 +1027,7 @@ evolve_universal_estimator_per_family <- function(dist_name,
     
   }
   
-  #Final selection stage: re-evaluates the entire population on validation using a
+  # Final selection stage: re-evaluate the entire population on validation using a
   # fixed final seed to ensure deterministic ranking, chooses the best individual, and records its
   # validation score. This avoids relying on minibatch or checkpoint noise when declaring the winner.
   q95_seed_final <- 2e6 + seed*1000 + 777
@@ -1158,10 +1158,9 @@ evolve_universal_estimator_per_family <- function(dist_name,
                            stringsAsFactors = FALSE)
   overall <- cbind(base_df, wdf, metrics_df)
   
-  #Final return object: exposes optimized weights and readable formula strings,
+  # Final return object: optimized weights, readable formula strings,
   # top-K candidate weights, full scenario table, compact overall summary, convergence history,
-  # perturbation robustness stats, and best validation score (optional). Designed for downstream logging,
-  # paper-ready tables, and reproducible re-analysis.
+  # perturbation robustness stats, and best validation score (optional).
   list(weights        = as.numeric(best_weights),
        estimator_str  = weights_to_formula(as.numeric(best_weights)),
        topk_weights   = ga_population[topk_idx, , drop = FALSE],
@@ -1396,9 +1395,9 @@ evolve_universal_estimator_per_family_cv <- function(dist_name,
   best_fold  <- which.min(val_scores)
   best_weights_cv <- fold_results[[best_fold]]$weights
   
-  #Final retrain option: runs one more GA pass on ALL scenarios using an expanded
+  # Final retrain option: runs one more GA pass on ALL scenarios using an expanded
   # warm-start matrix (warm_bank + best CV weights). This typically yields a stronger final solution
-  # for deployment/publication while CV still provides unbiased model selection via fold validation.
+  # for final reporting while CV still provides unbiased model selection via fold validation.
   # -------- FINAL OUTPUT --------
   if (isTRUE(final_retrain)) {
     cat(sprintf("\n[%s] Final retrain on ALL scenarios (warm-start)\n", dist_name))

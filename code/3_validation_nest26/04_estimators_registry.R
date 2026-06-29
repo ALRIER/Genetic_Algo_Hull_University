@@ -2,9 +2,8 @@
 # ESTIMATOR REGISTRY AND ROBUST LOCATION FUNCTIONALS
 # =============================================================================
 # This module defines the estimator “building blocks” used by the GA to construct a weighted composite
-# location estimator. Each component is implemented defensively so the pipeline remains stable under
-# heavy contamination: estimators should not crash on pathological samples and should return a sensible
-# fallback (typically the median) if an algorithm fails or yields non-finite outputs.
+# location estimator. Each component is written with explicit fallbacks so contaminated or degenerate
+# samples still return a finite location estimate, usually the median.
 # =============================================================================
 
 
@@ -103,7 +102,7 @@ huber_mean_safe <- function(x) {
 
 # Tukey biweight (bisquare) M-estimator: stronger downweighting of large residuals than Huber. This is
 # useful under heavy contamination because extreme points can be almost fully ignored. As with huber_mean,
-# we defensively catch failures and return the median when the robust regression cannot produce a finite fit.
+# failures return the median when robust regression cannot produce a finite fit.
 biweight_mean_safe <- function(x) {
   x <- as.numeric(x)
   out <- tryCatch({
@@ -173,9 +172,8 @@ huber_tuned_mean_safe <- function(x, k = 1.345) {
 # =============================================================================
 # ESTIMATOR REGISTRY
 # =============================================================================
-# Maps human-readable estimator names to functions. This registry is the “single source of truth” for
-# component definitions: the GA treats each entry as one feature in a convex combination, and downstream
-# code relies on this ordering to interpret weights, export formulas, and ensure reproducibility across runs.
+# Maps estimator names to functions. The order of this registry defines the
+# coordinate system for GA weights, exported formulas, and result tables.
 # =============================================================================
 
 # The distribution family "invgauss" (Inverse Gaussian) is used
@@ -300,7 +298,7 @@ apply_estimator_admissibility <- function(weights,
                                     strict_support = strict_support)
   w[!mask] <- 0
   if (!any(is.finite(w)) || sum(w, na.rm = TRUE) <= 0) {
-    # Defensive fallback: if all weight was on blocked estimators, redistribute
+    # Checked fallback: if all weight was on blocked estimators, redistribute
     # uniformly over allowed estimators. If the family is unknown and everything
     # is somehow blocked, fall back to the full simplex.
     allowed <- which(mask)
@@ -355,9 +353,9 @@ custom_estimator <- function(sample, weights, distribution = NULL, target = "ari
 
 
 # Converts weight vector into readable symbolic formula
-# Produces a compact, human-readable representation of the GA solution by pairing each normalized weight
-# with its estimator name (rounded for readability). This is used in logs and result tables so researchers
-# can quickly interpret which components dominate and how the composite compares across distributions/stages.
+# Builds a compact formula string by pairing each normalized weight with its
+# estimator name. Logs and result tables use this to show which components
+# dominate a composite estimator.
 weights_to_formula <- function(weights, distribution = NULL, target = "arithmetic_mean") {
   stopifnot(length(weights) == N_EST)
   w <- round(apply_estimator_admissibility(as.numeric(weights), distribution = distribution, target = target), 3)

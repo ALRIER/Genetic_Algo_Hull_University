@@ -54,7 +54,7 @@
 #     layer3_sanity_checks.csv
 #     layer4_empirical_anchoring.csv
 #     validation_summary.csv      <- one row per layer, PASS / WARN / FAIL
-#     validation_report.txt       <- human-readable narrative
+#     validation_report.txt       <- plain-text narrative
 #
 # Usage
 # -----

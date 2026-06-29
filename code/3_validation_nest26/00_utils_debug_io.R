@@ -166,7 +166,7 @@ mkdirp <- function(p) {
 
 # Simple timestamped logger used throughout the pipeline for reproducible logs.
 catf <- function(fmt, ...) {
-  # Standard console logger: prepends a human-readable timestamp and formats messages with sprintf().
+  # Standard console logger: prepends a readable timestamp and formats messages with sprintf().
   # Used across modules so logs remain consistent and searchable (especially when debugging long experiments).
   msg <- sprintf(fmt, ...)
   cat(sprintf("[%s] %s\n", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), msg))
@@ -175,7 +175,7 @@ catf <- function(fmt, ...) {
 # --- Safe scalar extractor (top-level) -----------------------------------
 # Used when building small tibbles/data.frames from possibly length>1 vectors.
 .safe_scalar1 <- function(x, default = NA_real_) {
-  # Extracts a single numeric value defensively from potentially empty/non-numeric inputs.
+  # Extracts one numeric value from potentially empty or non-numeric inputs.
   # Prevents accidental recycling or list-columns when building summaries; returns default on invalid values.
   if (is.null(x) || length(x) < 1L) return(default)
   v <- suppressWarnings(as.numeric(x[[1]]))
@@ -204,7 +204,7 @@ safe_save_rds <- function(obj, path) {
 }
 
 safe_write_csv <- function(df, path) {
-  # Writes a data.frame to CSV defensively: skips empty/invalid frames, creates parent directories, and uses
+  # Writes a data.frame to CSV after basic checks: skips empty or invalid frames, creates parent directories, and uses
   # readr::write_csv when available for consistent formatting. Falls back to base write.csv for portability.
   if (!is.data.frame(df) || nrow(df) == 0L) return(invisible(NULL))
   mkdirp(dirname(path))
@@ -266,7 +266,7 @@ index_flush <- function(run_dir) {
 # Write MANIFEST.txt and a session snapshot (SESSION.txt).
 # These files capture run metadata and the R environment for reproducibility.
 write_manifest <- function(dir_out, meta, extra = NULL, write_session = TRUE) {
-  # Creates human-readable run metadata files:
+  # Creates readable run metadata files:
   # - MANIFEST.txt captures configuration (families, seeds, GA settings, scenario mode, minibatching, etc.)
   # - SESSION.txt captures sessionInfo() and an installed.packages snapshot. Together they support auditing
   #   and reproduction of a run on a different machine or at a later date with minimal ambiguity.

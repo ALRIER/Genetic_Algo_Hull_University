@@ -257,9 +257,9 @@ generate_external_report_v5 <- function(run_dir,
     sprintf("The strict primary result is the FDR-adjusted dataset-level count: %d rows at 5%% and %d rows at 10%% sensitivity. This should be reported before any larger condition-level or depth-probe counts.", n_fdr05, n_fdr10),
     "If surviving rows concentrate in lognormal_like or weibull_like profiles, the correct interpretation is not universal superiority. It is regime-conditional transfer: GA specialists retain value where the external dataset resembles the discovery regime.",
     "If most datasets remain no_win or near_ci, that supports the No Free Lunch frame: robust benchmarks continue to dominate outside the specialist regime, and gains are localized rather than universal.",
-    "If a dataset becomes saturated, the cap protects the paper. It says the dataset contains strong repeated signal, but the primary count is limited so the result cannot be driven by one public source or one data structure.",
+    "If a dataset becomes saturated, the cap prevents one public source or one data structure from dominating the primary count, while still preserving the repeated signal in the audit trail.",
     "Depth probes should be discussed as within-dataset mechanism checks. They can deepen the explanation of a signal but should never be counted as independent datasets.",
-    "The oracle audit answers a reviewer question: what happens against the best available benchmark? It is intentionally secondary because an oracle benchmark is stronger than a pre-registered real comparator and can be biased by selection across many benchmarks."
+    "The oracle audit asks what happens against the best available benchmark. It is intentionally secondary because an oracle benchmark is stronger than a pre-registered real comparator and can be biased by selection across many benchmarks."
   )
   .gr_text_block(interpretation)
 

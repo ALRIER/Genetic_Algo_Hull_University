@@ -5,7 +5,7 @@
 # Methodological annex: random-search audit for NEST26 abstention decisions.
 #
 # This script is meant to be run from the cleaned repository or from the final
-# results bundle, not from a toy example. By default it reads:
+# results bundle. By default it reads:
 #   - the final NEST26 evidence taxonomy, which says which regimes
 #     ended as benchmark_retained, marginal_ga_win, or negative controls;
 #   - the expanded fixed-weight validation table, which contains the

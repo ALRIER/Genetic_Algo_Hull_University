@@ -2,9 +2,8 @@
 # 08_LOCATIONESTIMATORS
 # =============================================================================
 # Main launcher/orchestration module for the robust-location simulation pipeline.
-# This pruned edition keeps the defensive loading logic and comments, but removes
-# hard-coded path forcing and automatic debug activation that were not essential
-# to the computational objective.
+# The file keeps the stage self-contained: it checks that the expected modules
+# are available, then runs the regime-first discovery workflow.
 # =============================================================================
 
 # Module tracking is defined in 00_utils_debug_io.R. This fallback only lets the file source on its own.
@@ -38,10 +37,10 @@ if (!exists("catf", mode = "function", inherits = TRUE)) {
   catf <- function(fmt, ...) cat(sprintf(fmt, ...))
 }
 
-catf("\n[DEFENSIVE] this_dir = %s\n", this_dir)
-catf("[DEFENSIVE] getwd()  = %s\n\n", getwd())
+catf("\n[CHECK] this_dir = %s\n", this_dir)
+catf("[CHECK] getwd()  = %s\n\n", getwd())
 
-# 1) Confirm module files exist where you think they do
+# 1) Confirm that the expected module files are present.
 module_files <- c(
   "00_utils_debug_io.R",
   "01_paths_repro.R",
@@ -56,17 +55,16 @@ module_files <- c(
 missing_files <- module_files[!file.exists(file.path(this_dir, module_files))]
 if (length(missing_files) > 0L) {
   msg <- paste0(
-    "[DEFENSIVE] Missing module files under this_dir:\n  - ",
+    "[CHECK] Missing module files under this_dir:\n  - ",
     paste(missing_files, collapse = "\n  - "),
-    "\n\nFix: check PROJECT_ROOT / working directory, or rename module_files list."
+    "\n\nCheck PROJECT_ROOT, the working directory, or the module_files list."
   )
   stop(msg, call. = FALSE)
 } else {
-  catf("[DEFENSIVE] All module files exist under this_dir.\n")
+  catf("[CHECK] All module files exist under this_dir.\n")
 }
 
-# 2) Confirm critical symbols are loaded into the environment
-#    (1–3 per module is enough; tweak as you evolve.)
+# 2) Confirm that the symbols needed by the launcher are available.
 required <- list(
   "00_utils" = list(
     fun = c("safe_write_csv", "safe_save_rds", "safe_write_lines"),
@@ -121,14 +119,14 @@ for (mod in names(required)) {
 
 if (length(missing_syms) > 0L) {
   msg <- paste0(
-    "[DEFENSIVE] Module load check FAILED. Missing symbols:\n  - ",
+    "[CHECK] Module load check failed. Missing symbols:\n  - ",
     paste(missing_syms, collapse = "\n  - "),
     "\n\nMost common cause: source() paths are wrong (PROJECT_ROOT/getwd mismatch).\n",
-    "Fix: ensure the modules are sourced first, or point PROJECT_ROOT to the module folder."
+    "Ensure the modules are sourced first, or point PROJECT_ROOT to the module folder."
   )
   stop(msg, call. = FALSE)
 } else {
-  catf("[DEFENSIVE] Module load check OK: all required symbols are present.\n\n")
+  catf("[CHECK] Module load check OK: all required symbols are present.\n\n")
 }
 # ===============================================================================
 
@@ -153,7 +151,7 @@ if (length(missing_syms) > 0L) {
 
 
 # =============================================================================
-# MARTICA 2 — REGIME DISCOVERY REPORTING HELPERS
+# REGIME DISCOVERY REPORTING HELPERS
 # =============================================================================
 # These helpers add a reporting-only layer for regime-aware discovery.
 # They do not change the GA training loop, PSOCK logic, K-folds, halving,
@@ -1891,7 +1889,7 @@ run_regime_specialist_ga <- function(selected_regimes, dist_name, dist_param_gri
 
 
 # =============================================================================
-# MARTICA 3 — INTER-FAMILY PROFILE-MATCHED GENERALIZATION AUDIT
+# INTER-FAMILY PROFILE-MATCHED GENERALIZATION AUDIT
 # =============================================================================
 # This is a lightweight, no-retraining audit that is run only after specialist
 # winners are selected. It is not the old global family transfer matrix. Instead,
@@ -2289,7 +2287,7 @@ run_interfamily_profile_matched_audit <- function(specialist_summary,
 run_all_one_shot <- function(..., regime_first_mode = TRUE) {
   # Final architecture: regime-first only.
   if (!isTRUE(regime_first_mode)) {
-    stop("Only the regime-first pipeline is supported in this publication code.", call. = FALSE)
+    stop("Only the regime-first pipeline is supported in this workflow.", call. = FALSE)
   }
   args <- list(...)
   seeds_arg <- args$seeds
@@ -2298,9 +2296,8 @@ run_all_one_shot <- function(..., regime_first_mode = TRUE) {
   seeds_arg <- seeds_arg[is.finite(seeds_arg)]
   if (!length(seeds_arg)) seeds_arg <- c(101L)
 
-  # Multi-seed orchestration: each seed gets a complete, independent run folder
-  # with its own per-seed CSVs. A master folder then binds the thesis-critical
-  # outputs across seeds and writes stability summaries for publication review.
+  # Multi-seed orchestration: each seed gets a complete, independent run folder.
+  # A master folder then binds the key outputs and writes stability summaries.
   if (length(seeds_arg) > 1L) {
     out_root <- args$out_root %||% OUT_ROOT
     master_id <- paste0("GA_REGIME_FIRST_MULTI_SEED_", RUN_TS())
@@ -2414,7 +2411,7 @@ run_all_one_shot <- function(..., regime_first_mode = TRUE) {
 
 
 # =============================================================================
-# MARTICA 3 — SPECIALIST SINGLE-HALVING
+# SPECIALIST SINGLE-HALVING
 # =============================================================================
 # The regime-first architecture uses HPF1 and HPF2 as screening stages. After
 # HPF2 selects candidate regime/configuration pairs, this helper performs one
@@ -2667,7 +2664,7 @@ run_regime_specialist_single_halving <- function(selected_regimes, dist_name, di
 }
 
 # =============================================================================
-# MARTICA 3 — REGIME-FIRST EVOLUTIONARY DISCOVERY
+# REGIME-FIRST EVOLUTIONARY DISCOVERY
 # =============================================================================
 # This architecture removes the expensive global Halving + global Final Eval as
 # the center of the experiment. HPF1 and HPF2 are used as screening stages to
@@ -3866,4 +3863,3 @@ if (RUN_MODE == "micro") {
   # RUN_MODE = "none" or unrecognised — do nothing when sourced as a module
   invisible(NULL)
 }
-
