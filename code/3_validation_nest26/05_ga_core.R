@@ -130,133 +130,6 @@ build_warm_starts <- function() {
   unique(W)
 }
 
-
-summarize_scenario <- function(S, weights, distribution, sample_size,
-                               q95_B = 300L, q95_seed = NULL, q95_boot_indices = NULL) {
-  if (exists("apply_estimator_admissibility", mode = "function", inherits = TRUE)) {
-    weights <- apply_estimator_admissibility(weights, distribution = distribution, target = "arithmetic_mean")
-  }
-  true_mu <- S$true_mean
-  C <- S$components_by_size[[as.character(sample_size)]]
-  
-  if (is.null(C) || !is.matrix(C) || ncol(C) != N_EST) {
-    base_row <- tibble::tibble(
-      distribution = distribution,
-      sample_size = as.integer(sample_size),
-      contamination_rate = S$scenario$contamination_rate,
-      outlier_scale_mad  = S$scenario$outlier_scale_mad,
-      contamination_type = S$scenario$contamination_type,
-      true_mean = true_mu,
-      scenario_mode = { sm <- attr(S, "scenario_mode", exact = TRUE); if (is.null(sm)) "unknown" else sm }
-    )
-    
-    na_metrics <- list(
-      mse=NA_real_, mse_q95=NA_real_, mse_max=NA_real_,
-      bias=NA_real_, abs_bias=NA_real_,
-      variance=NA_real_, mad=NA_real_, iqr=NA_real_
-    )
-    
-    make_row <- function(est_name) {
-      dplyr::mutate(base_row, estimator = est_name, !!!na_metrics)
-    }
-    
-    return(dplyr::bind_rows(
-      make_row("robust"),
-      make_row("mean"),
-      make_row("median"),
-      make_row("trimmed20"),
-      make_row("harmonic"),
-      make_row("geometric"),
-      make_row("mode_hsm"),
-      make_row("mode_parzen"),
-      make_row("trimean"),
-      make_row("huber"),
-      make_row("biweight")
-    ))
-  }
-  
-  # robust column selector: if it does not exist it returns NA 
-  #NEed to resolve... the NA could not be useful - contaminations. 
-  col_safe <- function(nm) {
-    j <- match(nm, ESTIMATOR_NAMES)
-    if (is.na(j)) rep(NA_real_, nrow(C)) else C[, j, drop = TRUE]
-  }
-  
-  est_mean    <- col_safe("mean")
-  est_median  <- col_safe("median")
-  est_trim20  <- col_safe("trimmed20")
-  est_harm    <- col_safe("harmonic")
-  est_geom    <- col_safe("geometric")
-  est_mode_h  <- col_safe("mode_hsm")
-  est_mode_p  <- col_safe("mode_parzen")
-  est_trimean <- col_safe("trimean")
-  est_huber   <- col_safe("huber")
-  est_biwt    <- col_safe("biweight")
-  
-  w_robust   <- .normalize_simplex(as.numeric(weights))
-  est_robust <- as.vector(C %*% w_robust)
-  
-  agg <- function(z) {
-    z <- as.numeric(z); z <- z[is.finite(z)]
-    if (length(z) == 0L) {
-      return(c(mse=NA, mse_q95=NA, mse_max=NA,
-               bias=NA, abs_bias=NA,
-               variance=NA, mad=NA, iqr=NA))
-    }
-    errs2 <- (z - true_mu)^2
-    c(
-      mse      = base::mean(errs2, na.rm = TRUE),
-      mse_q95  = q95_boot(errs2, B = q95_B, rng_seed = q95_seed, boot_indices = q95_boot_indices),
-      mse_max  = base::max(errs2, na.rm = TRUE),
-      bias     = base::mean(z, na.rm = TRUE) - true_mu,
-      abs_bias = base::abs(base::mean(z, na.rm = TRUE) - true_mu),
-      variance = stats::var(z, na.rm = TRUE),
-      mad      = stats::mad(z, constant = 1, na.rm = TRUE),
-      iqr      = stats::IQR(z, na.rm = TRUE)
-    )
-  }
-  
-  m_mean    <- agg(est_mean)
-  m_median  <- agg(est_median)
-  m_trim20  <- agg(est_trim20)
-  m_harm    <- agg(est_harm)
-  m_geom    <- agg(est_geom)
-  m_mode_h  <- agg(est_mode_h)
-  m_mode_p  <- agg(est_mode_p)
-  m_trimean <- agg(est_trimean)
-  m_huber   <- agg(est_huber)
-  m_biwt    <- agg(est_biwt)
-  m_robust  <- agg(est_robust)
-  
-  base_row <- tibble::tibble(
-    distribution = distribution,
-    sample_size = as.integer(sample_size),
-    contamination_rate = S$scenario$contamination_rate,
-    outlier_scale_mad  = S$scenario$outlier_scale_mad,
-    contamination_type = S$scenario$contamination_type,
-    true_mean = true_mu,
-    scenario_mode = { sm <- attr(S, "scenario_mode", exact = TRUE); if (is.null(sm)) "unknown" else sm }
-  )
-  
-  make_row2 <- function(est_name, m) {
-    dplyr::mutate(base_row, estimator = est_name, !!!as.list(m))
-  }
-  
-  dplyr::bind_rows(
-    make_row2("robust",      m_robust),
-    make_row2("mean",        m_mean),
-    make_row2("median",      m_median),
-    make_row2("trimmed20",   m_trim20),
-    make_row2("harmonic",    m_harm),
-    make_row2("geometric",   m_geom),
-    make_row2("mode_hsm",    m_mode_h),
-    make_row2("mode_parzen", m_mode_p),
-    make_row2("trimean",     m_trimean),
-    make_row2("huber",       m_huber),
-    make_row2("biweight",    m_biwt)
-  )
-}
-
 .ga_default_ctrl <- list(
   objective           = "q95",
   use_hierarchical = TRUE,
@@ -1495,7 +1368,7 @@ evolve_universal_estimator_per_family_cv <- function(dist_name,
     #  Alternative output path when final_retrain is disabled: returns the best fold’s
     # result directly as the final model. This is faster and preserves an unbiased validation estimate,
     # but may yield slightly weaker weights than training once on the full scenario set with warm-starts.
-    # NO retrain: devolvemos el mejor fold
+    # No final retrain: return the best fold.
     export_cv_diagnostics(fold_results, best_fold, val_scores, final_result = NULL)
     return(list(
       fold_results = fold_results,
