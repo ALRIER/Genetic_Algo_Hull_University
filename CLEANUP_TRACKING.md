@@ -147,19 +147,26 @@ Funciones afectadas: `.regime_rate_bin`, `.regime_scale_bin`, `.regime_sample_si
 - Test de equivalencia en R: `TEST_08_equivalencia.R` (ejecutar antes de aceptar).
 
 ### Barrido de duplicados en los 52 archivos
-Los **únicos** duplicados top-level en todo el proyecto son los del `08` (arriba) y un
-caso en `05_ga_core.R` de la fase 3 (ver abajo). El resto del código no tiene funciones
-redefinidas.
+Tras la segunda pasada, ya no quedan redefiniciones top-level accidentales salvo `getp`
+en los módulos `03_distributions_params.R`. Ese caso se deja local a propósito: una
+copia vive en `generate_population()` y la otra en `analytic_mean_from_params()`, con
+mensajes de error ajustados a tareas distintas. Unificarlo ahorraría muy poco y haría
+menos claro el diagnóstico cuando falla una fila de la grilla.
 
-### `05_ga_core.R` (fase 3) — NO TOCADO (requiere decisión en R)
-`summarize_scenario` está definida **dos veces** y, a diferencia del `08`, **ambas
-versiones están en uso**:
-- Copia 1 (L157, 157 líneas) = idéntica a la versión de la fase 1; la usa la llamada
-  interna de la L1165.
-- Copia 2 (L1558, 49 líneas) = versión más corta y distinta; sobrescribe a la copia 1
-  tras cargarse el módulo, por lo que la llamada desde `07_fitness_objectives.R` (L992)
-  usaría esta versión reducida.
+### `05_ga_core.R` (fase 3) — APLICADO
+`summarize_scenario()` aparecía dos veces dentro del módulo NEST26. En R, las funciones
+se definen al cargar el archivo y las llamadas resuelven el nombre cuando se ejecutan;
+por tanto, la segunda definición era la activa después de `source()`. Se eliminó la
+primera copia sobrescrita y se conservó la versión NEST26 activa.
 
-Eliminar cualquiera de las dos **cambiaría comportamiento** según el orden de carga.
-Esto NO es código muerto y se deja **sin modificar**. Recomendación: decidir en R cuál
-versión es la deseada y comparar resultados antes de unificar. Posible bug latente.
+- Fase 3: −128 líneas.
+- Verificado: queda una sola definición de `summarize_scenario()`.
+- Verificado: todos los archivos R parsean correctamente.
+
+### `08_LocationEstimators.R` (fases 1 y 3) — helpers locales consolidados
+Las funciones locales `val_chr()` y `val_int()` estaban repetidas dentro de dos bloques
+de auditoría en cada launcher. Se reemplazaron por helpers privados de archivo
+(`.first_chr()` y `.first_int()`), sin mover dependencias entre fases.
+
+- Fase 1 y fase 3: −6 líneas netas en conjunto.
+- Verificado: todos los archivos R parsean correctamente.

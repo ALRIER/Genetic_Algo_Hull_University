@@ -37,6 +37,9 @@ if (!exists("catf", mode = "function", inherits = TRUE)) {
   catf <- function(fmt, ...) cat(sprintf(fmt, ...))
 }
 
+.first_chr <- function(x, nm) if (nm %in% names(x) && length(x[[nm]]) > 0L) as.character(x[[nm]][1]) else NA_character_
+.first_int <- function(x, nm) suppressWarnings(as.integer(if (nm %in% names(x) && length(x[[nm]]) > 0L) x[[nm]][1] else NA_integer_))
+
 catf("\n[CHECK] this_dir = %s\n", this_dir)
 catf("[CHECK] getwd()  = %s\n\n", getwd())
 
@@ -1377,16 +1380,13 @@ run_regime_specialist_ga <- function(selected_regimes, dist_name, dist_param_gri
       exclude_ids <- unique(as.character(source_subset$scenario_id))
     }
 
-    val_chr <- function(x, nm) if (nm %in% names(x) && length(x[[nm]]) > 0L) as.character(x[[nm]][1]) else NA_character_
-    val_int <- function(x, nm) suppressWarnings(as.integer(if (nm %in% names(x) && length(x[[nm]]) > 0L) x[[nm]][1] else NA_integer_))
-
-    target_direction <- val_chr(reg, "contamination_direction")
-    target_structure <- val_chr(reg, "contamination_structure")
-    target_rate_order <- val_int(reg, "rate_regime_order")
-    target_scale_order <- val_int(reg, "scale_group_regime_order")
+    target_direction <- .first_chr(reg, "contamination_direction")
+    target_structure <- .first_chr(reg, "contamination_structure")
+    target_rate_order <- .first_int(reg, "rate_regime_order")
+    target_scale_order <- .first_int(reg, "scale_group_regime_order")
     scale_order_col <- "scale_group_regime_order"
     if (!is.finite(target_scale_order) || !scale_order_col %in% names(profile_pool)) {
-      target_scale_order <- val_int(reg, "scale_regime_order")
+      target_scale_order <- .first_int(reg, "scale_regime_order")
       scale_order_col <- "scale_regime_order"
     }
 
@@ -1954,13 +1954,10 @@ run_interfamily_profile_matched_audit <- function(specialist_summary,
     }
     unique(targets)
   }
-  val_chr <- function(x, nm) if (nm %in% names(x) && length(x[[nm]]) > 0L) as.character(x[[nm]][1]) else NA_character_
-  val_int <- function(x, nm) suppressWarnings(as.integer(if (nm %in% names(x) && length(x[[nm]]) > 0L) x[[nm]][1] else NA_integer_))
-
   all_summary <- list(); all_scenarios <- list()
   for (ii in seq_len(nrow(rows))) {
     src <- rows[ii, , drop = FALSE]
-    src_family <- val_chr(src, "distribution")
+    src_family <- .first_chr(src, "distribution")
     if (!nzchar(src_family) || is.na(src_family) || !(src_family %in% source_families)) next
     w <- suppressWarnings(as.numeric(src[1, w_names, drop = TRUE]))
     if (!length(w) || any(!is.finite(w))) next
@@ -1969,19 +1966,19 @@ run_interfamily_profile_matched_audit <- function(specialist_summary,
     if (!length(candidate_targets)) next
     candidate_targets <- candidate_targets[seq_len(min(max_targets_per_winner, length(candidate_targets)))]
 
-    target_direction <- val_chr(src, "contamination_direction")
-    target_structure <- val_chr(src, "contamination_structure")
-    target_rate_order <- val_int(src, "rate_regime_order")
-    target_scale_order <- val_int(src, "scale_group_regime_order")
-    src_regime_id <- val_chr(src, "specialist_regime_id")
-    src_regime_key <- val_chr(src, "regime_key")
+    target_direction <- .first_chr(src, "contamination_direction")
+    target_structure <- .first_chr(src, "contamination_structure")
+    target_rate_order <- .first_int(src, "rate_regime_order")
+    target_scale_order <- .first_int(src, "scale_group_regime_order")
+    src_regime_id <- .first_chr(src, "specialist_regime_id")
+    src_regime_key <- .first_chr(src, "regime_key")
 
     for (target_family in candidate_targets) {
       pool <- add_scenario_ids(build_scenarios("full"))
       pool <- .add_regime_columns(pool, distribution = target_family, include_sample_size_bin = FALSE)
       scale_col <- "scale_group_regime_order"
       if (!is.finite(target_scale_order) || !scale_col %in% names(pool)) {
-        target_scale_order <- val_int(src, "scale_regime_order")
+        target_scale_order <- .first_int(src, "scale_regime_order")
         scale_col <- "scale_regime_order"
       }
       rate_close <- if ("rate_regime_order" %in% names(pool) && is.finite(target_rate_order)) {
