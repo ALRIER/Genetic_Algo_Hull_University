@@ -814,8 +814,8 @@ eb_grade <- function(mean_gain, q95_gain, ci_low, gate, equal_q95) {
 }
 
 run_realworld_external_battery <- function(project_root = normalizePath(getwd(), winslash = "/", mustWork = FALSE),
-                                           output_root = Sys.getenv("REALWORLD_OUT_ROOT", unset = file.path(dirname(project_root), "Estimator_Results")),
-                                           run_label = Sys.getenv("EXTERNAL_RUN_LABEL", unset = "realworld_external_battery"),
+                                           output_root = Sys.getenv("REALWORLD_OUT_ROOT", unset = file.path(dirname(dirname(project_root)), "results")),
+                                           run_label = Sys.getenv("EXTERNAL_RUN_LABEL", unset = "6_realworld_external_battery"),
                                            R = as.integer(Sys.getenv("EXTERNAL_R", unset = "500")),
                                            boot_B = as.integer(Sys.getenv("EXTERNAL_BOOT_B", unset = "500")),
                                            boot_B_extra = as.integer(Sys.getenv("EXTERNAL_BOOT_B_EXTRA", unset = "500")),

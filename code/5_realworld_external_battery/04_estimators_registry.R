@@ -275,9 +275,9 @@ admissible_estimator_mask <- function(distribution = NULL,
                                       target = "arithmetic_mean",
                                       strict_support = TRUE) {
   # A named TRUE/FALSE vector aligned with ESTIMATOR_NAMES.
-  # Point 2 of Martica: harmonic/geometric are blocked when the family can
-  # generate zero/negative values. Target-compatibility is recorded in metadata;
-  # stronger target penalties belong to the fitness layer (Martica point 3).
+  # Harmonic and geometric means are blocked for families that can generate
+  # zero or negative values. Target compatibility is recorded in metadata;
+  # stronger target penalties belong to the fitness layer.
   mask <- rep(TRUE, N_EST)
   names(mask) <- ESTIMATOR_NAMES
 

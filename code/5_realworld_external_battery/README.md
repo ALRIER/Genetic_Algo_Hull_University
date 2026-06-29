@@ -16,7 +16,7 @@ advantages outside the synthetic regime grid.
 Candidates are loaded from:
 
 ```text
-GA_Results/05_expanded_fixed_weight_validation_evidence_taxonomy_NEST26/tables/evidence_taxonomy_all_candidates.csv
+results/5_evidence_taxonomy_nest26/tables/evidence_taxonomy_all_candidates.csv
 ```
 
 The runner keeps the taxonomy labels in the output, including:
@@ -65,15 +65,15 @@ logic.
 From the repository root:
 
 ```bash
-GA_Code/Validation_Stage/RealWorld_External_Battery_40Datasets_CODE/run_realworld_external_battery.sh
+code/5_realworld_external_battery/run_realworld_external_battery.sh
 ```
 
 The launcher sets:
 
 - `PROJECT_ROOT` to this code folder.
 - `VALIDATION_RESULTS_ROOT` to the repository root.
-- `REALWORLD_OUT_ROOT` to `GA_Results`.
-- `EXTERNAL_RUN_LABEL` to `06_realworld_external_battery_40datasets`.
+- `REALWORLD_OUT_ROOT` to `results`.
+- `EXTERNAL_RUN_LABEL` to `6_realworld_external_battery`.
 
 ## Interpretation
 

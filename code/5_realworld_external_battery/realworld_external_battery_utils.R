@@ -350,18 +350,24 @@ rw_weight_from_row <- function(row, phase, specialist_id, source_file) {
 
 rw_load_specialists <- function(root) {
   taxonomy_file <- rw_first_existing(root, c(
+    file.path("results", "5_evidence_taxonomy_nest26",
+              "tables/evidence_taxonomy_all_candidates.csv"),
     file.path("05_EVIDENCE_TAXONOMY_NEST26", "evidence_results_20260611",
               "tables/evidence_taxonomy_all_candidates.csv"),
     file.path("GA_Results", "05_expanded_fixed_weight_validation_evidence_taxonomy_NEST26",
               "tables/evidence_taxonomy_all_candidates.csv")
   ), "taxonomy")
   p2_file <- rw_first_existing(root, c(
+    file.path("results", "4_fixed_weight_validation_nest26",
+              "root_summaries", "post_discovery_fixed_weight_validation_selected_regimes.csv"),
     file.path("04_EXPANDED_POST_DISCOVERY_FIXED_WEIGHT_VALIDATION_NEST26",
               "raw_full_run_output_with_tasks_checkpoints_20260611", "q1_selected_regimes.csv"),
     file.path("GA_Results", "04_expanded_post_discovery_fixed_weight_validation_NEST26",
               "root_summaries", "post_discovery_fixed_weight_validation_selected_regimes.csv")
   ), "selected-regime")
   p2_locked <- rw_first_existing(root, c(
+    file.path("results", "4_fixed_weight_validation_nest26",
+              "audit", "post_discovery_fixed_weight_validation_locked_unseen_construction.csv"),
     file.path("04_EXPANDED_POST_DISCOVERY_FIXED_WEIGHT_VALIDATION_NEST26",
               "raw_full_run_output_with_tasks_checkpoints_20260611",
               "audit", "q1_locked_unseen_construction.csv"),

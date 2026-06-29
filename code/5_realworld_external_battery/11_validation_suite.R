@@ -25,7 +25,7 @@
 #       Under zero contamination in Normal distributions the sample mean
 #       must dominate the median in MSE — this is Gauss-Markov. If the
 #       pipeline fails to recover this textbook result, there is a bug in
-#       the fitness evaluator. Reviewers can cite this as built-in auditing.
+#       the fitness evaluator. This serves as built-in simulation auditing.
 #
 #   Layer 4 — Empirical Anchoring
 #       Downloads 5 real datasets (one per distributional regime) and
@@ -1176,7 +1176,7 @@ run_layer4 <- function(param_grids_input = param_grids,
     "",
     "## INTERPRETATION",
     "PASS  = criterion met within tolerance",
-    "WARN  = marginal or partial pass; review recommended",
+    "WARN  = marginal or partial pass; manual inspection recommended",
     "FAIL  = criterion violated; investigate before proceeding to GA training",
     "SKIP  = dataset could not be downloaded (network issue)",
     "PASS_HEAVY_TAIL = SPY excess kurtosis > 1 as expected (desired outcome)"
