@@ -86,4 +86,4 @@ The signal is conditional rather than universal. Most surviving rows are concent
 
 The depth probes should be treated as within-dataset mechanism checks. They strengthen the interpretation of repeated signal inside a source, but they should not be counted as independent public datasets. The saturation cap is therefore important: it prevents a single dataset from inflating the primary count while preserving the evidence pattern for audit.
 
-For GitHub, this folder intentionally excludes recovery logs, checkpoints, raw downloads, and the large split condition-metric table. Those files belong in the full archival deposit. The committed package keeps the compact decision tables, dataset registry, run manifest, generated report, and gate/oracle audit tables needed to review the result.
+This repository excludes recovery logs, checkpoints, raw downloads, and the large split condition-metric table. Those files belong in the full data archive. The committed result layer keeps the compact decision tables, dataset registry, run manifest, generated report, and gate/oracle audit tables needed to inspect the result.

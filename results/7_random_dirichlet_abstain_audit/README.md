@@ -12,7 +12,7 @@ The audit does not rerun the GA. It samples random Dirichlet weight vectors over
 
 ## Inputs
 
-The script uses the cleaned repository structure by default:
+The script uses the repository structure by default:
 
 - `results/5_evidence_taxonomy_nest26/tables/evidence_taxonomy_all_candidates.csv`
 - `results/4_fixed_weight_validation_nest26/root_summaries/post_discovery_fixed_weight_validation_selected_regimes.csv`

@@ -14,10 +14,10 @@ exceed the configured cap, default 25 percent of selected primary datasets.
 ## Output layout
 The run writes four folders:
 
-1. `01_results_basic`: compact final results for reading, writing, and review.
+1. `01_results_basic`: compact final results for interpretation and writing.
 2. `02_reports`: generated PDF and markdown report.
 3. `03_audit_ready`: full provenance, decisions, oracle audit, and split CSVs.
-4. `99_recovery_logs`: downloads, checkpoints, temporary recovery files, and logs.
+4. `99_recovery_logs`: downloads, checkpoints, recovery files, and logs.
 
 ## Empirical profiles
 A dataset is assigned to one empirical profile before any winner is counted:

@@ -12,7 +12,7 @@ Run from this repository root:
 Rscript code/6_random_dirichlet_abstain_audit/random_dirichlet_gate_audit.R --draws 4000 --R 500
 ```
 
-By default the script reads the cleaned repository layout:
+By default the script reads the repository layout:
 
 - `code/3_validation_nest26`
 - `code/4_fixed_weight_validation_nest26`

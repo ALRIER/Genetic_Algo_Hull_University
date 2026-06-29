@@ -35,16 +35,16 @@ signals are concentrated in the candidate classes where they are expected.
 The run writes into a structured result folder:
 
 ```text
-01_results_basic/       compact tables for reading and manuscript work
+01_results_basic/       compact tables for interpretation and manuscript work
 02_reports/             PDF and markdown reports
 03_audit_ready/         full provenance, decisions, oracle audit, and split CSVs
-98_discarded_nonfinal/  obsolete or nonfinal byproducts, kept out of evidence
+98_discarded_nonfinal/  superseded byproducts, kept out of evidence
 99_recovery_logs/       downloads, checkpoints, logs, and recovery files
 ```
 
-The compact GitHub package should receive only final outputs from
-`01_results_basic`, `02_reports`, and selected audit files from `03_audit_ready`.
-Large checkpoints and raw downloads belong in OSF or another data repository.
+The committed result layer should keep final outputs from `01_results_basic`,
+`02_reports`, and selected audit files from `03_audit_ready`. Large checkpoints
+and raw downloads belong in the full data archive.
 
 ## Main Files
 

@@ -1,12 +1,12 @@
 # Manifest
 
-Research code and curated-result compendium for the genetic-algorithm location-estimator experiments (University of Hull).
+Research code and summarized results for the genetic-algorithm location-estimator experiments (University of Hull).
 
 ## Root
 
-- `code/`: cleaned experiment code, organized by stage.
-- `results/`: compact curated result subset (summaries, figures, evidence-taxonomy tables, audit metadata).
-- `CODE_MAP.md`: map of shared vs stage-specific modules based on md5 comparison.
+- `code/`: experiment code, organized by stage.
+- `results/`: summary result files, figures, evidence-taxonomy tables, and audit metadata.
+- `CODE_MAP.md`: map of shared vs stage-specific modules.
 
 ## Estimator dimensions
 
@@ -22,7 +22,7 @@ Research code and curated-result compendium for the genetic-algorithm location-e
 - `code/5_realworld_external_battery/`: external public-data battery for frozen specialist estimators.
 - `code/6_random_dirichlet_abstain_audit/`: random-Dirichlet stress test of the regime map.
 
-## Curated results
+## Results
 
 - `results/1_discovery_nest10/`
 - `results/2_fixed_weight_validation_nest10/`
@@ -32,4 +32,4 @@ Research code and curated-result compendium for the genetic-algorithm location-e
 - `results/6_realworld_external_battery/`
 - `results/7_random_dirichlet_abstain_audit/`
 
-Large checkpoints, per-task outputs, logs, raw downloads, and RDS files are intentionally excluded; see *Data Availability* in `README.md`.
+Large checkpoints, per-task outputs, logs, raw downloads, and RDS files are not committed here; see *Data Availability* in `README.md`.

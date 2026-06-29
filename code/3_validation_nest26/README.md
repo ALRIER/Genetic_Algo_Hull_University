@@ -29,7 +29,7 @@ The stage keeps the regime-first specialist logic but expands the estimator basi
 
 ## Module Map
 
-- `00_utils_debug_io.R`: logging, defensive checks, safe writing, and runtime diagnostics.
+- `00_utils_debug_io.R`: logging, basic checks, safe writing, and runtime diagnostics.
 - `01_paths_repro.R`: reproducible paths, run directory setup, and seed helpers.
 - `02_scenarios_sampling.R`: contamination/sample-size scenario construction.
 - `03_distributions_params.R`: distribution generators, analytic means, and parameter grids.
@@ -44,7 +44,7 @@ The stage keeps the regime-first specialist logic but expands the estimator basi
 ## How to Run
 
 ```r
-setwd("/path/to/GA_Validation_Extended_90HPF2_Inheritance_NEST26_CODE")
+setwd("/path/to/Genetic_Algo_Hull_University/code/3_validation_nest26")
 Sys.setenv(PROJECT_ROOT = getwd())
 Sys.setenv(RUN_MODE = "full")
 source("run_experiment.R")

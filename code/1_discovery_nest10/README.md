@@ -30,7 +30,7 @@ The goal of this stage is to identify local, regime-specific composite estimator
 
 ## Module Map
 
-- `00_utils_debug_io.R`: logging, defensive checks, safe CSV writing, diagnostics, and helper utilities used across the pipeline.
+- `00_utils_debug_io.R`: logging, basic checks, safe CSV writing, diagnostics, and helper utilities used across the pipeline.
 - `01_paths_repro.R`: output paths, run directories, reproducibility settings, and environment-aware project-root handling.
 - `02_scenarios_sampling.R`: scenario construction for sample sizes, contamination rates, contamination scales, and contamination mechanisms.
 - `03_distributions_params.R`: distribution generators, analytic means, and parameter grids for the six families.
@@ -68,7 +68,7 @@ The final winner is therefore a fixed local composite estimator, not a retrained
 
 ## Multi-Seed Design
 
-The code supports multi-seed execution through `run_all_one_shot()`. When multiple seeds are supplied, the launcher creates child run folders, binds key CSV outputs, and writes seed-stability summaries. The publication run used independent discovery seeds to assess whether local wins were stable or seed-sensitive.
+The code supports multi-seed execution through `run_all_one_shot()`. When multiple seeds are supplied, the launcher creates child run folders, binds key CSV outputs, and writes seed-stability summaries. The reported discovery run used independent seeds to assess whether local wins were stable or seed-sensitive.
 
 ## Main Outputs
 
@@ -96,7 +96,7 @@ Across seeds, the main outputs include:
 From a clean R session or terminal, set the project root to this folder and run the launcher.
 
 ```r
-setwd("/path/to/GA_Discovery_60_80_CODE")
+setwd("/path/to/Genetic_Algo_Hull_University/code/1_discovery_nest10")
 Sys.setenv(PROJECT_ROOT = getwd())
 Sys.setenv(RUN_MODE = "full")
 source("run_experiment.R")
@@ -111,4 +111,4 @@ source("run_experiment.R")
 
 ## Interpretation
 
-This code should be cited as the original discovery-stage implementation. Its role is to generate and screen local candidate estimators under the original 10-estimator basis. Later validation-stage code should be treated as a separate phase because it expands the estimator basis and validation design.
+This folder is the original discovery-stage implementation. Its role is to generate and screen local candidate estimators under the 10-estimator basis. Later validation-stage code should be treated as a separate phase because it expands the estimator basis and validation design.

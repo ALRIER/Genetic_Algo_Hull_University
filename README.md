@@ -1,8 +1,8 @@
 # Genetic Algorithms for Regime-Specific Location Estimators — University of Hull
 
-This repository is the publication-oriented code and curated-result compendium for a two-phase research program on genetic algorithms (GA) for robust, regime-specific location estimation. It documents the full experimental pipeline: how Monte Carlo samples were generated, how distributional regimes were defined, how a genetic algorithm searched a space of weighted estimator combinations, how candidates were filtered and validated, how winners from the first phase were inherited into a stricter second phase, and how the resulting fixed-weight estimators were stress-tested against external public data.
+This repository contains the code and summarized results for a two-phase research program on genetic algorithms (GA) for robust, regime-specific location estimation. It documents the full experimental pipeline: how Monte Carlo samples were generated, how distributional regimes were defined, how a genetic algorithm searched a space of weighted estimator combinations, how candidates were filtered and validated, how winners from the first phase were inherited into a stricter second phase, and how the resulting fixed-weight estimators were stress-tested against external public data.
 
-The repository is **not** a general-purpose R package. It is a reproducibility and audit archive: a clean, self-contained record that allows an independent researcher to follow the methodology end to end and to verify the reported findings.
+The repository is not an R package. It is a reproducibility record: code is organized by experimental stage, and the committed result files give the main tables, figures, and audit summaries needed to inspect the findings.
 
 ## Scientific Purpose
 
@@ -35,7 +35,7 @@ Genetic_Algo_Hull_University/
     └── 7_random_dirichlet_abstain_audit/
 ```
 
-`code/` holds the cleaned source for each stage. `results/` holds a compact, GitHub-friendly subset of summaries, diagnostic figures, evidence-taxonomy tables, and small audit-metadata files that let the main findings be reconstructed quickly without downloading the full raw experiment output. Large raw outputs (RDS checkpoints, per-task dumps, logs, downloaded datasets) are intentionally excluded and belong in a research-data repository (see *Data Availability*).
+`code/` holds the source for each stage. `results/` holds summary tables, diagnostic figures, evidence-taxonomy tables, and audit metadata used to inspect the main findings. Large raw outputs (RDS checkpoints, per-task dumps, logs, and downloaded datasets) are not committed here; they belong in the separate full-data archive.
 
 ## Monte Carlo Sample Generator
 
@@ -80,7 +80,7 @@ The GA core (`05_ga_core.R`) and the benchmark-relative objective functions (`07
 
 ## Phase 1 — Discovery (`code/1_discovery_nest10/`)
 
-The cleaned original discovery experiment: a regime-first search using the 10-estimator basis and the original 60–80 exposure logic. Its role is to find promising specialist candidates rather than universal winners. The accompanying fixed-weight validation layer (`code/2_fixed_weight_validation_nest10/`) re-evaluates those candidates with **frozen** weights, on additional seeds and held-out regimes, without allowing further optimization. This separates candidate *generation* from candidate *evaluation*: discovery can find a promising estimator, but fixed-weight validation asks whether it remains credible once it is no longer being optimized.
+The original discovery experiment: a regime-first search using the 10-estimator basis and the original 60–80 exposure logic. Its role is to find promising specialist candidates rather than universal winners. The accompanying fixed-weight validation layer (`code/2_fixed_weight_validation_nest10/`) re-evaluates those candidates with **frozen** weights, on additional seeds and held-out regimes, without allowing further optimization. This separates candidate *generation* from candidate *evaluation*: discovery can find a promising estimator, but fixed-weight validation asks whether it remains credible once it is no longer being optimized.
 
 ## Phase 2 — Validation with Inheritance (`code/3_validation_nest26/`)
 
@@ -116,12 +116,12 @@ Several modules share the same filename across phases (for example `00_utils_deb
 - Each stage folder is self-contained and runnable on its own; `run_*.sh` / `run_*.R` launchers are included where applicable.
 - Do not mix the `N_EST = 10` and `N_EST = 26` modules.
 - Random seeds and path/reproducibility settings are handled in each stage's `01_paths_repro.R`.
-- The compact `results/` layer is sufficient to reconstruct the headline findings; full raw output is hosted separately.
+- The committed `results/` layer is sufficient to inspect the headline findings; full raw output is stored separately.
 
 ## Data Availability
 
-This repository holds cleaned source code and a lightweight curated-result subset. Full Monte Carlo output (large CSV/RDS archives, per-task checkpoints, downloaded external datasets, and complete evidence packs) can exceed practical GitHub limits and should be deposited in a research-data repository such as OSF, Zenodo, or institutional storage. Add the deposit DOI/link here once available.
+This repository holds source code and a summary layer of result files. Full Monte Carlo output (large CSV/RDS archives, per-task checkpoints, downloaded external datasets, and complete evidence packs) can exceed practical GitHub limits and should be stored in a separate research-data deposit.
 
 ## Citation
 
-If you use this code, please cite the associated research output and this repository. A `CITATION.cff` can be added at the project root to standardize attribution.
+If you use this code, please cite the associated research output and this repository.

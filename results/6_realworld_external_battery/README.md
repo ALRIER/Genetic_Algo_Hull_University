@@ -1,13 +1,12 @@
 # Real-World External Battery Results
 
-This folder contains the curated GitHub result package for the taxonomy-guided
+This folder contains the summarized result files for the taxonomy-guided
 real-world external battery V5.
 
 The full local run produced recovery logs, raw downloads, and checkpoints. Those
-files are intentionally excluded from the GitHub package and should remain in the
-full archival deposit. The files kept here include the compact result tables, the
-dataset registry, the generated reports, and the split condition-level audit
-table needed to inspect the external validation stage.
+files are not committed here. The files kept here include the compact result
+tables, the dataset registry, the generated reports, and the split
+condition-level audit table needed to inspect the external validation stage.
 
 ## Included Layout
 
@@ -29,7 +28,7 @@ table needed to inspect the external validation stage.
 - `external_survival_map.csv`
 - `external_taxonomy_summary.csv`
 
-`02_reports/` contains the generated report files and the curated interpretation
+`02_reports/` contains the generated report files and the interpretation
 summary:
 
 - `SUMMARY_EXTERNAL_BATTERY.md`
@@ -56,8 +55,7 @@ The following outputs are deliberately not committed here:
 - recovery copies
 - logs
 
-Those files are suitable for the full data archive, not the compact GitHub
-repository.
+Those files are suitable for the full data archive, not this source repository.
 
 ## Primary Result
 

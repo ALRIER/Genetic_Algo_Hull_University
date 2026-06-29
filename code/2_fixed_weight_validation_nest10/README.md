@@ -8,7 +8,7 @@ This stage is not a new GA search. It does not mutate, retrain, or re-optimize c
 
 ## Naming note
 
-This code was originally developed as the `Q1` validation layer. For publication it is named `Post_Discovery_Fixed_Weight_Validation_NEST10_CODE`, because that name describes the method directly. Some internal function names and output CSV filenames retain the `q1_` prefix for reproducibility with archived outputs.
+This code was originally developed as the `Q1` validation layer. Some internal function names and output CSV filenames retain the `q1_` prefix so older result files can still be matched to the validation code.
 
 ## Inputs
 
@@ -58,13 +58,13 @@ No GA search is rerun in either mode.
 ## How to Run
 
 ```bash
-PROJECT_ROOT=/path/to/GA_Discovery_60_80_CODE \
-DISCOVERY_ROOT=/path/to/2026_May_25_Finals \
+PROJECT_ROOT=/path/to/Genetic_Algo_Hull_University/code/1_discovery_nest10 \
+DISCOVERY_ROOT=/path/to/discovery_results \
 VALIDATION_OUTPUT_ROOT=/path/to/FIXED_WEIGHT_VALIDATION_OUTPUT \
 Rscript run_fixed_weight_validation.R
 ```
 
-The older `Q1_OUTPUT_ROOT` environment variable is still accepted as a fallback for archived reproduction scripts.
+The older `Q1_OUTPUT_ROOT` environment variable is still accepted as a fallback for earlier reproduction scripts.
 
 ## Interpretation
 
