@@ -16,7 +16,7 @@ The GA does not invent an estimator from raw observations. It learns convex comb
 Genetic_Algo_Hull_University/
 ├── README.md
 ├── MANIFEST.md
-├── CODE_MAP.md                 # auto-generated map of shared vs stage-specific modules
+├── CODE_MAP.md                 # map of shared vs stage-specific modules
 ├── .gitignore
 ├── code/
 │   ├── 1_discovery_nest10/                  # Phase 1 GA discovery (N_EST = 10)

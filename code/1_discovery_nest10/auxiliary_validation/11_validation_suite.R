@@ -1332,7 +1332,7 @@ run_validation_suite <- function(
 # =============================================================================
 # LaTeX TABLE EXPORTER
 # =============================================================================
-# Generates ready-to-paste LaTeX tables for the paper / thesis.
+# Generates LaTeX summary tables for reporting.
 # Output files: tables_for_paper.tex  (all 4 tables in one file)
 #               table_L1_moments.tex
 #               table_L2_contamination.tex
