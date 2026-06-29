@@ -174,8 +174,8 @@ summarize_scenario <- function(S, weights, distribution, sample_size,
     ))
   }
   
-  # robust column selector: if it does not exist it returns NA 
-  #NEed to resolve... the NA could not be useful - contaminations. 
+  # Keep the summary table stable if an estimator column is absent; the missing
+  # estimator is carried as NA rather than silently dropping the row.
   col_safe <- function(nm) {
     j <- match(nm, ESTIMATOR_NAMES)
     if (is.na(j)) rep(NA_real_, nrow(C)) else C[, j, drop = TRUE]

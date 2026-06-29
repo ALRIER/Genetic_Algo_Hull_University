@@ -36,8 +36,18 @@ if (!exists("catf", mode = "function", inherits = TRUE)) {
   catf <- function(fmt, ...) cat(sprintf(fmt, ...))
 }
 
-.first_chr <- function(x, nm) if (nm %in% names(x) && length(x[[nm]]) > 0L) as.character(x[[nm]][1]) else NA_character_
-.first_int <- function(x, nm) suppressWarnings(as.integer(if (nm %in% names(x) && length(x[[nm]]) > 0L) x[[nm]][1] else NA_integer_))
+.first_chr <- function(x, nm) {
+  if (nm %in% names(x) && length(x[[nm]]) > 0L) {
+    as.character(x[[nm]][1])
+  } else {
+    NA_character_
+  }
+}
+
+.first_int <- function(x, nm) {
+  value <- if (nm %in% names(x) && length(x[[nm]]) > 0L) x[[nm]][1] else NA_integer_
+  suppressWarnings(as.integer(value))
+}
 
 catf("\n[CHECK] this_dir = %s\n", this_dir)
 catf("[CHECK] getwd()  = %s\n\n", getwd())
@@ -133,14 +143,13 @@ if (length(missing_syms) > 0L) {
 # ===============================================================================
 
 
-# ====================== DEBUG SWITCH (MAIN) ======================
-# Set environment variable DEBUG_MAIN=1 to enable verbose console logs from MAIN pipeline.
+# Debug helpers. Set DEBUG_MAIN=1 when a run needs more console detail.
 .dbg_main <- function(msg) {
   if (identical(Sys.getenv("DEBUG_MAIN","0"), "1")) {
     message(sprintf("[DEBUG_MAIN %s] %s", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), msg))
   }
 }
-# Convenience: print short object summary (names, dim, class)
+# Short object summary for interactive debugging.
 .dbg_obj <- function(name, x) {
   if (!identical(Sys.getenv("DEBUG_MAIN","0"), "1")) return(invisible(NULL))
   cls <- paste(class(x), collapse=",")
