@@ -1047,9 +1047,8 @@ weight_perturbation_test <- function(w_star, prepped,
 }
 
 # ===== EVALUATION: top-k fixed weights (NO GA) ======================
-#This stage is the final one, its a full evaluation outside of the GA, the
-# idea is to identity the estimators that perform better in each family under all scenarios.
-  # the complete grind runs here. 
+# Final fixed-weight evaluation outside the GA. This stage identifies which
+# estimators perform best within each family across all validation scenarios.
 .evaluate_topk_fixed_weights <- function(dist_name, dist_param_grid, weights_mat,
                                          sample_sizes, num_samples,
                                          scenario_mode = "full",
@@ -1241,5 +1240,4 @@ evolve_universal_estimator_per_family_cv_two_phase <- function(
 }
 
 
-#Trigger for the module run tracker
 mark_module_done("07_fitness_objectives.R")

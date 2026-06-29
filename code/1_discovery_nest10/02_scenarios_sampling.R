@@ -327,5 +327,4 @@ pick_minibatch_configs <- function(cfg_grid, frac = NULL, k = NULL, seed = 13, s
 }
 
 
-#Trigger for the module run tracker
 mark_module_done("02_scenarios_sampling.R")

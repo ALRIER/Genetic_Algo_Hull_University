@@ -283,8 +283,8 @@ summarize_scenario <- function(S, weights, distribution, sample_size,
   benchmark_mix_w_mse = 0.35,
   benchmark_mix_w_q95 = 0.65,
   dominance_benchmark_multiplier = 8.00,
-  minibatch_frac      = NULL,#fraction of train scenarios -only in lightmode
-  minibatch_min       = 12L,  #minibatch/ minimum number scenarios
+  minibatch_frac      = NULL, # fraction of training scenarios, only in light mode
+  minibatch_min       = 12L,  # minimum number of scenarios in a minibatch
   checkpoint_dir      = NULL  # if set, saves GA state every check_every gens
 )
 
@@ -300,20 +300,14 @@ summarize_scenario <- function(S, weights, distribution, sample_size,
   colnames(out) <- colnames(pop)
   out
 }
-#Controls scenarios picks up light/full 
+# Choose full or light scenario mode from an approximate workload score.
 .ga_pick_mode <- function(sample_sizes, num_samples, pop_size, generations) {
   n_scen_full <- nrow(build_scenarios_full())
   work_score  <- n_scen_full * length(sample_sizes) * num_samples * pop_size * generations
   if (work_score >= 5e7) "light" else "full"
 }
 
-# # Cluster PSOCK con RNG reproducible
-#Creates a PSOCK cluster (separate R worker processes) 
-#and assigns each worker an independent, reproducible 
-#RNG (random number generator) stream using a seed. 
-#Ensures parallel simulations and genetic algorithm runs 
-#produce consistent yet non-overlapping random sequences 
-#across cores.
+# Create a PSOCK worker plan with reproducible, non-overlapping RNG streams.
 .ga_parallel_worker_count <- function(use_parallel = TRUE) {
   if (!isTRUE(use_parallel)) {
     return(list(enabled = FALSE, total_cores = NA_integer_, reserve_cores = NA_integer_,
@@ -424,13 +418,9 @@ summarize_scenario <- function(S, weights, distribution, sample_size,
 }
 # ====================== MULTI-NODE ORCHESTRATION ====================
 
-#This is important sice the complete training in a normal computer can take
-#up a 3 months, so I produce a clustered solution based on 3 computers
-#I have at home>>>>>>>>
-#Orchestrates 2-level parallelism safely: one PSOCK worker per remote node (Level A),
-# while each node can still run its own local-core parallelism (Level B) via .ga_setup_cluster().
-# This avoids oversubscribing cores and lets the master distribute work by distribution-family.
-# Goal: 2-level parallelism without oversubscription
+# Orchestrate two-level parallelism safely: one PSOCK worker per remote node
+# (Level A), while each node can still use local-core parallelism (Level B).
+# This avoids core oversubscription and distributes work by distribution family.
 #   - Level A (multi-node): master assigns *families* to nodes
 #       -> we create 1 PSOCK worker per node
 #   - Level B (intra-node): inside each node-process we keep the existing
@@ -438,9 +428,8 @@ summarize_scenario <- function(S, weights, distribution, sample_size,
 #       .ga_setup_cluster().
 
 
-#Benchmarks each node’s compute capacity using a short, CPU-heavy loop (matrix ops).
-# Returns cores detected, repetitions completed, elapsed time, and a capacity score used to load-balance
-# work across nodes (faster nodes get more work; slower nodes get less).
+# Benchmark each node with a short CPU-heavy loop and derive a capacity score
+# for load-balancing work across heterogeneous machines.
 .node_benchmark <- function(seconds = 0.25) {
   cores <- suppressWarnings(parallel::detectCores())
   if (!is.finite(cores) || is.na(cores)) cores <- 1L
@@ -456,9 +445,8 @@ summarize_scenario <- function(S, weights, distribution, sample_size,
   list(cores = as.integer(cores), reps = reps, elapsed = elapsed, score = as.numeric(score))
 }
 
-#Assigns distribution families to nodes based on node capacity scores (and optional
-# family weights). Uses greedy bin-packing on “effective load” = weight/score so each node receives
-# a balanced share of work, minimizing total wall-clock time across heterogeneous machines.
+# Assign distribution families to nodes using greedy bin-packing on effective
+# load, so faster nodes receive a larger share of work.
 .assign_families_by_capacity <- function(families, node_scores, family_weights = NULL) {
   stopifnot(is.character(families), length(families) >= 1L)
   stopifnot(is.numeric(node_scores), length(node_scores) >= 1L)
@@ -496,7 +484,7 @@ summarize_scenario <- function(S, weights, distribution, sample_size,
   buckets
 }
 
-#Creates a PSOCK cluster across the provided hostnames (one worker per host),
+# Create a PSOCK cluster across the provided hostnames, one worker per host.
 # initializes reproducible RNG streams on workers using a seed, “warms up” RNG state, benchmarks
 # each node with .node_benchmark(), and returns the cluster plus per-node capacity scores for scheduling.
 setup_multinode_controller <- function(hosts,
@@ -514,7 +502,7 @@ setup_multinode_controller <- function(hosts,
 }
 
 
-#Computes a smooth mutation-rate schedule that decays over generations: starts near
+# Compute a smooth mutation-rate schedule that decays over generations: starts near
 # m0 early to explore broadly, then gradually approaches mmin as g→gmax to stabilize convergence.
 # Uses a log-based curve to avoid overly fast decay in early generations.
 .ga_decay_mut <- function(g, gmax, m0, mmin = 0.05) {
@@ -522,7 +510,7 @@ setup_multinode_controller <- function(hosts,
   mmin + (m0 - mmin) * (log(gmax + 1) - log(g + 1)) / log(gmax + 1)
 }
 
-#Wrapper for evaluating a candidate weight vector w on a subset of scenarios idx.
+# Evaluate a candidate weight vector on a subset of scenarios.
 # It forwards GA control settings (penalties, mixing weights, bootstrap size, hierarchical grouping)
 # into fitness_universal(), and sets q95_seed so bootstrap/q95 components remain reproducible.
 .ga_eval_split <- function(w, prepped, idx, ctrl, q95_seed) {
@@ -566,7 +554,7 @@ setup_multinode_controller <- function(hosts,
 
 
 # ===================== SENSITIVITY: WEIGHT PERTURBATION =====================
-#Generates nearby alternative weight vectors on the probability simplex
+# Generate nearby alternative weight vectors on the probability simplex.
 # by applying Gaussian noise in log-space and renormalizing. This preserves positivity
 # and sum-to-one constraints while exploring the local neighborhood around w, enabling
 # smooth robustness and sensitivity analyses of estimator combinations.
@@ -593,14 +581,14 @@ perturb_weights_simplex <- function(w_star, sigma = 0.02, n = 200, seed = 1) {
 }
 
 
-#It Re-runs the perturbation-based robustness test but also returns the
+# Re-run the perturbation-based robustness test and return the
 # full vector of fitness values. This allows deeper diagnostics such as distribution
 # plots, tail-risk analysis, and identifying asymmetric sensitivity where some nearby
 # weight directions cause much larger degradation than others.
 
 
 # =========================== GA (single split) ===========================
-#Main GA driver for one distribution family using a single train/validation split.
+# Main GA driver for one distribution family using a single train/validation split.
 # Builds/uses a scenario set, initializes a simplex-constrained population 
 # (optionally warm-started), evolves weights with selection/crossover/mutation, 
 # evaluates on train/val, early-stops, and returns best weights plus detailed
@@ -654,21 +642,17 @@ evolve_universal_estimator_per_family <- function(dist_name,
                                                   crn_env = NULL,
                                                   fam_key = NULL,
                                                   force_scenario_mode = NULL,
-                                                  #permite inyectar el prepped ya subseteado desde CV
+                                                  # allow CV to provide an already-subsetted prepped object
                                                   prepped_override = NULL,
                                                   diagnostics = FALSE,
                                                   checkpoint_dir = NULL){
   
-  #Validates key inputs and establishes a reproducible RNG state for the entire run.
-  # This ensures deterministic behavior across GA initialization, scenario generation, folds/splits,
-  # and any stochastic evaluation components that depend on the seed, including parallel RNG streams.
+  # Validate key inputs and establish a reproducible RNG state for the run.
   stopifnot(pop_size >= 2L, generations >= 1L, length(sample_sizes) >= 1L)
   seed <- .ensure_seed(seed, fallback = 101L)
   set.seed(seed)
   
-  #Consolidates all GA hyperparameters and objective settings into a single control
-  # list (ctrl). This centralizes configuration used throughout selection/mutation/evaluation and
-  # enables consistent logging/diagnostics and safe parameter passing to worker processes.
+  # Consolidate GA hyperparameters and objective settings into one control list.
   ctrl <- modifyList(.ga_default_ctrl, list(
     objective          = match.arg(objective),
     lambda_instab      = lambda_instab,
@@ -1233,13 +1217,13 @@ evolve_universal_estimator_per_family_cv <- function(dist_name,
                                                      minibatch_min  = 12L,
                                                      crn_env = NULL,
                                                      fam_key = NULL,
-                                                     #scenario subsampling (works for FULL and LIGHT)
+                                                     # scenario subsampling, for full and light modes
                                                      scenario_frac = 1.0,
                                                      scenario_seed = NULL,
                                                      subset_tag = NULL,
-                                                     #forzar full/light desde fuera
+                                                     # allow launchers to force full or light mode
                                                      force_scenario_mode = NULL,
-                                                     #override scenario universe/subset from launcher
+                                                     # allow launchers to override the scenario universe
                                                      scenario_universe = NULL,
                                                      scenario_subset_override = NULL,
                                                      run_dir = NULL,
@@ -1451,6 +1435,5 @@ evolve_universal_estimator_per_family_cv <- function(dist_name,
   
 }
 
-# This is just a tag... if the module is successfully 
-#loaded this tag will be printed out in the console
+# Record that the GA core module was sourced.
 mark_module_done("05_ga_core.R")

@@ -258,5 +258,3 @@ build_param_grids <- function(overrides = NULL, families = names(.param_grids_de
 # (param_grids) without repeatedly rebuilding. This also ensures validation happens early and fails fast
 # if any family grid is misconfigured or becomes empty due to invalid parameter values.
 param_grids <- build_param_grids()
-
-#Trigger for the module run tracker

@@ -363,6 +363,3 @@ weights_to_formula <- function(weights, distribution = NULL, target = "arithmeti
   w <- round(apply_estimator_admissibility(as.numeric(weights), distribution = distribution, target = target), 3)
   paste0(paste0(w, "*", ESTIMATOR_NAMES), collapse = " + ")
 }
-
-
-#Trigger for the module run tracker

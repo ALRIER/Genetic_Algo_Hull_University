@@ -98,14 +98,11 @@ make_crn_indices <- function(families, sample_sizes, num_samples = 50L, ...) {
   crn
 }
 
-# Stable integer seed from an arbitrary string key (hash-like): 
-#used when we need deterministic per-key seeds without integer overflow.
+# Stable integer seed from an arbitrary string key, used when deterministic
+# per-key seeds are needed without integer overflow.
 .stable_int_seed <- function(key, base_seed = 0L) {
-  # Converts an arbitrary string key into a stable positive 
-  #32-bit-ish integer seed using modular hashing.
-  # Used when we want deterministic seeds per “entity” 
-  #(e.g., family/stage/config key) without depending on R’s
-  # internal hashing, and without overflow issues that can occur with naive integer conversions.
+  # Convert an arbitrary key into a stable positive integer seed using modular
+  # hashing, independent of R's internal hash behavior.
   key  <- paste0(key)
   ints <- utf8ToInt(key)
   
@@ -122,21 +119,18 @@ make_crn_indices <- function(families, sample_sizes, num_samples = 50L, ...) {
 }
 
 .ensure_seed <- function(seed, fallback = 12345L) {
-  # Normalizes user-provided seeds into a single positive integer, defaulting to 
-  #fallback on invalid input.
-  # This prevents accidental NA/0/negative seeds from silently 
-  #breaking reproducibility or RNG-stream selection.
+  # Normalize user-provided seeds into a single positive integer, falling back
+  # when input is missing, non-finite, zero, or negative.
   s <- suppressWarnings(as.integer(seed))
   if (length(s) != 1L || is.na(s) || s <= 0L) s <- as.integer(fallback)
   s
 }
 
 
-# Helper: evaluate an expression under a local seed and then restore the previous RNG state (prevents accidental cross-talk between modules).
+# Evaluate an expression under a local seed, then restore the previous RNG state.
 .seed_scope <- function(seed, expr) {
-  # Executes an expression under a temporary seed, then restores the prior RNG state on exit.
-  # This isolates stochastic components (sampling, bootstrapping, CRN-driven draws) so one module does not
-  # unintentionally shift the global RNG stream and alter results elsewhere in the pipeline.
+  # Isolate stochastic components so one module does not shift the global RNG
+  # stream used elsewhere in the pipeline.
   s_backup_exists <- exists(".Random.seed", inherits = FALSE)
   if (s_backup_exists) s_backup <- .Random.seed
   on.exit({

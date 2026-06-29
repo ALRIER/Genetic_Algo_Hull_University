@@ -293,5 +293,4 @@ weights_to_formula <- function(weights, distribution = NULL, target = "arithmeti
 }
 
 
-#Trigger for the module run tracker
 mark_module_done("04_estimators_registry.R")

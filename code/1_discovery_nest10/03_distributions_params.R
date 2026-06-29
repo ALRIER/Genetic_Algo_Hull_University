@@ -258,5 +258,4 @@ build_param_grids <- function(overrides = NULL, families = names(.param_grids_de
 # if any family grid is misconfigured or becomes empty due to invalid parameter values.
 param_grids <- build_param_grids()
 
-#Trigger for the module run tracker
 mark_module_done("03_distributions_params.R")

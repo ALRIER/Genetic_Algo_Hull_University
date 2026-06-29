@@ -326,6 +326,3 @@ pick_minibatch_configs <- function(cfg_grid, frac = NULL, k = NULL, seed = 13, s
   }
   cfg_grid[sort(unique(take)), , drop = FALSE]
 }
-
-
-#Trigger for the module run tracker

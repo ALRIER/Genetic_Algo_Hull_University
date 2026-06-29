@@ -173,22 +173,16 @@ compute_components_vector <- function(x) {
   as.numeric(comps)
 }
 
-# The helpers below support reproducible simulation via local seeding and CRN
-# (Common Random Numbers). CRN ensures different estimators are
-# compared on the same underlying random draws for each (family, n),
+# The helpers below support reproducible simulation via local seeding and common
+# random numbers. CRN ensures different estimators are compared on the same
+# underlying random draws for each family/sample-size pair,
 # reducing Monte Carlo noise and improving cross-run comparability.
 
-#Helper: evaluate an expression under a local seed without affecting global RNG -------
-
-# --- PREP with CRN: uses sim-seeds by (family, n) for reproducible sampling
-# 'crn_env' comes from make_crn_indices(); key = paste(family, n, sep="__")
-
 # Prepares (and optionally caches) the scenario list for a distribution family by
-# generating a pooled population from the parameter grid, then sampling
-# repeated datasets per scenario and sample size, computing estimator
-# components each time. Supports CRN for variance reduction and optional
-# scenario subsampling to enable CV and staged/halving workflows
-# without regenerating data.
+# generating a pooled population from the parameter grid, sampling repeated
+# datasets per scenario and sample size, and computing estimator components.
+# Scenario subsets allow CV, downsampling, and staged workflows without
+# regenerating unnecessary data.
 prep_scenarios <- function(dist_name, dist_param_grid,
                            sample_sizes = c(50, 100, 300, 500, 1000, 2000),
                            num_samples = 80,
@@ -196,13 +190,7 @@ prep_scenarios <- function(dist_name, dist_param_grid,
                            seed = 123,
                            crn_env = NULL,
                            fam_key = NULL,
-                           # Optional scenario subset input: when provided,
-                           #prep_scenarios only simulates the
-                           # requested rows instead of the full scenario universe.
-                           #This is used for CV folds, scenario_frac
-                           # downsampling, and multi-stage pipelines.
-                           #subset_tag labels the subset for caching and auditing.
-                           # scenario subsampling (prepare ONLY this subset)
+                           # Optional scenario subset: prepare only these rows.
                            scenario_subset = NULL,
                            subset_tag = NULL,
                            use_cache = TRUE) {
@@ -393,5 +381,3 @@ balanced_sample_idx <- function(prepped, pool_idx, k, seed) {
     unique(head(take, k))
   })
 }
-
-#Trigger for the module run tracker
