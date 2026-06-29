@@ -1,13 +1,13 @@
 # Code Cleanup Record — Genetic_Algo_Hull_University
 
-This document records the cleanup applied to the R code in this repository.
+This document records code-maintenance changes applied to the R files in this repository.
 The guiding rule is simple: change presentation and maintainability only
 (comments, diagnostic scaffolding, duplicate non-numerical helpers), not the
 numerical core. Modified files were checked with diffs that isolate executable
 changes from comments, blank lines, and module-tracking fallbacks.
 
 Before replacing any production archive, numerical equivalence should still be
-checked by running representative original and cleaned pipelines and comparing
+checked by running representative reference and current pipelines and comparing
 checksums for representative CSV outputs.
 
 ---

@@ -25,5 +25,5 @@ for (f in files) {
 }
 if (!flagged) cat("  (none; module tracking does not control execution flow)\n")
 
-cat("\nReminder: numerical equivalence requires running the original and cleaned\n")
+cat("\nReminder: numerical equivalence requires running the reference and current\n")
 cat("pipelines and comparing checksums for representative result CSVs.\n")

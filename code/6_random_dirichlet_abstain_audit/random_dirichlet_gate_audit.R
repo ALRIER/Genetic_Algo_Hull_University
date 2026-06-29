@@ -4,7 +4,7 @@
 # -----------------------------------------------------------------------------
 # Methodological annex: random-search audit for NEST26 abstention decisions.
 #
-# This script is meant to be run from the cleaned repository or from the final
+# This script is meant to be run from this repository or from the final
 # results bundle. By default it reads:
 #   - the final NEST26 evidence taxonomy, which says which regimes
 #     ended as benchmark_retained, marginal_ga_win, or negative controls;
@@ -28,7 +28,7 @@
 # Dirichlet weight draws by matrix multiplication. A draw must beat the best
 # admissible benchmark on both mean MSE and q95 MSE for every validation seed.
 #
-# Typical use from the cleaned repository root:
+# Typical use from the repository root:
 #   Rscript random_dirichlet_gate_audit.R --draws 4000 --R 500
 #
 # Useful smoke test before a long run:
