@@ -7,36 +7,20 @@
 # reproducibility and statistical interpretation.
 # =============================================================================
 
-# ===== MODULE RUN TRACKING =====
 # Lightweight run-tracking utilities used across modules to confirm that a script was
 # successfully sourced. The environment stores per-module status and timestamps, which helps debug
 # partial loads and ordering issues in multi-file pipelines without affecting the experiment logic.
-# ===== MODULE RUN TRACKING =====
 # Keep the per-file load checks, but avoid carrying a full duplicated helper implementation
 # in every module. If the shared helpers from 00_utils_debug_io.R are already loaded, we reuse them.
 # Otherwise, we create a minimal fallback so this file can still be sourced on its own.
-if (!exists(".MOD_STATUS", inherits = TRUE) || !is.environment(.MOD_STATUS)) {
-  .MOD_STATUS <- new.env(parent = emptyenv())
-}
 
+# Module load tracking lives in 00_utils_debug_io.R, which is sourced first in a normal run.
+# If this file is opened on its own, this tiny no-op fallback lets it still source cleanly.
 if (!exists("mark_module_done", mode = "function", inherits = TRUE)) {
-  mark_module_done <- function(module_id, extra = NULL) {
-    ts <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    .MOD_STATUS[[module_id]] <- list(done = TRUE, time = ts, extra = extra)
-    cat(sprintf("[MODULE DONE] %s | %s%s\n",
-                ts, module_id,
-                if (!is.null(extra)) paste0(" | ", extra) else ""))
-    flush.console()
-    invisible(TRUE)
-  }
+  mark_module_done <- function(module_id, extra = NULL) invisible(TRUE)
+  is_module_done   <- function(module_id) FALSE
 }
 
-if (!exists("is_module_done", mode = "function", inherits = TRUE)) {
-  is_module_done <- function(module_id) {
-    x <- try(.MOD_STATUS[[module_id]], silent = TRUE)
-    is.list(x) && isTRUE(x$done)
-  }
-}
 
 
 # Injects controlled contamination into a sample by replacing k observations with
@@ -416,6 +400,5 @@ balanced_sample_idx <- function(prepped, pool_idx, k, seed) {
 }
 
 #Trigger for the module run tracker
-mark_module_done("06_data_prep.R")
 
 

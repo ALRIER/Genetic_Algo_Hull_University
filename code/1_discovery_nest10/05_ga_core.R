@@ -4,31 +4,12 @@
 # Genetic algorithm primitives for simplex-constrained composite estimators.
 # =============================================================================
 
-# ===== MODULE RUN TRACKING =====
-# Keep the per-file load checks, but avoid carrying a full duplicated helper implementation
-# in every module. If the shared helpers from 00_utils_debug_io.R are already loaded, we reuse them.
-# Otherwise, we create a minimal fallback so this file can still be sourced on its own.
-if (!exists(".MOD_STATUS", inherits = TRUE) || !is.environment(.MOD_STATUS)) {
-  .MOD_STATUS <- new.env(parent = emptyenv())
-}
-
+# Module load tracking lives in 00_utils_debug_io.R, which is always sourced first.
+# If this file is opened on its own (without 00), we add a tiny no-op fallback so it
+# still runs. In a normal pipeline run this branch never executes.
 if (!exists("mark_module_done", mode = "function", inherits = TRUE)) {
-  mark_module_done <- function(module_id, extra = NULL) {
-    ts <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    .MOD_STATUS[[module_id]] <- list(done = TRUE, time = ts, extra = extra)
-    cat(sprintf("[MODULE DONE] %s | %s%s\n",
-                ts, module_id,
-                if (!is.null(extra)) paste0(" | ", extra) else ""))
-    flush.console()
-    invisible(TRUE)
-  }
-}
-
-if (!exists("is_module_done", mode = "function", inherits = TRUE)) {
-  is_module_done <- function(module_id) {
-    x <- try(.MOD_STATUS[[module_id]], silent = TRUE)
-    is.list(x) && isTRUE(x$done)
-  }
+  mark_module_done <- function(module_id, extra = NULL) invisible(TRUE)
+  is_module_done   <- function(module_id) FALSE
 }
 
 
@@ -50,7 +31,7 @@ init_population <- function(size, n_estimators, alpha = 1, warm_start = NULL, ji
     ws <- t(apply(ws, 1, .normalize_simplex))
     k <- min(nrow(ws), size)
     if (k > 0) {
-      # jitter suave for diversity
+      # gentle jitter for diversity
       eps <- matrix(gtools::rdirichlet(k, rep(alpha + jitter, n_estimators)),
                     nrow = k, byrow = TRUE)
       pop[seq_len(k), ] <- t(apply((ws[seq_len(k), , drop = FALSE] + eps) / 2, 1, .normalize_simplex))
@@ -84,12 +65,12 @@ tournament_select <- function(scores, pop_size, t_size = 2L, replace = TRUE) {
   stopifnot(is.numeric(scores), length(scores) >= 2L, pop_size >= 2L, t_size >= 2L)
   n <- length(scores)
   t_size  <- min(t_size, n)             # guard: tournament size cannot exceed population
-  n_pairs <- max(1L, pop_size %/% 2L) #size of mating pool
+  n_pairs <- max(1L, pop_size %/% 2L) # number of parents to pick (size of the mating pool)
   winners <- integer(n_pairs)
   
   for (i in seq_len(n_pairs)) {
-    cand <- base::sample.int(n, size = t_size, replace = FALSE)
-    local_best <- cand[which.min(scores[cand])]
+    cand <- base::sample.int(n, size = t_size, replace = FALSE)  # draw t_size random contenders
+    local_best <- cand[which.min(scores[cand])]                 # the one with the lowest score wins this round
     winners[i] <- local_best
   }
   
@@ -1441,7 +1422,7 @@ evolve_universal_estimator_per_family_cv <- function(dist_name,
   #Final retrain option: runs one more GA pass on ALL scenarios using an expanded
   # warm-start matrix (warm_bank + best CV weights). This typically yields a stronger final solution
   # for deployment/publication while CV still provides unbiased model selection via fold validation.
-  # -------- FINAL OUTPUT (correcto) --------
+  # -------- FINAL OUTPUT --------
   if (isTRUE(final_retrain)) {
     cat(sprintf("\n[%s] Final retrain on ALL scenarios (warm-start)\n", dist_name))
     
@@ -1465,7 +1446,7 @@ evolve_universal_estimator_per_family_cv <- function(dist_name,
     #  Alternative output path when final_retrain is disabled: returns the best fold’s
     # result directly as the final model. This is faster and preserves an unbiased validation estimate,
     # but may yield slightly weaker weights than training once on the full scenario set with warm-starts.
-    # NO retrain: devolvemos el mejor fold
+    # No retrain: return the best fold as the final result
     return(list(
       fold_results = fold_results,
       final        = fold_results[[best_fold]],

@@ -41,18 +41,12 @@
 # =============================================================================
 
 
-# ── Module run tracking (defensive: works even if 00 not sourced) ──────────
-if (!exists(".MOD_STATUS", inherits = TRUE) || !is.environment(.MOD_STATUS)) {
-  .MOD_STATUS <- new.env(parent = emptyenv())
-}
+# Module load tracking lives in 00_utils_debug_io.R, which is always sourced first.
+# If this file is opened on its own (without 00), we add a tiny no-op fallback so it
+# still runs. In a normal pipeline run this branch never executes.
 if (!exists("mark_module_done", mode = "function", inherits = TRUE)) {
-  mark_module_done <- function(module_id, extra = NULL) {
-    ts <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    .MOD_STATUS[[module_id]] <- list(done = TRUE, time = ts, extra = extra)
-    cat(sprintf("[MODULE DONE] %s | %s%s\n", ts, module_id,
-                if (!is.null(extra)) paste0(" | ", extra) else ""))
-    flush.console(); invisible(TRUE)
-  }
+  mark_module_done <- function(module_id, extra = NULL) invisible(TRUE)
+  is_module_done   <- function(module_id) FALSE
 }
 if (!exists("catf", mode = "function", inherits = TRUE)) {
   catf <- function(fmt, ...) cat(sprintf(fmt, ...), "\n")

@@ -9,36 +9,20 @@
 # =============================================================================
 
 
-# ===== MODULE RUN TRACKING =====
 # Tracks whether this module has already been sourced in the current session. The shared .MOD_STATUS
 # environment acts as a lightweight “load ledger” across files, which helps debug partial sourcing or
 # incorrect load order in a multi-module workflow without changing any experimental computations.
-# ===== MODULE RUN TRACKING =====
 # Keep the per-file load checks, but avoid carrying a full duplicated helper implementation
 # in every module. If the shared helpers from 00_utils_debug_io.R are already loaded, we reuse them.
 # Otherwise, we create a minimal fallback so this file can still be sourced on its own.
-if (!exists(".MOD_STATUS", inherits = TRUE) || !is.environment(.MOD_STATUS)) {
-  .MOD_STATUS <- new.env(parent = emptyenv())
-}
 
+# Module load tracking lives in 00_utils_debug_io.R, which is sourced first in a normal run.
+# If this file is opened on its own, this tiny no-op fallback lets it still source cleanly.
 if (!exists("mark_module_done", mode = "function", inherits = TRUE)) {
-  mark_module_done <- function(module_id, extra = NULL) {
-    ts <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    .MOD_STATUS[[module_id]] <- list(done = TRUE, time = ts, extra = extra)
-    cat(sprintf("[MODULE DONE] %s | %s%s\n",
-                ts, module_id,
-                if (!is.null(extra)) paste0(" | ", extra) else ""))
-    flush.console()
-    invisible(TRUE)
-  }
+  mark_module_done <- function(module_id, extra = NULL) invisible(TRUE)
+  is_module_done   <- function(module_id) FALSE
 }
 
-if (!exists("is_module_done", mode = "function", inherits = TRUE)) {
-  is_module_done <- function(module_id) {
-    x <- try(.MOD_STATUS[[module_id]], silent = TRUE)
-    is.list(x) && isTRUE(x$done)
-  }
-}
 
 
 # =============================================================================
@@ -353,4 +337,3 @@ pick_minibatch_configs <- function(cfg_grid, frac = NULL, k = NULL, seed = 13, s
 
 
 #Trigger for the module run tracker
-mark_module_done("02_scenarios_sampling.R")

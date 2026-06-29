@@ -96,53 +96,7 @@ for (pkg in required_packages) {
 # the execution path (early-stopping, error handling, etc.). This helper
 # prints the structure of a result object to explain why a Top-K matrix
 # could not be recovered.
-.debug_topk_diagnose <- function(res, label = "") {
-  # Structural introspection for GA/CV outputs: prints key fields and shapes to explain Top-K extraction.
-  # Useful when wrappers differ (CV vs single-run) or when early-stopping/errors change object structure.
-  if (!.debug_on()) return(invisible(NULL))
-  if (is.null(res)) {
-    .dbg(label, " res is NULL (likely error caught by tryCatch).")
-    return(invisible(NULL))
-  }
-  if (!is.list(res)) {
-    .dbg(label, " res is not a list; class=", paste(class(res), collapse=","), ".")
-    return(invisible(NULL))
-  }
-  nms <- names(res); if (is.null(nms)) nms <- character()
-  .dbg(label, " names(res)=", paste(nms, collapse=", "))
-  has_final <- !is.null(res$final) && is.list(res$final)
-  .dbg(label, " has_final=", has_final)
-  if (has_final) {
-    fnms <- names(res$final); if (is.null(fnms)) fnms <- character()
-    .dbg(label, " names(res$final)=", paste(fnms, collapse=", "))
-    has_topk <- !is.null(res$final$topk_weights)
-    has_w    <- !is.null(res$final$weights)
-    .dbg(label, " final$topk_weights present=", has_topk, " | final$weights present=", has_w)
-    if (!is.null(res$final$overall)) {
-      ov <- res$final$overall
-      if (is.data.frame(ov)) {
-        wcols <- grep("^w_", colnames(ov), value = TRUE)
-        .dbg(label, " overall rows=", nrow(ov), " cols=", ncol(ov),
-             " | w_ cols=", paste(wcols, collapse=", "))
-      } else {
-        .dbg(label, " final$overall is not a data.frame; class=", paste(class(ov), collapse=","))
-      }
-    } else {
-      .dbg(label, " final$overall is NULL")
-    }
-  }
-  invisible(NULL)
-}
-
 # Capture a compact call stack string (useful inside error handlers).
-.debug_stack <- function() {
-  # Captures the current call chain as a single string; helpful inside tryCatch error handlers when you want
-  # context without printing full tracebacks. This is diagnostics-only and should not affect RNG or results.
-  calls <- sys.calls()
-  if (length(calls) == 0) return("")
-  paste(vapply(calls, function(x) paste(deparse(x), collapse=" "), character(1)), collapse="  <-  ")
-}
-
 for (pkg in required_packages) {
   # Attaches the required packages quietly (suppresses startup messages) so functions are available by name.
   # Centralizing library() calls here avoids repeated imports in every module and keeps logs cleaner.
@@ -443,4 +397,3 @@ progress_finalize <- function() {
 }
 
 # Mark this module as successfully sourced (used for sanity checks in the console).
-mark_module_done("00_utils_debug_io.R")

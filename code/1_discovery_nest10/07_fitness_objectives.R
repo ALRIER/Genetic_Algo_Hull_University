@@ -5,31 +5,12 @@
 # Fitness objectives and benchmark-relative scoring for composite estimators.
 # =============================================================================
 
-# ===== MODULE RUN TRACKING =====
-# Keep the per-file load checks, but avoid carrying a full duplicated helper implementation
-# in every module. If the shared helpers from 00_utils_debug_io.R are already loaded, we reuse them.
-# Otherwise, we create a minimal fallback so this file can still be sourced on its own.
-if (!exists(".MOD_STATUS", inherits = TRUE) || !is.environment(.MOD_STATUS)) {
-  .MOD_STATUS <- new.env(parent = emptyenv())
-}
-
+# Module load tracking lives in 00_utils_debug_io.R, which is always sourced first.
+# If this file is opened on its own (without 00), we add a tiny no-op fallback so it
+# still runs. In a normal pipeline run this branch never executes.
 if (!exists("mark_module_done", mode = "function", inherits = TRUE)) {
-  mark_module_done <- function(module_id, extra = NULL) {
-    ts <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    .MOD_STATUS[[module_id]] <- list(done = TRUE, time = ts, extra = extra)
-    cat(sprintf("[MODULE DONE] %s | %s%s\n",
-                ts, module_id,
-                if (!is.null(extra)) paste0(" | ", extra) else ""))
-    flush.console()
-    invisible(TRUE)
-  }
-}
-
-if (!exists("is_module_done", mode = "function", inherits = TRUE)) {
-  is_module_done <- function(module_id) {
-    x <- try(.MOD_STATUS[[module_id]], silent = TRUE)
-    is.list(x) && isTRUE(x$done)
-  }
+  mark_module_done <- function(module_id, extra = NULL) invisible(TRUE)
+  is_module_done   <- function(module_id) FALSE
 }
 
 
@@ -54,7 +35,7 @@ run_sensitivity <- function(w_best, dist_name, dist_param_grid,
   for (i in seq_len(n_alt)) {
     alt_seed <- base_seed + i
     
-    # (A) subset alternativo
+    # (A) alternative scenario subset
     sc_u <- build_scenarios(scenario_mode)
     sc_u <- add_scenario_ids(sc_u)
     sc_alt <- pick_scenario_subset(sc_u, scenario_frac = 1.0, seed = alt_seed,
@@ -795,7 +776,7 @@ weight_perturbation_test <- function(w_star, prepped,
     folds_dir <- file.path(fam_dir, sprintf("FOLDS__%s", config_tag))
     mkdirp(fam_dir); mkdirp(folds_dir)
     
-    # --- Final (retrain o mejor fold) ---
+    # --- Final (retrain or best fold) ---
     .write_csv_safe(res_cv$final$overall,
                     file.path(fam_dir, sprintf("OVERALL__%s.csv",   config_tag)))
     .write_csv_safe(res_cv$final$scenario_table,

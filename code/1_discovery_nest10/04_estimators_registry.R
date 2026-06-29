@@ -8,35 +8,12 @@
 # =============================================================================
 
 
-# ===== MODULE RUN TRACKING =====
-# Tracks whether this module has already been sourced in the current R session. The shared .MOD_STATUS
-# environment is used across modules so long orchestration runs can confirm load order and detect missing
-# definitions (e.g., estimator registry not initialized) without altering any stochastic computation.
-# ===== MODULE RUN TRACKING =====
-# Keep the per-file load checks, but avoid carrying a full duplicated helper implementation
-# in every module. If the shared helpers from 00_utils_debug_io.R are already loaded, we reuse them.
-# Otherwise, we create a minimal fallback so this file can still be sourced on its own.
-if (!exists(".MOD_STATUS", inherits = TRUE) || !is.environment(.MOD_STATUS)) {
-  .MOD_STATUS <- new.env(parent = emptyenv())
-}
-
+# Module load tracking lives in 00_utils_debug_io.R, which is always sourced first.
+# If this file is opened on its own (without 00), we add a tiny no-op fallback so it
+# still runs. In a normal pipeline run this branch never executes.
 if (!exists("mark_module_done", mode = "function", inherits = TRUE)) {
-  mark_module_done <- function(module_id, extra = NULL) {
-    ts <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    .MOD_STATUS[[module_id]] <- list(done = TRUE, time = ts, extra = extra)
-    cat(sprintf("[MODULE DONE] %s | %s%s\n",
-                ts, module_id,
-                if (!is.null(extra)) paste0(" | ", extra) else ""))
-    flush.console()
-    invisible(TRUE)
-  }
-}
-
-if (!exists("is_module_done", mode = "function", inherits = TRUE)) {
-  is_module_done <- function(module_id) {
-    x <- try(.MOD_STATUS[[module_id]], silent = TRUE)
-    is.list(x) && isTRUE(x$done)
-  }
+  mark_module_done <- function(module_id, extra = NULL) invisible(TRUE)
+  is_module_done   <- function(module_id) FALSE
 }
 
 
@@ -235,7 +212,7 @@ admissible_estimator_mask <- function(distribution = NULL,
   names(mask) <- ESTIMATOR_NAMES
 
   if (isTRUE(strict_support) && family_allows_nonpositive(distribution)) {
-    positive_only <- ESTIMATOR_METADATA$estimator[isTRUE(TRUE) & ESTIMATOR_METADATA$requires_positive]
+    positive_only <- ESTIMATOR_METADATA$estimator[ESTIMATOR_METADATA$requires_positive]
     mask[positive_only] <- FALSE
   }
 
