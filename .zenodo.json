@@ -1,0 +1,27 @@
+{
+  "title": "Genetic Algorithms for Regime-Specific Location Estimators - University of Hull",
+  "upload_type": "software",
+  "description": "Source code and reviewer-ready result extracts for the University of Hull research program on genetic algorithms for regime-specific location estimators. The full archival results bundle, including raw checkpoints and recovery outputs, is stored separately in Zenodo as a dataset backup.",
+  "creators": [
+    {
+      "name": "Rivera-Eraso, Alvaro",
+      "affiliation": "Konrad Lorenz University",
+      "orcid": "0000-0002-4885-2021"
+    }
+  ],
+  "keywords": [
+    "genetic algorithms",
+    "location estimators",
+    "robust statistics",
+    "simulation study",
+    "real-world benchmark"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.21046199",
+      "relation": "isSupplementedBy",
+      "resource_type": "dataset",
+      "scheme": "doi"
+    }
+  ]
+}
