@@ -16,7 +16,6 @@ The GA does not invent an estimator from raw observations. It learns convex comb
 Genetic_Algo_Hull_University/
 ├── README.md
 ├── MANIFEST.md
-├── CODE_MAP.md                 # map of shared vs stage-specific modules
 ├── .gitignore
 ├── code/
 │   ├── 1_discovery_nest10/                  # Phase 1 GA discovery (N_EST = 10)
@@ -109,7 +108,18 @@ The phases are kept separate **on purpose**, because the estimator basis and val
 
 ## Shared vs Stage-Specific Code
 
-Several modules share the same filename across phases (for example `00_utils_debug_io.R`, `01_paths_repro.R`). Some are byte-identical between phases; others differ because they encode the phase differences (estimator basis, GA operators tuned to the expanded basis, fitness/benchmark exposure, inheritance). To keep every stage independently runnable and to preserve an exact record of what produced each result, the stages are kept self-contained rather than collapsed into a single copy. `CODE_MAP.md` documents, file by file, which shared-named modules are identical across phases and which differ — so the structure can be understood at a glance without diffing the folders manually.
+Several modules share the same filename across phases (for example `00_utils_debug_io.R`, `01_paths_repro.R`). Some are byte-identical between phases; others differ because they encode the phase differences (estimator basis, GA operators tuned to the expanded basis, fitness/benchmark exposure, inheritance). To keep every stage independently runnable and to preserve an exact record of what produced each result, the stages are kept self-contained rather than collapsed into a single copy.
+
+The intentionally repeated modules are:
+
+| Module | Appears in | Reason kept separate |
+| --- | --- | --- |
+| `02_scenarios_sampling.R` | Phase 1 and Phase 2 GA folders | identical scenario-grid construction, copied so each phase runs alone |
+| `03_distributions_params.R` | Phase 1, Phase 2, and real-world folders | same distribution families, kept local to each stage |
+| `10_distributional_diagnostics.R` | Phase 1 and Phase 2 GA folders | identical pre-GA diagnostics |
+| `02_expanded_benchmarks.R` | both fixed-weight validation folders | identical benchmark helper used by separate validation stages |
+
+Other same-named files are stage-specific and should not be merged.
 
 ## Reproducibility Notes
 

@@ -6,7 +6,6 @@ Research code and summarized results for the genetic-algorithm location-estimato
 
 - `code/`: experiment code, organized by stage.
 - `results/`: summary result files, figures, evidence-taxonomy tables, and audit metadata.
-- `CODE_MAP.md`: map of shared vs stage-specific modules.
 
 ## Estimator dimensions
 
