@@ -819,16 +819,14 @@ evolve_universal_estimator_per_family <- function(dist_name,
   ga_population <- .ga_apply_population_admissibility(ga_population, dist_name)
   ga_population <- protect_population_once(ga_population)
   
-  #Sets up optional parallel evaluation using a PSOCK cluster with reproducible RNG
-  # streams derived from seed. Exports required functions/data to workers and ensures the cluster is
-  # properly stopped on exit, preventing orphaned processes and non-deterministic RNG behavior.
+  # Set up optional parallel evaluation with reproducible RNG streams and make
+  # sure the worker cluster is stopped when this run exits.
   cl <- .ga_setup_cluster(use_parallel, seed)
   on.exit({ if (!is.null(cl)) try(parallel::stopCluster(cl), silent = TRUE) }, add = TRUE)
   .ga_export_cluster(cl, environment())
   
-  #Initializes convergence tracking and early-stopping state. Stores best/median
-  # train and validation metrics over time, maintains a validation history, and tracks the best score
-  # seen so far to trigger patience-based stopping and adaptive mutation boosts when stagnation occurs.
+  # Track convergence and early stopping: train/validation summaries, the best
+  # validation score so far, and mutation boosts after stagnation.
   # ---- Tracking ---------------------------------------------------------
   conv <- if (record_convergence)
     data.frame(gen=integer(0), best_train=numeric(0), med_train=numeric(0),
@@ -1271,11 +1269,8 @@ evolve_universal_estimator_per_family_cv <- function(dist_name,
   
   
   
-  # Defines the scenario subset used for CV. If an override is provided, 
-  # it is used directly (with scenario_id ensured). Otherwise,
-  # it builds/uses the full scenario universe and selects a reproducible
-  # subset (scenario_frac, min_n>=k_folds).
-  # Produces tags/seeds for tracking.
+  # Define the scenario subset used for CV. Overrides are used directly; otherwise
+  # the full scenario universe is sampled reproducibly.
   # ---- scenario subsampling (FULL or LIGHT) -----------------
   if (!is.null(scenario_subset_override)) {
     scenario_subset <- as.data.frame(scenario_subset_override)

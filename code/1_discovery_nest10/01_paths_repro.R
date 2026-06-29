@@ -1,6 +1,5 @@
-# ===== MODULE: PATHS + REPRODUCIBILITY (01_paths_repro.R) ===== 
-#This file configures where outputs are written (cluster vs local) 
-#and sets reproducible RNG conventions used across the whole experiment.
+# ===== MODULE: PATHS + REPRODUCIBILITY (01_paths_repro.R) =====
+# This file centralizes output paths and reproducible RNG conventions for the experiment.
 
 # Module tracking is defined in 00_utils_debug_io.R. This fallback only lets the file source on its own.
 if (!exists("mark_module_done", mode = "function", inherits = TRUE)) {
@@ -8,20 +7,18 @@ if (!exists("mark_module_done", mode = "function", inherits = TRUE)) {
   is_module_done   <- function(module_id) FALSE
 }
 
-
-# Module-run tracking: record that this module has been sourced successfully (helps confirm module order during interactive debugging).
-# Note: this early mark confirms the file was read; later code still may fail, but the timestamp helps localize issues quickly.
+# Record that the path/reproducibility layer was sourced during interactive runs.
 mark_module_done("01_paths_repro.R")
 
-# =========================== OPTIONAL WORKING DIRECTORY =========================== (usually leave commented so the project runs from any folder)
+# =========================== OPTIONAL WORKING DIRECTORY ===========================
+# Usually leave this commented so the project can run from any folder.
 # setwd("...")  # If you want a fixed base folder for relative paths, uncomment and set a local path here.
 # options(stringsAsFactors = FALSE)  # Legacy R option (kept for compatibility; not required for modern R).
 
-# =========================== OUTPUT ROOT (CLUSTER vs LOCAL) =========================== Centralizes ALL outputs under a single OUT_ROOT so runs are easy to archive and share.
-# Design: detect a shared cluster mount (/srv/cluster). If present, write to shared results so master/workers see the same filesystem.
-# If not on a cluster, write to WIN_OUT_ROOT (env var) or default to <getwd()>/Estimator_Results (single local folder).
-# This prevents scattering CSVs/logs across multiple places and keeps provenance of each run self-contained.
-# You can override the local folder without editing code by setting the environment variable WIN_OUT_ROOT.
+# =========================== OUTPUT ROOT (CLUSTER vs LOCAL) ===========================
+# Keep all generated artifacts under one OUT_ROOT. On a cluster, use the shared
+# mount so master and workers see the same files. Locally, allow WIN_OUT_ROOT to
+# override the default <getwd()>/Estimator_Results location.
 
 IS_WINDOWS <- .Platform$OS.type == "windows"
 CLUSTER_SHARED <- "/srv/cluster"
