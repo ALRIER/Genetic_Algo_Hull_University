@@ -8,17 +8,7 @@
 # =============================================================================
 
 
-# ===== MODULE RUN TRACKING =====
-# Records whether this module has already been sourced in the current session. The shared .MOD_STATUS
-# environment acts as a lightweight, cross-file “load ledger” to confirm module execution order during
-# long experiments, making it easy to detect missing dependencies without altering simulation results.
-# ===== MODULE RUN TRACKING =====
-# Keep the per-file load checks, but avoid carrying a full duplicated helper implementation
-# in every module. If the shared helpers from 00_utils_debug_io.R are already loaded, we reuse them.
-# Otherwise, we create a minimal fallback so this file can still be sourced on its own.
-# Module load tracking lives in 00_utils_debug_io.R, which is always sourced first.
-# If this file is opened on its own (without 00), we add a tiny no-op fallback so it
-# still runs. In a normal pipeline run this branch never executes.
+# Module tracking is defined in 00_utils_debug_io.R. This fallback only lets the file source on its own.
 if (!exists("mark_module_done", mode = "function", inherits = TRUE)) {
   mark_module_done <- function(module_id, extra = NULL) invisible(TRUE)
   is_module_done   <- function(module_id) FALSE
