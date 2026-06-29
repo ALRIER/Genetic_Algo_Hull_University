@@ -530,7 +530,7 @@ fitness_universal <- function(w, prepped,
   w <- .apply_admissibility_if_available(w_raw, distribution = family_id)
   objective <- match.arg(objective)
   
-  # Subconjunto de escenarios
+  # Scenario subset used in this fold.
   Slist <- if (is.null(idx)) prepped else prepped[idx]
   if (length(Slist) == 0L) return(Inf)
   
@@ -829,7 +829,7 @@ weight_perturbation_test <- function(w_star, prepped,
     )
   }
   
-  # Asegura que la tabla de escenarios tenga las columnas clave, rellenando con NA si faltan
+  # Ensure that scenario tables expose the expected columns, filling missing fields with NA.
   .ensure_scenario_cols <- function(df) {
     need <- c("distribution","sample_size",
               "contamination_rate","outlier_scale_mad","contamination_type",
@@ -839,21 +839,21 @@ weight_perturbation_test <- function(w_star, prepped,
     df
   }
   
-  # Asegura que la tabla de convergencia tenga las columnas clave
+  # Ensure that convergence tables expose the expected columns.
   .ensure_convergence_cols <- function(df) {
     need <- c("gen","best_train","med_train","best_val","med_val")
     for (nm in need) if (!nm %in% names(df)) df[[nm]] <- NA
     df
   }
   
-  # Construye un contexto enriquecido combinando:
-  # - lo que viene en 'context' (presupuestos, cobertura, fase, etc.)
-  # - lo que se pueda inferir del propio resultado (objective, scenario_mode) y del tag
+  # Build a richer context by combining:
+  # - values supplied by the caller, such as budgets, coverage, and phase;
+  # - values inferred from the result itself and from the configuration tag.
   .build_context <- function(df, table, run_id, family, config_tag, is_winner, fold, context) {
     cfg <- .parse_config(config_tag)
-    # Intento de deducir scenario_mode desde la propia tabla (si existe la col)
+    # Infer scenario_mode from the table itself when the column is available.
     scenemode_in_df <- df$scenario_mode[1] %||% NA
-    # coverage_hint: por defecto "full" si scenario_mode == "full"; si no, "partial"
+    # coverage_hint defaults to full only when scenario_mode explicitly says full.
     inferred_cov <- if (!is.na(scenemode_in_df) && is.character(scenemode_in_df)) {
       ifelse(tolower(scenemode_in_df) == "full", "full", "partial")
     } else NA_character_
@@ -866,7 +866,7 @@ weight_perturbation_test <- function(w_star, prepped,
       .fold        = as.integer(fold),
       coverage_hint = inferred_cov
     )
-    # El 'context' que pase el llamador (budget_gens, budget_pop, used_num_samples, used_bootstrapB,
+    # Caller-supplied context may add budgets, coverage labels, and phase metadata.
     c(base, as.list(cfg), context %||% list())
   }
   
@@ -887,8 +887,8 @@ weight_perturbation_test <- function(w_star, prepped,
     biglog
   }
   
-  # Extraer todo de un resultado de CV a filas largas
-  # 'context' permite estampar presupuestos/escenario/cobertura/fase:
+  # Collect all cross-validation outputs into one long-format audit log.
+  # context stamps budget, scenario, coverage, and phase metadata:
   #   list(
   #     objective=..., scenario_mode=..., coverage_hint=..., phase="HPF1|HPF2|HALVING|FINAL",
   #     grind_stage=1L, budget_gens=..., budget_pop=..., used_num_samples=..., used_bootstrapB=...
@@ -897,7 +897,7 @@ weight_perturbation_test <- function(w_star, prepped,
                                is_winner = FALSE, context = NULL) {
     if (is.null(res_cv) || is.null(res_cv$final)) return(biglog)
     
-    # Intenta extraer objective/scenario_mode del overall final si no vinieron en 'context'
+    # Use final overall metadata when objective or scenario_mode were not supplied.
     ov <- res_cv$final$overall
     if (is.data.frame(ov) && nrow(ov)) {
       context <- modifyList(
@@ -1071,7 +1071,7 @@ weight_perturbation_test <- function(w_star, prepped,
   
   rank_metric <- match.arg(rank_metric)
   if (is.null(weights_mat) || length(weights_mat) == 0) {
-    stop("weights_mat está vacío. No hay top-k para evaluar.")
+    stop("weights_mat is empty. No top-k weights are available for evaluation.")
   }
   weights_mat <- as.matrix(weights_mat)
   
