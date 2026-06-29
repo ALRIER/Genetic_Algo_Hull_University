@@ -6,6 +6,7 @@ Research code and summarized results for the genetic-algorithm location-estimato
 
 - `code/`: experiment code, organized by stage.
 - `results/`: summary result files, figures, evidence-taxonomy tables, and audit metadata.
+- `results/RESULTS_SELECTION_INDEX.csv`: index of committed result artifacts.
 
 ## Estimator dimensions
 
@@ -32,3 +33,6 @@ Research code and summarized results for the genetic-algorithm location-estimato
 - `results/7_random_dirichlet_abstain_audit/`
 
 Large checkpoints, per-task outputs, logs, raw downloads, and RDS files are not committed here; see *Data Availability* in `README.md`.
+The committed result layer is intended for review and audit. It keeps final tables,
+diagnostics, reports, run metadata, and split audit-ready CSVs, while excluding the
+multi-gigabyte checkpoint and raw-download folders.

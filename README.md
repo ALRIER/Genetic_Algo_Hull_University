@@ -34,7 +34,7 @@ Genetic_Algo_Hull_University/
     └── 7_random_dirichlet_abstain_audit/
 ```
 
-`code/` holds the source for each stage. `results/` holds summary tables, diagnostic figures, evidence-taxonomy tables, and audit metadata used to inspect the main findings. Large raw outputs (RDS checkpoints, per-task dumps, logs, and downloaded datasets) are not committed here; they belong in the separate full-data archive.
+`code/` holds the source for each stage. `results/` holds summary tables, diagnostic figures, evidence-taxonomy tables, run metadata, report files, and audit-ready CSV extracts used to inspect the main findings. `results/RESULTS_SELECTION_INDEX.csv` lists the committed result artifacts. Large raw outputs (RDS checkpoints, per-task dumps, recovery checkpoints, and downloaded public datasets) are not committed here; they belong in the separate full-data archive.
 
 ## Monte Carlo Sample Generator
 
@@ -127,6 +127,8 @@ Other same-named files are stage-specific and should not be merged.
 - Do not mix the `N_EST = 10` and `N_EST = 26` modules.
 - Random seeds and path/reproducibility settings are handled in each stage's `01_paths_repro.R`.
 - The committed `results/` layer is sufficient to inspect the headline findings; full raw output is stored separately.
+- The fixed-weight validation folders include run-task and runtime metadata, but not the full checkpoint directories.
+- The real-world battery includes the compact final tables plus the split audit-ready CSVs; downloaded public datasets and recovery checkpoints are excluded.
 
 ## Data Availability
 

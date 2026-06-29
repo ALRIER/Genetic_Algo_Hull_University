@@ -1,0 +1,6 @@
+Generated: 2026-06-11 18:27:46 UTC
+Results directory: /home/alrier/Documents/Pub # 1 & 2/Final_Results_27May2026/POST_DISCOVERY_FIXED_WEIGHT_VALIDATION_NEST26_EVIDENCE_RESULTS_20260611
+Methodological PDF: /home/alrier/Documents/Pub # 1 & 2/Final_Results_27May2026/POST_DISCOVERY_FIXED_WEIGHT_VALIDATION_NEST26_METHOD_GUIDE_FOR_GPT_20260611.pdf
+Methodological Markdown: /home/alrier/Documents/Pub # 1 & 2/Final_Results_27May2026/POST_DISCOVERY_FIXED_WEIGHT_VALIDATION_NEST26_METHOD_GUIDE_FOR_GPT_20260611.md
+
+No original validation outputs were modified.

@@ -1,0 +1,268 @@
+label,test,statistic,p_value,interpretation
+normal_row1_mean=1_sd=1,Shapiro-Wilk,0.999703202456323,0.7162792562420294,consistent with normal
+normal_row1_mean=1_sd=1,KS vs Normal,0.00687403492182026,0.9721634833532831,consistent with normal
+normal_row1_mean=1_sd=1,Jarque-Bera,1.6049659010644348,0.44821468644725704,consistent with normal
+normal_row2_mean=5_sd=1,Shapiro-Wilk,0.9997398070630352,0.8204797062488194,consistent with normal
+normal_row2_mean=5_sd=1,KS vs Normal,0.0055665739477257226,0.9977826567565278,consistent with normal
+normal_row2_mean=5_sd=1,Jarque-Bera,0.471917577279042,0.7898132225395372,consistent with normal
+normal_row3_mean=1_sd=1.414,Shapiro-Wilk,0.9995450289541322,0.29148593369755016,consistent with normal
+normal_row3_mean=1_sd=1.414,KS vs Normal,0.007826316853900228,0.9193570180233526,consistent with normal
+normal_row3_mean=1_sd=1.414,Jarque-Bera,3.651397234013667,0.16110505407502887,consistent with normal
+normal_row4_mean=5_sd=1.414,Shapiro-Wilk,0.9996342681604417,0.5095053823933555,consistent with normal
+normal_row4_mean=5_sd=1.414,KS vs Normal,0.01308099868260515,0.3592008479928599,consistent with normal
+normal_row4_mean=5_sd=1.414,Jarque-Bera,1.0380955505830376,0.5950869347466161,consistent with normal
+normal_row5_mean=1_sd=2,Shapiro-Wilk,0.9995089349967551,0.22681950928539604,consistent with normal
+normal_row5_mean=1_sd=2,KS vs Normal,0.007820634270210958,0.9197696458004028,consistent with normal
+normal_row5_mean=1_sd=2,Jarque-Bera,2.4370892376196984,0.2956601521760472,consistent with normal
+normal_row6_mean=5_sd=2,Shapiro-Wilk,0.9995691116529207,0.3422425277096215,consistent with normal
+normal_row6_mean=5_sd=2,KS vs Normal,0.010051078596772123,0.6933258134927205,consistent with normal
+normal_row6_mean=5_sd=2,Jarque-Bera,5.296845252941121,0.07076274435386375,consistent with normal
+normal_row7_mean=1_sd=3,Shapiro-Wilk,0.9997110715983997,0.7396706472058496,consistent with normal
+normal_row7_mean=1_sd=3,KS vs Normal,0.007315934965143156,0.9517784213921674,consistent with normal
+normal_row7_mean=1_sd=3,Jarque-Bera,0.4939637923516521,0.7811548352931569,consistent with normal
+normal_row8_mean=5_sd=3,Shapiro-Wilk,0.9997063241383426,0.7256026705767655,consistent with normal
+normal_row8_mean=5_sd=3,KS vs Normal,0.008859086943070138,0.8274721417592223,consistent with normal
+normal_row8_mean=5_sd=3,Jarque-Bera,1.8527972536605037,0.39597720725134367,consistent with normal
+lognormal_row1_meanlog=0.5_sdlog=0.25,Shapiro-Wilk,0.9734679908608049,1.6756793452390895e-29,non-normal
+lognormal_row1_meanlog=0.5_sdlog=0.25,KS vs Normal,0.05235514273403232,2.493178966274138e-12,non-normal
+lognormal_row1_meanlog=0.5_sdlog=0.25,Jarque-Bera,524.2061853969194,1.479357545808562e-114,non-normal
+lognormal_row2_meanlog=1_sdlog=0.25,Shapiro-Wilk,0.9653501173316719,4.781209740237699e-33,non-normal
+lognormal_row2_meanlog=1_sdlog=0.25,KS vs Normal,0.0530591533869458,1.1870018985683014e-12,non-normal
+lognormal_row2_meanlog=1_sdlog=0.25,Jarque-Bera,966.1654626856654,1.5842928968354638e-210,non-normal
+lognormal_row3_meanlog=0.5_sdlog=0.5,Shapiro-Wilk,0.8981239518576808,1.5958943597060713e-49,non-normal
+lognormal_row3_meanlog=0.5_sdlog=0.5,KS vs Normal,0.09909540362597472,4.5055770837383895e-43,non-normal
+lognormal_row3_meanlog=0.5_sdlog=0.5,Jarque-Bera,4179.712138086127,0,non-normal
+lognormal_row4_meanlog=1_sdlog=0.5,Shapiro-Wilk,0.885148756278819,1.4381539602031417e-51,non-normal
+lognormal_row4_meanlog=1_sdlog=0.5,KS vs Normal,0.09362200024473213,1.717022036414889e-38,non-normal
+lognormal_row4_meanlog=1_sdlog=0.5,Jarque-Bera,9001.986564475,0,non-normal
+lognormal_row5_meanlog=0.5_sdlog=1,Shapiro-Wilk,0.5951709724646248,1.1917222784424677e-75,non-normal
+lognormal_row5_meanlog=0.5_sdlog=1,KS vs Normal,0.23377373031288423,9.086860501247675e-238,non-normal
+lognormal_row5_meanlog=0.5_sdlog=1,Jarque-Bera,309592.39135000616,0,non-normal
+lognormal_row6_meanlog=1_sdlog=1,Shapiro-Wilk,0.6365197112516173,2.0920376052017813e-73,non-normal
+lognormal_row6_meanlog=1_sdlog=1,KS vs Normal,0.2151845703139263,1.5980080109988481e-201,non-normal
+lognormal_row6_meanlog=1_sdlog=1,Jarque-Bera,380313.8064625583,0,non-normal
+weibull_row1_shape=0.5_scale=0.5,Shapiro-Wilk,0.44648496873723464,2.3089694098439477e-82,non-normal
+weibull_row1_shape=0.5_scale=0.5,KS vs Normal,0.32848084238184166,0,non-normal
+weibull_row1_shape=0.5_scale=0.5,Jarque-Bera,1584017.0286738821,0,non-normal
+weibull_row2_shape=1_scale=0.5,Shapiro-Wilk,0.8045191597826602,3.70440068866683e-61,non-normal
+weibull_row2_shape=1_scale=0.5,KS vs Normal,0.16375599289421558,6.926474635505818e-117,non-normal
+weibull_row2_shape=1_scale=0.5,Jarque-Bera,11238.912358122683,0,non-normal
+weibull_row3_shape=2_scale=0.5,Shapiro-Wilk,0.9709057236931845,1.0566790248321405e-30,non-normal
+weibull_row3_shape=2_scale=0.5,KS vs Normal,0.05422086760807839,3.413467196008532e-13,non-normal
+weibull_row3_shape=2_scale=0.5,Jarque-Bera,333.6718913796144,3.500010955936818e-73,non-normal
+weibull_row4_shape=3_scale=0.5,Shapiro-Wilk,0.9963247101398075,8.162119347868707e-10,non-normal
+weibull_row4_shape=3_scale=0.5,KS vs Normal,0.02119781845676779,0.0223634065803893,non-normal
+weibull_row4_shape=3_scale=0.5,Jarque-Bera,39.89934945927861,2.167536149074318e-9,non-normal
+weibull_row5_shape=0.5_scale=1,Shapiro-Wilk,0.4550560692947493,5.0724268673707936e-82,non-normal
+weibull_row5_shape=0.5_scale=1,KS vs Normal,0.32846130361041304,0,non-normal
+weibull_row5_shape=0.5_scale=1,Jarque-Bera,451011.1548706166,0,non-normal
+weibull_row6_shape=1_scale=1,Shapiro-Wilk,0.8050897506845143,4.204622032212034e-61,non-normal
+weibull_row6_shape=1_scale=1,KS vs Normal,0.1624725971381167,4.558459177833617e-115,non-normal
+weibull_row6_shape=1_scale=1,Jarque-Bera,14287.111778966815,0,non-normal
+weibull_row7_shape=2_scale=1,Shapiro-Wilk,0.9733025258844723,1.393291286899204e-29,non-normal
+weibull_row7_shape=2_scale=1,KS vs Normal,0.053313904123895715,9.052397684746099e-13,non-normal
+weibull_row7_shape=2_scale=1,Jarque-Bera,317.78230575912414,9.872998730251463e-70,non-normal
+weibull_row8_shape=3_scale=1,Shapiro-Wilk,0.9962040462591333,4.813667159053807e-10,non-normal
+weibull_row8_shape=3_scale=1,KS vs Normal,0.023873444102837114,0.006695857748448394,non-normal
+weibull_row8_shape=3_scale=1,Jarque-Bera,42.12355279981869,7.128312497390512e-10,non-normal
+weibull_row9_shape=0.5_scale=2,Shapiro-Wilk,0.4722013936444629,2.5299036067771344e-81,non-normal
+weibull_row9_shape=0.5_scale=2,KS vs Normal,0.32290819794967335,0,non-normal
+weibull_row9_shape=0.5_scale=2,Jarque-Bera,496827.5508315538,0,non-normal
+weibull_row10_shape=1_scale=2,Shapiro-Wilk,0.8112851322240711,1.6978422236425066e-60,non-normal
+weibull_row10_shape=1_scale=2,KS vs Normal,0.16214536810435307,1.3186965741379607e-114,non-normal
+weibull_row10_shape=1_scale=2,Jarque-Bera,10210.930781154242,0,non-normal
+weibull_row11_shape=2_scale=2,Shapiro-Wilk,0.9729718920339139,9.661096429546247e-30,non-normal
+weibull_row11_shape=2_scale=2,KS vs Normal,0.048862132300807735,8.554893630647852e-11,non-normal
+weibull_row11_shape=2_scale=2,Jarque-Bera,294.37276686341,1.1960955216193798e-64,non-normal
+weibull_row12_shape=3_scale=2,Shapiro-Wilk,0.9967960090564884,7.113969484733315e-9,non-normal
+weibull_row12_shape=3_scale=2,KS vs Normal,0.014023757160197292,0.27911243481657355,consistent with normal
+weibull_row12_shape=3_scale=2,Jarque-Bera,32.115528537747736,1.0621884784622467e-7,non-normal
+invgauss_row1_mean=0.5_shape=0.5,Shapiro-Wilk,0.7387332446468151,9.623154642823458e-67,non-normal
+invgauss_row1_mean=0.5_shape=0.5,KS vs Normal,0.17564681745957084,2.057527059255386e-134,non-normal
+invgauss_row1_mean=0.5_shape=0.5,Jarque-Bera,30726.396277483465,0,non-normal
+invgauss_row2_mean=1_shape=0.5,Shapiro-Wilk,0.6177935917874906,1.898380981629007e-74,non-normal
+invgauss_row2_mean=1_shape=0.5,KS vs Normal,0.24179829396047253,2.424465721530109e-254,non-normal
+invgauss_row2_mean=1_shape=0.5,Jarque-Bera,110265.7856297122,0,non-normal
+invgauss_row3_mean=2_shape=0.5,Shapiro-Wilk,0.47014049432156324,2.0806085081442206e-81,non-normal
+invgauss_row3_mean=2_shape=0.5,KS vs Normal,0.30966030998101535,0,non-normal
+invgauss_row3_mean=2_shape=0.5,Jarque-Bera,343521.41762846656,0,non-normal
+invgauss_row4_mean=0.5_shape=1,Shapiro-Wilk,0.8310810733034071,1.931360337516806e-58,non-normal
+invgauss_row4_mean=0.5_shape=1,KS vs Normal,0.13265142260783472,7.600394412123978e-77,non-normal
+invgauss_row4_mean=0.5_shape=1,Jarque-Bera,11045.899054700032,0,non-normal
+invgauss_row5_mean=1_shape=1,Shapiro-Wilk,0.7346476818500728,4.758681511652394e-67,non-normal
+invgauss_row5_mean=1_shape=1,KS vs Normal,0.17617736776668338,3.18192259200874e-135,non-normal
+invgauss_row5_mean=1_shape=1,Jarque-Bera,39927.11825861529,0,non-normal
+invgauss_row6_mean=2_shape=1,Shapiro-Wilk,0.6086683949611538,6.113606040706403e-75,non-normal
+invgauss_row6_mean=2_shape=1,KS vs Normal,0.2446871825814484,1.9099902981465378e-260,non-normal
+invgauss_row6_mean=2_shape=1,Jarque-Bera,105119.58906324218,0,non-normal
+invgauss_row7_mean=0.5_shape=2,Shapiro-Wilk,0.8988285433355747,2.089755924351579e-49,non-normal
+invgauss_row7_mean=0.5_shape=2,KS vs Normal,0.09618506377419081,1.3243025822808617e-40,non-normal
+invgauss_row7_mean=0.5_shape=2,Jarque-Bera,4387.222595965338,0,non-normal
+invgauss_row8_mean=1_shape=2,Shapiro-Wilk,0.8072837414238913,6.86299539872917e-61,non-normal
+invgauss_row8_mean=1_shape=2,KS vs Normal,0.14020000399494262,8.628355892510218e-86,non-normal
+invgauss_row8_mean=1_shape=2,Jarque-Bera,29722.487964182932,0,non-normal
+invgauss_row9_mean=2_shape=2,Shapiro-Wilk,0.7123176839866538,1.184002690139927e-68,non-normal
+invgauss_row9_mean=2_shape=2,KS vs Normal,0.1836838686600228,5.9033488498695e-147,non-normal
+invgauss_row9_mean=2_shape=2,Jarque-Bera,77646.30771686525,0,non-normal
+exgaussian_row1_mu=0_sigma=0.5_tau=0.25,Shapiro-Wilk,0.9984231074266574,6.935527706485903e-5,non-normal
+exgaussian_row1_mu=0_sigma=0.5_tau=0.25,KS vs Normal,0.016037246605934828,0.1527074263855297,consistent with normal
+exgaussian_row1_mu=0_sigma=0.5_tau=0.25,Jarque-Bera,26.091660176892084,2.1590762528773686e-6,non-normal
+exgaussian_row2_mu=1_sigma=0.5_tau=0.25,Shapiro-Wilk,0.998287074190418,2.8177833982672887e-5,non-normal
+exgaussian_row2_mu=1_sigma=0.5_tau=0.25,KS vs Normal,0.013277334239105954,0.34137861053225627,consistent with normal
+exgaussian_row2_mu=1_sigma=0.5_tau=0.25,Jarque-Bera,30.103980965626665,2.904046671088828e-7,non-normal
+exgaussian_row3_mu=2_sigma=0.5_tau=0.25,Shapiro-Wilk,0.996880533549016,1.0688379726481871e-8,non-normal
+exgaussian_row3_mu=2_sigma=0.5_tau=0.25,KS vs Normal,0.021807446440902732,0.017205939089112523,non-normal
+exgaussian_row3_mu=2_sigma=0.5_tau=0.25,Jarque-Bera,49.04236143394439,2.241746626420506e-11,non-normal
+exgaussian_row4_mu=0_sigma=1_tau=0.25,Shapiro-Wilk,0.9996651553000193,0.6007704188074484,consistent with normal
+exgaussian_row4_mu=0_sigma=1_tau=0.25,KS vs Normal,0.009397676734236526,0.7691962273229385,consistent with normal
+exgaussian_row4_mu=0_sigma=1_tau=0.25,Jarque-Bera,1.9048312707484785,0.385807925623381,consistent with normal
+exgaussian_row5_mu=1_sigma=1_tau=0.25,Shapiro-Wilk,0.9997119545008736,0.7422703399820314,consistent with normal
+exgaussian_row5_mu=1_sigma=1_tau=0.25,KS vs Normal,0.009236298529535614,0.7871882451292503,consistent with normal
+exgaussian_row5_mu=1_sigma=1_tau=0.25,Jarque-Bera,0.36851684186788053,0.831720841975786,consistent with normal
+exgaussian_row6_mu=2_sigma=1_tau=0.25,Shapiro-Wilk,0.9995964677198153,0.40739756790416587,consistent with normal
+exgaussian_row6_mu=2_sigma=1_tau=0.25,KS vs Normal,0.010625454375615373,0.6249232750135179,consistent with normal
+exgaussian_row6_mu=2_sigma=1_tau=0.25,Jarque-Bera,1.1041860316378689,0.575743508145831,consistent with normal
+exgaussian_row7_mu=0_sigma=1.5_tau=0.25,Shapiro-Wilk,0.9997015738016524,0.7113950101056234,consistent with normal
+exgaussian_row7_mu=0_sigma=1.5_tau=0.25,KS vs Normal,0.00626611591171402,0.9894450131346801,consistent with normal
+exgaussian_row7_mu=0_sigma=1.5_tau=0.25,Jarque-Bera,0.10772274225823839,0.9475634570492375,consistent with normal
+exgaussian_row8_mu=1_sigma=1.5_tau=0.25,Shapiro-Wilk,0.9996764640081365,0.6351364400845512,consistent with normal
+exgaussian_row8_mu=1_sigma=1.5_tau=0.25,KS vs Normal,0.00997837501339307,0.7019310237832341,consistent with normal
+exgaussian_row8_mu=1_sigma=1.5_tau=0.25,Jarque-Bera,1.028443297369191,0.597965841031104,consistent with normal
+exgaussian_row9_mu=2_sigma=1.5_tau=0.25,Shapiro-Wilk,0.9994164368242583,0.11464710072397309,consistent with normal
+exgaussian_row9_mu=2_sigma=1.5_tau=0.25,KS vs Normal,0.006796384943871248,0.9750291664013503,consistent with normal
+exgaussian_row9_mu=2_sigma=1.5_tau=0.25,Jarque-Bera,0.964625231158239,0.6173540371051627,consistent with normal
+exgaussian_row10_mu=0_sigma=0.5_tau=0.5,Shapiro-Wilk,0.9772433143106596,1.4676534934827008e-27,non-normal
+exgaussian_row10_mu=0_sigma=0.5_tau=0.5,KS vs Normal,0.04157897000269752,6.20726549290067e-8,non-normal
+exgaussian_row10_mu=0_sigma=0.5_tau=0.5,Jarque-Bera,873.6759965104093,1.9216216014428088e-190,non-normal
+exgaussian_row11_mu=1_sigma=0.5_tau=0.5,Shapiro-Wilk,0.9738261404555386,2.5061090383354373e-29,non-normal
+exgaussian_row11_mu=1_sigma=0.5_tau=0.5,KS vs Normal,0.049940668385060526,2.9472708779169895e-11,non-normal
+exgaussian_row11_mu=1_sigma=0.5_tau=0.5,Jarque-Bera,800.8528705191269,1.250284244921036e-174,non-normal
+exgaussian_row12_mu=2_sigma=0.5_tau=0.5,Shapiro-Wilk,0.975335577182492,1.434121457066707e-28,non-normal
+exgaussian_row12_mu=2_sigma=0.5_tau=0.5,KS vs Normal,0.04836935278782619,1.3813416256119487e-10,non-normal
+exgaussian_row12_mu=2_sigma=0.5_tau=0.5,Jarque-Bera,765.953461343835,4.7349911524244596e-167,non-normal
+exgaussian_row13_mu=0_sigma=1_tau=0.5,Shapiro-Wilk,0.9977575933769319,1.0990483363076201e-6,non-normal
+exgaussian_row13_mu=0_sigma=1_tau=0.5,KS vs Normal,0.013484160342602048,0.32325196188295346,consistent with normal
+exgaussian_row13_mu=0_sigma=1_tau=0.5,Jarque-Bera,42.54139986561868,5.784321091908785e-10,non-normal
+exgaussian_row14_mu=1_sigma=1_tau=0.5,Shapiro-Wilk,0.9983620479758101,4.6121649163930586e-5,non-normal
+exgaussian_row14_mu=1_sigma=1_tau=0.5,KS vs Normal,0.01171186124986725,0.49908845986379946,consistent with normal
+exgaussian_row14_mu=1_sigma=1_tau=0.5,Jarque-Bera,25.635708635934723,2.711918288450681e-6,non-normal
+exgaussian_row15_mu=2_sigma=1_tau=0.5,Shapiro-Wilk,0.9985899086303731,2.1814174068110666e-4,non-normal
+exgaussian_row15_mu=2_sigma=1_tau=0.5,KS vs Normal,0.011432921310745603,0.5304904115980811,consistent with normal
+exgaussian_row15_mu=2_sigma=1_tau=0.5,Jarque-Bera,22.722358866945186,1.163864613941343e-5,non-normal
+exgaussian_row16_mu=0_sigma=1.5_tau=0.5,Shapiro-Wilk,0.9993995335766925,0.10078332094280688,consistent with normal
+exgaussian_row16_mu=0_sigma=1.5_tau=0.5,KS vs Normal,0.011445904559973763,0.5290114668811089,consistent with normal
+exgaussian_row16_mu=0_sigma=1.5_tau=0.5,Jarque-Bera,5.289649675027849,0.07101779230327573,consistent with normal
+exgaussian_row17_mu=1_sigma=1.5_tau=0.5,Shapiro-Wilk,0.9996802744094858,0.6467549648841153,consistent with normal
+exgaussian_row17_mu=1_sigma=1.5_tau=0.5,KS vs Normal,0.010390568466329487,0.6529184757210836,consistent with normal
+exgaussian_row17_mu=1_sigma=1.5_tau=0.5,Jarque-Bera,0.8011364118552039,0.6699392744006861,consistent with normal
+exgaussian_row18_mu=2_sigma=1.5_tau=0.5,Shapiro-Wilk,0.9994094692740475,0.1087279201895539,consistent with normal
+exgaussian_row18_mu=2_sigma=1.5_tau=0.5,KS vs Normal,0.009582122030966334,0.7481957146827236,consistent with normal
+exgaussian_row18_mu=2_sigma=1.5_tau=0.5,Jarque-Bera,6.940515674629157,0.03110900856368002,non-normal
+exgaussian_row19_mu=0_sigma=0.5_tau=1,Shapiro-Wilk,0.921701539423078,3.49687641937711e-45,non-normal
+exgaussian_row19_mu=0_sigma=0.5_tau=1,KS vs Normal,0.08662846115737502,5.122038090600424e-33,non-normal
+exgaussian_row19_mu=0_sigma=0.5_tau=1,Jarque-Bera,4168.307215172176,0,non-normal
+exgaussian_row20_mu=1_sigma=0.5_tau=1,Shapiro-Wilk,0.9113614299064995,3.341564106395695e-47,non-normal
+exgaussian_row20_mu=1_sigma=0.5_tau=1,KS vs Normal,0.09166969520780568,6.394673808251308e-37,non-normal
+exgaussian_row20_mu=1_sigma=0.5_tau=1,Jarque-Bera,4554.3055680529205,0,non-normal
+exgaussian_row21_mu=2_sigma=0.5_tau=1,Shapiro-Wilk,0.9185936598423029,8.218447929431523e-46,non-normal
+exgaussian_row21_mu=2_sigma=0.5_tau=1,KS vs Normal,0.09006431395247497,1.182722468884097e-35,non-normal
+exgaussian_row21_mu=2_sigma=0.5_tau=1,Jarque-Bera,3358.9689565600106,0,non-normal
+exgaussian_row22_mu=0_sigma=1_tau=1,Shapiro-Wilk,0.9721610004913375,3.9929106966220165e-30,non-normal
+exgaussian_row22_mu=0_sigma=1_tau=1,KS vs Normal,0.04460616435941136,4.569089856377402e-9,non-normal
+exgaussian_row22_mu=0_sigma=1_tau=1,Jarque-Bera,1439.679598964742,2.38532319043e-313,non-normal
+exgaussian_row23_mu=1_sigma=1_tau=1,Shapiro-Wilk,0.9720023154823858,3.366722006141125e-30,non-normal
+exgaussian_row23_mu=1_sigma=1_tau=1,KS vs Normal,0.0497160243124626,3.6867763897470135e-11,non-normal
+exgaussian_row23_mu=1_sigma=1_tau=1,Jarque-Bera,1198.8444440515675,4.723203351953304e-261,non-normal
+exgaussian_row24_mu=2_sigma=1_tau=1,Shapiro-Wilk,0.9799517596859273,5.218733006120949e-26,non-normal
+exgaussian_row24_mu=2_sigma=1_tau=1,KS vs Normal,0.039552748553600935,3.212481367082182e-7,non-normal
+exgaussian_row24_mu=2_sigma=1_tau=1,Jarque-Bera,566.4322471456949,1.0018445645402505e-123,non-normal
+exgaussian_row25_mu=0_sigma=1.5_tau=1,Shapiro-Wilk,0.9905331219493978,8.450792299560897e-18,non-normal
+exgaussian_row25_mu=0_sigma=1.5_tau=1,KS vs Normal,0.027698750605717935,9.311774747944873e-4,non-normal
+exgaussian_row25_mu=0_sigma=1.5_tau=1,Jarque-Bera,345.57828515633776,9.091359794707205e-76,non-normal
+exgaussian_row26_mu=1_sigma=1.5_tau=1,Shapiro-Wilk,0.9895141904475042,8.062135038492267e-19,non-normal
+exgaussian_row26_mu=1_sigma=1.5_tau=1,KS vs Normal,0.02777711042077404,8.915656773106954e-4,non-normal
+exgaussian_row26_mu=1_sigma=1.5_tau=1,Jarque-Bera,286.898889882019,5.019929639730081e-63,non-normal
+exgaussian_row27_mu=2_sigma=1.5_tau=1,Shapiro-Wilk,0.9935998231778976,3.5461549191919376e-14,non-normal
+exgaussian_row27_mu=2_sigma=1.5_tau=1,KS vs Normal,0.018020990189352236,0.0777332319050205,consistent with normal
+exgaussian_row27_mu=2_sigma=1.5_tau=1,Jarque-Bera,168.19911329900665,2.992448029184212e-37,non-normal
+exwald_row1_mu=1_lambda=0.5_rate=0.25,Shapiro-Wilk,0.8530623877575203,6.612080816196826e-56,non-normal
+exwald_row1_mu=1_lambda=0.5_rate=0.25,KS vs Normal,0.12329319138430345,1.9187096463273812e-66,non-normal
+exwald_row1_mu=1_lambda=0.5_rate=0.25,Jarque-Bera,6750.5433007084785,0,non-normal
+exwald_row2_mu=1.5_lambda=0.5_rate=0.25,Shapiro-Wilk,0.8395565818820969,1.692236237977917e-57,non-normal
+exwald_row2_mu=1.5_lambda=0.5_rate=0.25,KS vs Normal,0.1304048266601754,2.8017827175297995e-74,non-normal
+exwald_row2_mu=1.5_lambda=0.5_rate=0.25,Jarque-Bera,8650.433339360816,0,non-normal
+exwald_row3_mu=2_lambda=0.5_rate=0.25,Shapiro-Wilk,0.764386090236413,1.0046040836790376e-64,non-normal
+exwald_row3_mu=2_lambda=0.5_rate=0.25,KS vs Normal,0.15214069664959093,5.96748641499717e-101,non-normal
+exwald_row3_mu=2_lambda=0.5_rate=0.25,Jarque-Bera,69242.91993464397,0,non-normal
+exwald_row4_mu=1_lambda=1_rate=0.25,Shapiro-Wilk,0.8476738434216909,1.4829210973159874e-56,non-normal
+exwald_row4_mu=1_lambda=1_rate=0.25,KS vs Normal,0.1311968635994785,3.5284510256523767e-75,non-normal
+exwald_row4_mu=1_lambda=1_rate=0.25,Jarque-Bera,6644.381575007919,0,non-normal
+exwald_row5_mu=1.5_lambda=1_rate=0.25,Shapiro-Wilk,0.8588980465076108,3.517443168288964e-55,non-normal
+exwald_row5_mu=1.5_lambda=1_rate=0.25,KS vs Normal,0.1136543562437555,1.5916726690711255e-56,non-normal
+exwald_row5_mu=1.5_lambda=1_rate=0.25,Jarque-Bera,7164.468733855305,0,non-normal
+exwald_row6_mu=2_lambda=1_rate=0.25,Shapiro-Wilk,0.8506472497705313,3.3646688506926026e-56,non-normal
+exwald_row6_mu=2_lambda=1_rate=0.25,KS vs Normal,0.1208627108290344,7.247412022677245e-64,non-normal
+exwald_row6_mu=2_lambda=1_rate=0.25,Jarque-Bera,6898.638122075564,0,non-normal
+exwald_row7_mu=1_lambda=2_rate=0.25,Shapiro-Wilk,0.8468829447837285,1.1952241293111646e-56,non-normal
+exwald_row7_mu=1_lambda=2_rate=0.25,KS vs Normal,0.11992411060575427,6.945437668012832e-63,non-normal
+exwald_row7_mu=1_lambda=2_rate=0.25,Jarque-Bera,6850.611429538624,0,non-normal
+exwald_row8_mu=1.5_lambda=2_rate=0.25,Shapiro-Wilk,0.8475269758481225,1.4246014241601283e-56,non-normal
+exwald_row8_mu=1.5_lambda=2_rate=0.25,KS vs Normal,0.11657013774440708,1.9342072056965672e-59,non-normal
+exwald_row8_mu=1.5_lambda=2_rate=0.25,Jarque-Bera,8946.986798799968,0,non-normal
+exwald_row9_mu=2_lambda=2_rate=0.25,Shapiro-Wilk,0.8603064981987283,5.3108469983897734e-55,non-normal
+exwald_row9_mu=2_lambda=2_rate=0.25,KS vs Normal,0.11056751129473533,1.6135094190277394e-53,non-normal
+exwald_row9_mu=2_lambda=2_rate=0.25,Jarque-Bera,10636.820906391595,0,non-normal
+exwald_row10_mu=1_lambda=0.5_rate=0.5,Shapiro-Wilk,0.8450630173839165,7.301887849987983e-57,non-normal
+exwald_row10_mu=1_lambda=0.5_rate=0.5,KS vs Normal,0.12085557992370487,7.373416337203414e-64,non-normal
+exwald_row10_mu=1_lambda=0.5_rate=0.5,Jarque-Bera,9133.376271994084,0,non-normal
+exwald_row11_mu=1.5_lambda=0.5_rate=0.5,Shapiro-Wilk,0.7625855856829925,7.151257093021473e-65,non-normal
+exwald_row11_mu=1.5_lambda=0.5_rate=0.5,KS vs Normal,0.1533510193286825,1.4791615019575828e-102,non-normal
+exwald_row11_mu=1.5_lambda=0.5_rate=0.5,Jarque-Bera,57687.75837179123,0,non-normal
+exwald_row12_mu=2_lambda=0.5_rate=0.5,Shapiro-Wilk,0.6493061208933182,1.1452915540561613e-72,non-normal
+exwald_row12_mu=2_lambda=0.5_rate=0.5,KS vs Normal,0.1962396656595399,1.1329149679603481e-167,non-normal
+exwald_row12_mu=2_lambda=0.5_rate=0.5,Jarque-Bera,220841.45437527937,0,non-normal
+exwald_row13_mu=1_lambda=1_rate=0.5,Shapiro-Wilk,0.8652391705464187,2.311619519951748e-54,non-normal
+exwald_row13_mu=1_lambda=1_rate=0.5,KS vs Normal,0.1150581066083696,6.419906868838021e-58,non-normal
+exwald_row13_mu=1_lambda=1_rate=0.5,Jarque-Bera,5353.4350237340295,0,non-normal
+exwald_row14_mu=1.5_lambda=1_rate=0.5,Shapiro-Wilk,0.855056569112015,1.1631711157411723e-55,non-normal
+exwald_row14_mu=1.5_lambda=1_rate=0.5,KS vs Normal,0.1236446587714907,8.055313888106494e-67,non-normal
+exwald_row14_mu=1.5_lambda=1_rate=0.5,Jarque-Bera,8065.504047948385,0,non-normal
+exwald_row15_mu=2_lambda=1_rate=0.5,Shapiro-Wilk,0.7786262601566885,1.6007667028647428e-63,non-normal
+exwald_row15_mu=2_lambda=1_rate=0.5,KS vs Normal,0.14149007554723134,2.2787692336856323e-87,non-normal
+exwald_row15_mu=2_lambda=1_rate=0.5,Jarque-Bera,57548.45313617651,0,non-normal
+exwald_row16_mu=1_lambda=2_rate=0.5,Shapiro-Wilk,0.8501252049106424,2.91101384133622e-56,non-normal
+exwald_row16_mu=1_lambda=2_rate=0.5,KS vs Normal,0.11745947046466196,2.413265336416886e-60,non-normal
+exwald_row16_mu=1_lambda=2_rate=0.5,Jarque-Bera,12644.235769191893,0,non-normal
+exwald_row17_mu=1.5_lambda=2_rate=0.5,Shapiro-Wilk,0.8849274042887834,1.332317774394157e-51,non-normal
+exwald_row17_mu=1.5_lambda=2_rate=0.5,KS vs Normal,0.11018574553702995,3.7478109157598336e-53,non-normal
+exwald_row17_mu=1.5_lambda=2_rate=0.5,Jarque-Bera,4263.722978064207,0,non-normal
+exwald_row18_mu=2_lambda=2_rate=0.5,Shapiro-Wilk,0.8533107199492331,7.0914281734598255e-56,non-normal
+exwald_row18_mu=2_lambda=2_rate=0.5,KS vs Normal,0.111907093926045,8.193577252793039e-55,non-normal
+exwald_row18_mu=2_lambda=2_rate=0.5,Jarque-Bera,10670.322407022148,0,non-normal
+exwald_row19_mu=1_lambda=0.5_rate=1,Shapiro-Wilk,0.7872940958436526,9.301732361377351e-63,non-normal
+exwald_row19_mu=1_lambda=0.5_rate=1,KS vs Normal,0.13682539442693425,9.906976492891097e-82,non-normal
+exwald_row19_mu=1_lambda=0.5_rate=1,Jarque-Bera,29312.205319387867,0,non-normal
+exwald_row20_mu=1.5_lambda=0.5_rate=1,Shapiro-Wilk,0.6477006236164553,9.224764715919586e-73,non-normal
+exwald_row20_mu=1.5_lambda=0.5_rate=1,KS vs Normal,0.19378193507466307,1.648941761980473e-163,non-normal
+exwald_row20_mu=1.5_lambda=0.5_rate=1,Jarque-Bera,171223.81056136815,0,non-normal
+exwald_row21_mu=2_lambda=0.5_rate=1,Shapiro-Wilk,0.5444753655220568,3.790156963475738e-78,non-normal
+exwald_row21_mu=2_lambda=0.5_rate=1,KS vs Normal,0.24101422825336125,1.0682357003774852e-252,non-normal
+exwald_row21_mu=2_lambda=0.5_rate=1,Jarque-Bera,522920.26856279944,0,non-normal
+exwald_row22_mu=1_lambda=1_rate=1,Shapiro-Wilk,0.8647617479189528,2.001013905454132e-54,non-normal
+exwald_row22_mu=1_lambda=1_rate=1,KS vs Normal,0.11546942245402678,2.487323805418972e-58,non-normal
+exwald_row22_mu=1_lambda=1_rate=1,Jarque-Bera,7206.695467291081,0,non-normal
+exwald_row23_mu=1.5_lambda=1_rate=1,Shapiro-Wilk,0.7833166388106194,4.1178653012378867e-63,non-normal
+exwald_row23_mu=1.5_lambda=1_rate=1,KS vs Normal,0.14271829811432482,6.945502241186687e-89,non-normal
+exwald_row23_mu=1.5_lambda=1_rate=1,Jarque-Bera,39857.06072702287,0,non-normal
+exwald_row24_mu=2_lambda=1_rate=1,Shapiro-Wilk,0.7160188964199747,2.1465821893843487e-68,non-normal
+exwald_row24_mu=2_lambda=1_rate=1,KS vs Normal,0.17207214988307318,5.146807002921821e-129,non-normal
+exwald_row24_mu=2_lambda=1_rate=1,Jarque-Bera,46152.24350562852,0,non-normal
+exwald_row25_mu=1_lambda=2_rate=1,Shapiro-Wilk,0.8938655023973385,3.229928406306766e-50,non-normal
+exwald_row25_mu=1_lambda=2_rate=1,KS vs Normal,0.10211601288634933,1.0332151933195853e-45,non-normal
+exwald_row25_mu=1_lambda=2_rate=1,Jarque-Bera,3920.6918275732705,0,non-normal
+exwald_row26_mu=1.5_lambda=2_rate=1,Shapiro-Wilk,0.8699452506823218,9.811207515342148e-54,non-normal
+exwald_row26_mu=1.5_lambda=2_rate=1,KS vs Normal,0.11359755420868986,1.8109818672050185e-56,non-normal
+exwald_row26_mu=1.5_lambda=2_rate=1,Jarque-Bera,6121.683960548721,0,non-normal
+exwald_row27_mu=2_lambda=2_rate=1,Shapiro-Wilk,0.789752810451333,1.5492776146704183e-62,non-normal
+exwald_row27_mu=2_lambda=2_rate=1,KS vs Normal,0.13175522280544097,8.127284703731092e-76,non-normal
+exwald_row27_mu=2_lambda=2_rate=1,Jarque-Bera,54667.82119321765,0,non-normal
