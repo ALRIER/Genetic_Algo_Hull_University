@@ -12,7 +12,14 @@ The audit does not rerun the GA. It samples random Dirichlet weight vectors over
 
 ## Inputs
 
-The script uses the final-results bundle structure by default:
+The script uses the cleaned repository structure by default:
+
+- `results/5_evidence_taxonomy_nest26/tables/evidence_taxonomy_all_candidates.csv`
+- `results/4_fixed_weight_validation_nest26/root_summaries/post_discovery_fixed_weight_validation_selected_regimes.csv`
+- `code/3_validation_nest26`
+- `code/4_fixed_weight_validation_nest26`
+
+It also keeps fallback support for the original full-results bundle paths:
 
 - `05_EVIDENCE_TAXONOMY_NEST26/evidence_results_20260611/tables/evidence_taxonomy_all_candidates.csv`
 - `04_EXPANDED_POST_DISCOVERY_FIXED_WEIGHT_VALIDATION_NEST26/raw_full_run_output_with_tasks_checkpoints_20260611/q1_selected_regimes.csv`
@@ -23,7 +30,7 @@ The script checks that the sourced estimator basis has `N_EST = 26`.
 
 ## Run
 
-From the final-results bundle root:
+From the repository root:
 
 ```bash
 Rscript code/6_random_dirichlet_abstain_audit/random_dirichlet_gate_audit.R --draws 4000 --R 500

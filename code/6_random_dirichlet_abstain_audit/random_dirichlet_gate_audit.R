@@ -4,13 +4,13 @@
 # -----------------------------------------------------------------------------
 # Methodological annex: random-search audit for NEST26 abstention decisions.
 #
-# This script is meant to be run from the final results bundle, not from a toy
-# example. By default it reads:
-#   - the final NEST26 evidence taxonomy (stage 05), which says which regimes
+# This script is meant to be run from the cleaned repository or from the final
+# results bundle, not from a toy example. By default it reads:
+#   - the final NEST26 evidence taxonomy, which says which regimes
 #     ended as benchmark_retained, marginal_ga_win, or negative controls;
-#   - the expanded fixed-weight validation table (stage 04), which contains the
+#   - the expanded fixed-weight validation table, which contains the
 #     exact contamination cells, sample sizes, and GA weight vectors; and
-#   - the archived NEST26 code, so the estimator basis, benchmarks, simulator,
+#   - the NEST26 code used for validation, so the estimator basis, benchmarks, simulator,
 #     contamination mechanism, and validation gate remain the same as the
 #     experiment that produced the reported tables.
 #
@@ -28,7 +28,7 @@
 # Dirichlet weight draws by matrix multiplication. A draw must beat the best
 # admissible benchmark on both mean MSE and q95 MSE for every validation seed.
 #
-# Typical use from Final_Results_15June2026:
+# Typical use from the cleaned repository root:
 #   Rscript random_dirichlet_gate_audit.R --draws 4000 --R 500
 #
 # Useful smoke test before a long run:
@@ -62,9 +62,11 @@ default_bundle_root <- function() {
   start <- if (!is.na(sp)) dirname(sp) else getwd()
   here <- normalizePath(start, winslash = "/", mustWork = FALSE)
   repeat {
+    has_clean_repo_markers <- dir.exists(file.path(here, "code", "3_validation_nest26")) &&
+      dir.exists(file.path(here, "results", "5_evidence_taxonomy_nest26"))
     has_bundle_markers <- dir.exists(file.path(here, "05_EVIDENCE_TAXONOMY_NEST26")) &&
       dir.exists(file.path(here, "07_CODE_ARCHIVE"))
-    if (has_bundle_markers) return(here)
+    if (has_clean_repo_markers || has_bundle_markers) return(here)
     parent <- dirname(here)
     if (identical(parent, here)) break
     here <- parent
@@ -74,14 +76,60 @@ default_bundle_root <- function() {
 
 ROOT0 <- default_bundle_root()
 
+first_existing_path <- function(root, candidates) {
+  paths <- file.path(root, candidates)
+  hit <- paths[file.exists(paths) | dir.exists(paths)]
+  if (length(hit)) hit[1] else paths[1]
+}
+
+default_project_root <- function(root) {
+  first_existing_path(root, c(
+    file.path("code", "3_validation_nest26"),
+    file.path("07_CODE_ARCHIVE", "expanded_and_realworld_experiment_code")
+  ))
+}
+
+default_validation_code_root <- function(root) {
+  first_existing_path(root, c(
+    file.path("code", "4_fixed_weight_validation_nest26"),
+    file.path("07_CODE_ARCHIVE", "original_fixed_weight_validation_code")
+  ))
+}
+
+default_taxonomy_csv <- function(root) {
+  first_existing_path(root, c(
+    file.path("results", "5_evidence_taxonomy_nest26",
+              "tables", "evidence_taxonomy_all_candidates.csv"),
+    file.path("05_EVIDENCE_TAXONOMY_NEST26", "evidence_results_20260611",
+              "tables", "evidence_taxonomy_all_candidates.csv")
+  ))
+}
+
+default_selected_regimes_csv <- function(root) {
+  first_existing_path(root, c(
+    file.path("results", "4_fixed_weight_validation_nest26",
+              "root_summaries", "post_discovery_fixed_weight_validation_selected_regimes.csv"),
+    file.path("04_EXPANDED_POST_DISCOVERY_FIXED_WEIGHT_VALIDATION_NEST26",
+              "raw_full_run_output_with_tasks_checkpoints_20260611", "q1_selected_regimes.csv")
+  ))
+}
+
+default_output_root <- function(root) {
+  if (dir.exists(file.path(root, "results"))) {
+    file.path(root, "results", "7_random_dirichlet_abstain_audit")
+  } else {
+    file.path(root, "08_RANDOM_DIRICHLET_ABSTAIN_AUDIT")
+  }
+}
+
 # ----------------------------- configuration ---------------------------------
 CFG <- list(
   bundle_root          = ROOT0,
-  project_root         = Sys.getenv("PROJECT_ROOT", unset = file.path(ROOT0, "07_CODE_ARCHIVE", "expanded_and_realworld_experiment_code")),
-  validation_code_root = Sys.getenv("VALIDATION_CODE_ROOT", unset = Sys.getenv("VALIDATION_ROOT", unset = file.path(ROOT0, "07_CODE_ARCHIVE", "original_fixed_weight_validation_code"))),
-  taxonomy_csv         = Sys.getenv("TAXONOMY_CSV", unset = file.path(ROOT0, "05_EVIDENCE_TAXONOMY_NEST26", "evidence_results_20260611", "tables", "evidence_taxonomy_all_candidates.csv")),
-  selected_regimes_csv = Sys.getenv("SELECTED_REGIMES_CSV", unset = file.path(ROOT0, "04_EXPANDED_POST_DISCOVERY_FIXED_WEIGHT_VALIDATION_NEST26", "raw_full_run_output_with_tasks_checkpoints_20260611", "q1_selected_regimes.csv")),
-  output_root          = Sys.getenv("OUTPUT_ROOT", unset = file.path(ROOT0, "08_RANDOM_DIRICHLET_ABSTAIN_AUDIT")),
+  project_root         = Sys.getenv("PROJECT_ROOT", unset = default_project_root(ROOT0)),
+  validation_code_root = Sys.getenv("VALIDATION_CODE_ROOT", unset = Sys.getenv("VALIDATION_ROOT", unset = default_validation_code_root(ROOT0))),
+  taxonomy_csv         = Sys.getenv("TAXONOMY_CSV", unset = default_taxonomy_csv(ROOT0)),
+  selected_regimes_csv = Sys.getenv("SELECTED_REGIMES_CSV", unset = default_selected_regimes_csv(ROOT0)),
+  output_root          = Sys.getenv("OUTPUT_ROOT", unset = default_output_root(ROOT0)),
   n_draws              = 4000L,
   R                    = 500L,
   q                    = 0.95,
@@ -103,11 +151,11 @@ parse_args <- function(cfg) {
     switch(key,
       root    = {
         cfg$bundle_root <- normalizePath(getv(i), winslash = "/", mustWork = FALSE)
-        cfg$project_root <- file.path(cfg$bundle_root, "07_CODE_ARCHIVE", "expanded_and_realworld_experiment_code")
-        cfg$validation_code_root <- file.path(cfg$bundle_root, "07_CODE_ARCHIVE", "original_fixed_weight_validation_code")
-        cfg$taxonomy_csv <- file.path(cfg$bundle_root, "05_EVIDENCE_TAXONOMY_NEST26", "evidence_results_20260611", "tables", "evidence_taxonomy_all_candidates.csv")
-        cfg$selected_regimes_csv <- file.path(cfg$bundle_root, "04_EXPANDED_POST_DISCOVERY_FIXED_WEIGHT_VALIDATION_NEST26", "raw_full_run_output_with_tasks_checkpoints_20260611", "q1_selected_regimes.csv")
-        cfg$output_root <- file.path(cfg$bundle_root, "08_RANDOM_DIRICHLET_ABSTAIN_AUDIT")
+        cfg$project_root <- default_project_root(cfg$bundle_root)
+        cfg$validation_code_root <- default_validation_code_root(cfg$bundle_root)
+        cfg$taxonomy_csv <- default_taxonomy_csv(cfg$bundle_root)
+        cfg$selected_regimes_csv <- default_selected_regimes_csv(cfg$bundle_root)
+        cfg$output_root <- default_output_root(cfg$bundle_root)
         i <- i + 2L
       },
       "project-root" = { cfg$project_root <- getv(i); i <- i + 2L },
@@ -147,14 +195,28 @@ load_project <- function(cfg) {
   if (!dir.exists(cfg$project_root))
     die("Project code folder not found: ", cfg$project_root)
 
-  config_file <- file.path(cfg$validation_code_root, "config", "q1_validation_config.R")
-  rdir <- file.path(cfg$validation_code_root, "R")
-  vfiles <- file.path(rdir, c(
-    "00_q1_helpers.R",
-    "02_extra_benchmarks.R",
-    "03_q1_validation_run.R",
-    "06_locked_unseen_regimes.R"
+  config_file <- first_existing_path(cfg$validation_code_root, c(
+    file.path("config", "fixed_weight_validation_config.R"),
+    file.path("config", "q1_validation_config.R")
   ))
+  validation_files <- c(
+    first_existing_path(cfg$validation_code_root, c(
+      file.path("R", "00_validation_helpers.R"),
+      file.path("R", "00_q1_helpers.R")
+    )),
+    first_existing_path(cfg$validation_code_root, c(
+      file.path("R", "02_expanded_benchmarks.R"),
+      file.path("R", "02_extra_benchmarks.R")
+    )),
+    first_existing_path(cfg$validation_code_root, c(
+      file.path("R", "03_fixed_weight_validation_run.R"),
+      file.path("R", "03_q1_validation_run.R")
+    )),
+    first_existing_path(cfg$validation_code_root, c(
+      file.path("R", "06_locked_unseen_regimes.R")
+    ))
+  )
+  vfiles <- validation_files
   missing <- c(config_file, vfiles)[!file.exists(c(config_file, vfiles))]
   if (length(missing))
     die("Validation code is incomplete. Missing: ", paste(missing, collapse = ", "))
@@ -427,7 +489,7 @@ main <- function() {
   cfg <- parse_args(CFG)
   message("=============================================================")
   message(" Random-Dirichlet audit for NEST26 benchmark-retained regimes")
-  message("   final taxonomy + fixed-weight validation + archived NEST26 code")
+  message("   final taxonomy + fixed-weight validation + NEST26 validation code")
   message("=============================================================")
   message(" bundle_root          = ", normalizePath(cfg$bundle_root, winslash = "/", mustWork = FALSE))
   message(" project_root         = ", normalizePath(cfg$project_root, winslash = "/", mustWork = FALSE))
