@@ -26,7 +26,7 @@ The script checks that the sourced estimator basis has `N_EST = 26`.
 From the final-results bundle root:
 
 ```bash
-Rscript 08_RANDOM_DIRICHLET_ABSTAIN_AUDIT/code/random_dirichlet_gate_audit.R --draws 4000 --R 500
+Rscript code/6_random_dirichlet_abstain_audit/random_dirichlet_gate_audit.R --draws 4000 --R 500
 ```
 
 The completed production run used:
