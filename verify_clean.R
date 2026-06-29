@@ -1,21 +1,21 @@
 # verify_clean.R
-# Verifica integridad sintáctica del repo limpio y que el bloque de tracking no controla flujo.
-# Ejecutar desde la raíz de final_repo:  Rscript verify_clean.R
-# NOTA: esto NO prueba equivalencia numérica; para eso corre el pipeline y compara md5 de CSV.
+# Checks that all R files parse and that module-tracking helpers do not control flow.
+# Run from the repository root: Rscript verify_clean.R
+# This is a syntax and structure check, not a numerical equivalence test.
 
 files <- list.files("code", pattern = "\\.R$", recursive = TRUE, full.names = TRUE)
-cat(sprintf("Verificando %d archivos...\n\n", length(files)))
+cat(sprintf("Checking %d R files...\n\n", length(files)))
 
 ok <- TRUE
 for (f in files) {
   res <- tryCatch({ parse(f); "OK" },
                   error = function(e) paste("PARSE ERROR:", conditionMessage(e)))
-  if (res != "OK") { ok <- FALSE; cat(sprintf("  [FALLA] %s -> %s\n", f, res)) }
+  if (res != "OK") { ok <- FALSE; cat(sprintf("  [FAIL] %s -> %s\n", f, res)) }
 }
-if (ok) cat("\n[OK] Todos los archivos parsean correctamente.\n")
+if (ok) cat("\n[OK] All R files parse successfully.\n")
 
-# is_module_done solo debe aparecer dentro de if(!exists(...)) o en su propia definicion
-cat("\nUsos de is_module_done que NO sean el guard estandar:\n")
+# is_module_done should appear only in fallback guards or in its own definition.
+cat("\nis_module_done uses outside the standard fallback guard:\n")
 flagged <- FALSE
 for (f in files) {
   ln <- readLines(f, warn = FALSE)
@@ -23,7 +23,7 @@ for (f in files) {
   bad  <- hits[!grepl("!exists\\(\"is_module_done\"", hits) & !grepl("is_module_done\\s*<-", hits)]
   if (length(bad)) { flagged <- TRUE; cat(sprintf("  %s: %s\n", f, paste(bad, collapse=" | "))) }
 }
-if (!flagged) cat("  (ninguno: confirmado que el tracking nunca controla flujo)\n")
+if (!flagged) cat("  (none; module tracking does not control execution flow)\n")
 
-cat("\nRecordatorio: la prueba definitiva es ejecutar el pipeline con codigo original\n")
-cat("y con el limpio, y comparar el md5sum de un CSV de resultados.\n")
+cat("\nReminder: numerical equivalence requires running the original and cleaned\n")
+cat("pipelines and comparing checksums for representative result CSVs.\n")

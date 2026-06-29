@@ -1,15 +1,14 @@
-# Registro de limpieza de código — Genetic_Algo_Hull_University
+# Code Cleanup Record — Genetic_Algo_Hull_University
 
-Este documento describe la limpieza de forma aplicada al código R del proyecto.
-**Principio rector:** se modificó únicamente la FORMA (comentarios, andamiaje de
-diagnóstico, redundancias), NUNCA el NÚCLEO numérico. Cada archivo modificado fue
-verificado con un comparador que ignora comentarios, líneas en blanco y el bloque
-de seguimiento de módulos, y confirma que el resto del código ejecutable es idéntico
-al original.
+This document records the cleanup applied to the R code in this repository.
+The guiding rule is simple: change presentation and maintainability only
+(comments, diagnostic scaffolding, duplicate non-numerical helpers), not the
+numerical core. Modified files were checked with diffs that isolate executable
+changes from comments, blank lines, and module-tracking fallbacks.
 
-> **Pendiente del lado del usuario (en R):** antes de reemplazar los archivos en el
-> repositorio, conviene verificar equivalencia ejecutando `parse()` sobre cada archivo
-> y comparando el `md5sum` de un CSV de resultados antes/después. Claude no dispone de R.
+Before replacing any production archive, numerical equivalence should still be
+checked by running representative original and cleaned pipelines and comparing
+checksums for representative CSV outputs.
 
 ---
 
@@ -87,7 +86,7 @@ lo que deben existir por separado.
 
 ---
 
-## Método de verificación usado por Claude (diff de código)
+## Verification Method
 
 Para cada archivo modificado se comparó contra el original ignorando: comentarios,
 líneas en blanco y el bloque de seguimiento de módulos (probado como no-numérico).
