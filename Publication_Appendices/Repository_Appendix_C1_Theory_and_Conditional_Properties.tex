@@ -1,0 +1,211 @@
+\section*{Repository Appendix C: Extended theoretical and methodological details}
+
+\subsection*{C.1 Regime-dependent estimator performance}
+
+Classical location estimators offer different balances between efficiency and robustness, and these balances vary across distributional regimes. Huber’s $\varepsilon$ contamination model formalizes how even a small proportion of gross errors can distort empirical summaries, particularly those based on moments~\citep{huber1964robust}. An estimator that is efficient under clean Gaussian sampling may perform poorly under right skewness, heavy-tailed noise, or adversarial contamination. Recent concentration results for heavy-tailed and structured settings reinforce this dependence on the underlying regime~\citep{oliveira2022improved,cai2022nonasymptotic}. The objective is to determine which estimator is best suited to a given structural setting.
+
+Let $\mathcal{F}$ denote the collection of baseline distributions considered in the study, $\Gamma$ the set of contamination rates, $\mathcal{C}$ the set of outlier scales, $\mathcal{M}$ the collection of contamination mechanisms, and $\mathcal{N}$ the set of sample sizes. Define the regime space as
+\[
+\mathfrak{R}
+=
+\mathcal{F}
+\times
+\Gamma
+\times
+\mathcal{C}
+\times
+\mathcal{M}
+\times
+\mathcal{N}.
+\]
+A particular regime is represented by
+\[
+\mathcal{R}
+=
+(F_0,\gamma,c,m,n)
+\in
+\mathfrak{R},
+\]
+where $F_0$ is the baseline distribution, $\gamma$ is the contamination rate, $c$ is the outlier scale, $m$ is the contamination mechanism, and $n$ is the sample size. The distribution induced by $\mathcal{R}$ is denoted by
+\[
+F_{\mathcal{R}}
+=
+(1-\gamma)F_0
++
+\gamma G_{m,c}(F_0),
+\]
+where $G_{m,c}(F_0)$ denotes the contamination distribution generated from $F_0$ under mechanism $m$ and scale $c$. Support, skewness, and tail behavior are properties of the resulting distribution $F_{\mathcal{R}}$. For notational simplicity, once a regime is fixed, the induced distribution is written as $F=F_{\mathcal{R}}$.
+
+The learning problem is then to identify a mapping
+\[
+\mathcal{R}
+\longrightarrow
+\widehat{\theta}^{*}_{\mathcal{R}},
+\]
+where $\widehat{\theta}^{*}_{\mathcal{R}}$ minimizes a prespecified risk criterion within that regime. This formulation is not a literal extension of the finite No Free Lunch theorem to continuous estimation spaces. It follows the same underlying logic: when the candidate data-generating environments contain incompatible structures, optimality is expected to depend on the regime instead of extending universally across all settings~\citep{wolpert1997nfl,goldblum2024nfl,wolpert2021metainduction,sterkenburg2021nfl}.
+
+\subsection*{C.2 Target functional and admissibility}
+
+Conditional optimality is meaningful only after the target has been fixed. Here, the estimand is the population mean functional
+\[
+\theta(F)=\mu_F=E_F[X],
+\]
+whenever $E_F[|X|]<\infty$. This distinction is important under asymmetry, where the mean, median, mode, geometric mean, and harmonic mean describe different features of the distribution. Because squared error loss elicits the mean, MSE comparisons are meaningful here only when all procedures are evaluated as estimators of $\mu_F$~\citep{gneiting2011point}.
+
+The term admissible is used here in an operational sense and not in the decision-theoretic sense of an estimator being undominated. For validation stage $s$, let $\mathcal{B}_s$ denote the benchmark registry available at that stage. Define
+\[
+\mathcal{B}^{\mathrm{adm}}_s(\mathcal{R})
+=
+\left\{
+T_{b,n}\in\mathcal{B}_s:
+T_{b,n}\text{ is well defined under }F_{\mathcal{R}}
+\right\},
+\]
+with membership further restricted by the benchmark policy specified for stage~$s$.
+The strongest admissible benchmarks are selected separately for the two risk criteria:
+\[
+T^{*,\mathrm{mean}}_{b,s,n}
+=
+\pi^{\mathrm{mean}}_s
+\left(
+\mathcal{B}^{\mathrm{adm}}_s(\mathcal{R})
+\right)
+\]
+and
+\[
+T^{*,q}_{b,s,n}
+=
+\pi^{q}_s
+\left(
+\mathcal{B}^{\mathrm{adm}}_s(\mathcal{R})
+\right),
+\]
+where \(\pi^{\mathrm{mean}}_s\) and \(\pi^{q}_s\) denote the prespecified benchmark-selection rules for MSE and \(q_{0.95}\), respectively, as described in Section~3.2 of the main text. Thus, strongest refers exclusively to the criterion-specific benchmark selected by the stage-specific comparison policy; it does not denote decision-theoretic admissibility. Every eligible benchmark is evaluated against the same target \(\mu_F\).
+
+This choice imposes two constraints. Support admissibility excludes the harmonic and geometric means from regimes in which observations may be non-positive. Target compatibility is more subtle. Even under positive support, the harmonic mean, geometric mean, median, and modal estimators are generally inconsistent for $\mu_F$ under asymmetry. They may nevertheless reduce finite-sample risk when used as components of a composite. The search must discourage solutions that appear stable only because they drift toward a different functional. Bias control, dominance control, and benchmark-relative pressure are introduced for this purpose.
+
+\subsection*{C.3 Composite estimators and conditional properties}
+
+Let $X_1,\ldots,X_n$ be iid observations from $F$, with observed sample $x=(x_1,\ldots,x_n)$. Let $T_{1,n},\ldots,T_{L,n}$ denote a set of base location statistics, and define the $L$-component probability simplex as
+\[
+\Delta_L
+=
+\left\{
+w\in[0,1]^L:
+\sum_{j=1}^{L}w_j=1
+\right\}.
+\]
+For a fixed weight vector $w\in\Delta_L$, the resulting composite estimator is
+\[
+\widehat{\theta}_{w,n}(x)
+=
+\sum_{j=1}^{L}w_jT_{j,n}(x).
+\]
+This construction remains interpretable because the estimator is a weighted combination of familiar statistical summaries. Its properties, however, depend on the components receiving positive weight and on the distributional regime in which the composite is used.
+
+Because $L$ is finite and $w$ remains fixed, if every positive-weight component is consistent for the same target $\mu_F$, so that
+\[
+T_{j,n}\xrightarrow{p}\mu_F
+\qquad\text{as }n\to\infty
+\]
+for every $j$ such that $w_j>0$, then
+\[
+\widehat{\theta}_{w,n}\xrightarrow{p}\mu_F.
+\]
+This observation states the target-compatibility condition required for consistency; it is not presented as a separate theoretical contribution. The condition is essential. Harmonic, geometric, and modal components are not assumed to be individually consistent for $\mu_F$ across general skewed regimes. They enter the composite as auxiliary components that may improve the balance between bias and variance, but their value must be established through comparison with an operationally admissible benchmark.
+
+Breakdown and influence properties also depend on the weights. When the sample mean receives positive weight, the composite will inherit an asymptotic breakdown point of zero. At the functional level, suppose that the functionals underlying the positive-weight components admit influence functions at $F$ and that the regularity conditions required for linearity hold. The influence function of the fixed composite can then be written as
+\[
+\operatorname{IF}(z;\theta_w,F)
+=
+\sum_{j=1}^{L}
+w_j\operatorname{IF}(z;T_j,F).
+\]
+For the population mean functional,
+\[
+\operatorname{IF}(z;\mu,F)=z-\mu_F,
+\]
+which is unbounded. Consequently, when $w_{\mathrm{mean}}>0$ and the remaining positive-weight components have bounded influence functions, the composite influence function remains unbounded. The mean weight scales its contribution but does not make it bounded~\citep{hampel1986robust,avellamedina2017influence}. The framework therefore does not assume that combining estimators automatically produces robustness. Instead, the weights reveal the balance among components, while the benchmark gate determines whether that balance is favorable within a particular regime.
+
+The principal risk quantity considered for the composite is mean squared error. Let
+\[
+b_{j,n}(F)
+=
+E_F[T_{j,n}]-\mu_F
+\]
+denote the finite-sample bias of component $j$. Because the weights are fixed, the finite-sample bias of the composite is
+\[
+B_n(w,F)
+=
+E_F[\widehat{\theta}_{w,n}]-\mu_F
+=
+\sum_{j=1}^{L}w_jb_{j,n}(F).
+\]
+Under iid sampling, the sample mean is unbiased whenever $E_F[X]$ exists and is finite, so
+\[
+b_{\mathrm{mean},n}(F)=0.
+\]
+The composite bias therefore satisfies
+\[
+|B_n(w,F)|
+\leq
+(1-w_{\mathrm{mean}})
+\max_{j\neq\mathrm{mean}}
+|b_{j,n}(F)|.
+\]
+Retaining some weight on the sample mean limits how far the composite can move away from $\mu_F$, although it does not by itself ensure consistency or robustness.
+
+\begin{proposition}[Finite-sample MSE dominance region]\label{prop:mse}
+For fixed $n$, suppose that the relevant second moments are finite. Let
+\[
+V_n(w,F)
+=
+\operatorname{Var}_F(\widehat{\theta}_{w,n})
+\]
+denote the finite-sample variance of the composite and let $B_n(w,F)$ denote its finite-sample bias. Then $\widehat{\theta}_{w,n}$ has strictly smaller MSE than $\bar X_n$ for estimating $\mu_F$ if and only if
+\[
+B_n(w,F)^2+V_n(w,F)
+<
+\operatorname{Var}_F(\bar X_n).
+\]
+\end{proposition}
+
+For the strongest operationally admissible benchmarks selected at stage \(s\), the corresponding conditions are
+\[
+\operatorname{MSE}_{F,n}(\widehat{\theta}_{w,n})
+<
+\operatorname{MSE}_{F,n}
+\left(T^{*,\mathrm{mean}}_{b,s,n}\right)
+\]
+and
+\[
+q_{0.95,F,n}(\widehat{\theta}_{w,n})
+<
+q_{0.95,F,n}
+\left(T^{*,q}_{b,s,n}\right).
+\]
+Proposition~\ref{prop:mse} isolates the sample mean case and clarifies the balance between efficiency and robustness. The benchmark gate evaluates the broader comparison empirically against the criterion-specific comparators selected from $\mathcal{B}^{\mathrm{adm}}_s(\mathcal{R})$ by the prespecified stage-specific policy.
+
+\noindent Although elementary, this inequality clarifies when a composite can improve on the sample mean. Under right skewness and heavy tails, $\operatorname{Var}_F(\bar X_n)$ may be large. A composite can then accept a small amount of squared bias in exchange for a sufficiently large reduction in variance and still achieve lower MSE.
+
+As $F$ approaches a light-tailed, nearly symmetric regime in which the sample mean is efficient, progressively less variance remains available for a composite to reduce without introducing offsetting bias~\citep{lehmann1998point,vandervaart1998asymptotic}. Under such conditions, any successful composite would be expected to assign almost all of its weight to the sample mean. Composite gains should be more plausible in skewed and heavy-tailed families such as Lognormal, Weibull, Inverse Gaussian, and Ex Wald, and less likely in Normal and other nearly efficient regimes. This pattern is a theoretical expectation to be tested by the benchmark gate, not a condition encoded in the selection rule.
+
+The same decomposition explains why performance may not transfer across regimes. Both $B_n(w,F)$ and $V_n(w,F)$ depend on $F$. Weights learned under a training regime $F_{\mathrm{train}}$ may produce different bias and variance under $F_{\mathrm{test}}$. When the distributional structure changes, a favorable reduction in variance can disappear while the bias remains.
+
+This is the mechanism behind the No Free Lunch pattern considered in the study. No single weight vector should be expected to have an MSE dominance region covering several structurally incompatible regimes~\citep{sterkenburg2021nfl,goldblum2024nfl}. The selected weights are frozen and evaluated again on locked-unseen regimes and external data. In the language of Proposition~\ref{prop:mse}, this evaluation asks whether the dominance inequality continues to hold under a distribution that played no role in choosing $w$.
+
+The bias penalty and admissibility mask used during discovery serve related purposes. The penalty discourages weight vectors with large estimated bias, while the mask excludes harmonic and geometric components whenever their support requirements are not satisfied. In those cases, $b_{j,n}(F)$ would not merely be large; the corresponding statistic could be undefined.
+
+A final distinction is important because the composite is later compared with Catoni-type, median-of-means, winsorized, tuned Huber, and trimmed-mean estimators. The citations to Lugosi and Mendelson concern the broader theoretical literature on robust mean estimation, including median-of-means and trimmed-mean methods; they do not denote a separate estimator in the registry. Under their respective assumptions, Catoni's theoretically calibrated estimator, median-of-means procedures, and certain trimmed-mean constructions admit finite-sample deviation guarantees that keep estimation error small with high probability under heavy tails~\citep{catoni2012challenging,lugosi2019mean,lugosi2021trimmed}. These guarantees are not attributed to the implementation-specific Catoni-type variants used here. The composite has no comparable guarantee. Proposition~\ref{prop:mse} identifies the condition under which a weighted combination can improve, but that condition depends on the unknown quantities $B_n(w,F)$ and $V_n(w,F)$. It characterizes the relevant bias and variance balance without providing an a priori performance bound.
+
+Evidence for a particular composite must come from frozen-weight evaluation under the benchmark gate, locked-unseen regimes, and external error control. Because the behavior of the individual components is known, a deviation bound for a fixed convex combination may be derivable under finite variance. Developing such a bound remains a theoretical extension and is not claimed in the present article.
+
+\subsection*{C.4 Aggregation and evolutionary search over the simplex}
+
+The framework is related to estimator aggregation, shrinkage, Bayesian model averaging, and stacking, but it differs in both the statistical object being combined and the final decision rule. James-Stein shrinkage improves estimation of multivariate normal means under squared loss~\citep{stein1956inadmissibility,james1961estimation}. Bayesian model averaging combines predictive models through posterior model probabilities~\citep{hoeting1999bma}, while stacking and the Super Learner combine prediction rules according to cross-validated risk~\citep{vanderlaan2007super,claeskens2008model,yang2001adaptive}. Here, the combined objects are location estimators, the target remains fixed at \(\mu_F=E_F[X]\), and learning occurs across simulated distributional regimes instead of a single observed prediction dataset. The final rule also permits abstention: a composite is accepted only when it outperforms the strongest admissible benchmark.
+
+Searching for such a composite requires optimization over the simplex $\Delta_L$. The fitness surface is not smooth because it combines quantile-based tail risk, maximum loss, bias, instability, entropy, dominance, and benchmark-relative terms estimated across stochastic Monte Carlo scenarios. Gradient estimation would require additional fitness evaluations and smoothness assumptions that do not fit this objective naturally. Projected gradient and mirror descent methods are not used as the default search procedures, although they remain valuable comparators for future evaluation~\citep{beck2003mirror}.
+
+The genetic algorithm is suitable for this setting because it relies only on function evaluations, maintains a population of candidate weight vectors, and applies convex crossover and Dirichlet mutation without leaving the simplex~\citep{back1996evolutionary,Eiben2015,telikani2021evolutionary,katoch2021review,zhan2022evolutionary,sipper2023meltingpot}. Its population structure also supports the regime-dependent design. A persistent warm-start bank retains strong weight vectors from earlier regime-specific searches and introduces them into related runs, allowing useful structures to be reconsidered without treating them as predetermined solutions.
+
+This allocation of search effort is conceptually related to successive halving and Hyperband~\citep{jamieson2016nonstochastic,li2017hyperband}. The genetic algorithm is not assumed to be uniquely optimal, and a carefully designed CMA-ES procedure with simplex constraints and warm starts would provide a meaningful comparison. Hansen's tutorial offers an accessible account of CMA-ES and provides useful background for understanding how such an alternative search could be implemented in this setting~\citep{hansen2016cma}. The empirical question remains more focused: whether the weights produced by the present search remain competitive once they are frozen and evaluated under held-out and fixed-weight validation.
