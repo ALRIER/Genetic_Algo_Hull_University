@@ -1,0 +1,158 @@
+\subsection*{C.5 Estimator space and evolutionary search}
+Each individual in the genetic algorithm population is represented by a weight vector $w\in\Delta_L$. The initial population is sampled from a symmetric Dirichlet distribution and supplemented with warm-start candidates retained from previous regime-specific runs. Tournament selection chooses the parent vectors, and convex crossover produces offspring of the form
+\[
+c=\alpha p_1+(1-\alpha)p_2,
+\qquad
+\alpha\sim U(0,1).
+\]
+Dirichlet mutation perturbs and renormalizes the weights, ensuring that every candidate remains a valid point on the simplex~\citep{Aitchison1982,PawlowskyGlahn2015}. Elitism preserves the strongest candidates, while periodic immigration replaces weak candidates with fresh Dirichlet draws. Reproducibility across parallel runs is maintained through L'Ecuyer CMRG random number streams~\citep{lecuyer2002streams}.
+
+The initial discovery stage searches over ten learnable components: the mean, median, 20\% trimmed mean, harmonic mean, geometric mean, half-sample mode, Parzen kernel mode, Tukey trimean, Huber location, and Tukey biweight location. The expanded discovery stage extends this basis to 26 components by adding
+winsorized means at 5\%, 10\%, and 20\%; median-of-means estimators with
+\(k\in\{5,10,20\}\) blocks; five Catoni-type M-estimators; and Huber tuned
+locations with
+\[
+k\in\{0.75,1,1.345,1.75,2\}.
+\]
+
+The Catoni-type candidates are defined as solutions in \(\theta\) of
+\[
+\sum_{i=1}^{n}
+\psi\!\left(a(X_i-\theta)\right)=0,
+\]
+where
+\[
+\psi(u)
+=
+\operatorname{sign}(u)
+\log\!\left(1+|u|+\frac{u^2}{2}\right),
+\]
+and
+\[
+a\in\{0.05,0.10,0.20,0.35,0.50\}.
+\]
+Here, \(a\) is an implementation-specific sensitivity parameter used to
+define five distinct candidate estimators. The grid was fixed before
+expanded discovery to span increasingly nonlinear score behavior. It was not
+designed to reproduce the variance- and confidence-calibrated choice of
+\(\alpha\) derived in Catoni's theoretical analysis. Because
+\(\psi(a u)\approx a u\) as \(a\rightarrow0\), smaller values yield behavior
+closer to the sample mean, whereas larger values produce stronger nonlinear
+attenuation of extreme residuals. These candidates are therefore described
+as Catoni-type estimators and are evaluated empirically under the same frozen
+benchmark protocol as the remaining components. No finite-sample deviation guarantee from Catoni's theoretically calibrated
+estimator is attributed to this implementation~\citep{catoni2012challenging}.
+
+\subsection*{C.6 Data generating families and contamination}
+Synthetic super populations were generated from six distributional families: Normal, Lognormal, Weibull, Inverse Gaussian, Ex Gaussian, and Ex Wald. These families were selected because they cover symmetry, positive skewness, flexible hazard structures, asymmetric duration tails, exponential reaction time tails, and first passage dynamics~\citep{aitchison1957lognormal,weibull1951,chhikara1989inversegaussian,schwarz2001exwald,heathcote2004fitting}.
+
+Samples were drawn at sizes
+\[
+n\in\{300,500,1000,2000,5000\}.
+\]
+Contamination was introduced at rates
+\[
+\gamma\in\{0.00,0.01,0.02,0.05,0.10,0.15,0.20,0.30\},
+\]
+with outlier scales
+\[
+c\in\{1.5,3,4.5,6,9,12,15,20,30\}.
+\]
+Eight contamination mechanisms were considered: upper-tail, lower-tail, symmetric $t$, point-mass, clustered upper, clustered symmetric, bimodal near, and bimodal far.
+
+Together, these dimensions define the regime structure over which the candidate estimators are discovered and evaluated. Each regime reflects a particular combination of distributional family, sample size, contamination rate, outlier scale, and contamination mechanism.
+
+\subsection*{C.7 Simulation validation, performance criteria, and benchmark gate}
+Before optimization, the simulation engine was examined through four checks: moment fidelity, contamination injection fidelity, recovery of established statistical benchmarks, and empirical anchoring against real datasets. The benchmark recovery layer verified that the sample mean is efficient under clean Normal sampling, that the median dominates under severe upper-tail contamination, and that Huber location improves on the mean under moderate contamination. These checks follow established recommendations for the design and reporting of simulation studies~\citep{law2015simulation,morris2019simulation}.
+
+Performance was evaluated using MSE and \(q_{0.95}\). MSE summarizes average squared error across the relevant replicates, while \(q_{0.95}\) is the 95th percentile of the replicate-level squared-error distribution and captures an upper-tail loss threshold. This second criterion is a quantile risk measure analogous to Value at Risk. Unlike CVaR, it reports the loss quantile itself and does not average losses beyond that threshold~\citep{artzner1999coherent,rockafellar2000cvar}.
+
+For validation stage \(s\) and regime \(\mathcal{R}\), the benchmark gate operates on the operationally admissible registry
+\[
+\mathcal{B}^{\mathrm{adm}}_s(\mathcal{R})
+\]
+defined in Section~2 of the main text. The strongest benchmark is selected separately for each risk criterion. Specifically, define
+\[
+T^{*,\mathrm{mean}}_{b,s,n}
+\in
+\argmin_{T_{b,n}\in\mathcal{B}^{\mathrm{adm}}_s(\mathcal{R})}
+\operatorname{MSE}_{F,n}(T_{b,n})
+\]
+and
+\[
+T^{*,q}_{b,s,n}
+\in
+\argmin_{T_{b,n}\in\mathcal{B}^{\mathrm{adm}}_s(\mathcal{R})}
+q_{0.95,F,n}(T_{b,n}),
+\]
+where
+\[
+q_{0.95,F,n}(T_{b,n})
+=
+q_{0.95}
+\left[
+\bigl(T_{b,n}-\mu_F\bigr)^2
+\right].
+\]
+The benchmarks minimizing MSE and \(q_{0.95}\) need not be the same estimator.
+
+A candidate composite clears the dual benchmark gate only when
+\[
+\operatorname{MSE}_{F,n}(\widehat{\theta}_{w,n})
+<
+\operatorname{MSE}_{F,n}
+\left(T^{*,\mathrm{mean}}_{b,s,n}\right)
+\]
+and
+\[
+q_{0.95,F,n}(\widehat{\theta}_{w,n})
+<
+q_{0.95,F,n}
+\left(T^{*,q}_{b,s,n}\right).
+\]
+Thus, a composite that improves \(q_{0.95}\) but worsens MSE is rejected, as is a composite that improves MSE while worsening \(q_{0.95}\). When both requirements are not satisfied simultaneously, the procedure abstains and retains the relevant criterion-specific benchmark values. The resulting rule is stricter than selection based only on the lowest average loss.
+
+\subsection*{C.8 Initial discovery and fixed-weight confirmation}
+Initial discovery uses three-fold cross-validation and a multistage allocation of computational resources. The first high-pass filter, HPF1, performs a broad, relatively low-cost scan across configurations and regimes using 60\% scenario exposure. HPF2 then reevaluates the more promising signals using 80\% exposure. Specialist halving concentrates the remaining computation on the strongest regime-specific candidates, and final discovery decisions use held-out scenarios without retraining.
+
+At the end of discovery, a composite is accepted only when it improves simultaneously on MSE and $q_{0.95}$ relative to the best admissible classical benchmark. Discovery nominates candidate weight vectors, but does not provide the final evidential claim.
+
+Once discovery is complete, the selected weights are frozen and evaluated again without further optimization. Table~\ref{tab:phase1_settings} summarizes the distinction between discovery and fixed-weight confirmation. Confirmation expands the benchmark set to include Catoni-type estimators, median-of-means estimators, winsorized means, tuned Huber estimators, and an equal-weight composite. It also raises precision to $R=500$ Monte Carlo replicates and $B=500$ bootstrap resamples, introduces eight additional validation seeds, and evaluates each candidate in both its original regime and a locked-unseen related regime.
+
+The locked-unseen related regime was constructed deterministically from the discovery regime and was never available during HPF1, HPF2, specialist training, specialist validation, or the original held-out gate. Let $\Gamma_{\mathcal R}$ and $\mathcal C_{\mathcal R}$ denote the contamination rates and outlier scales used by the discovery regime, and let $\widetilde{\gamma}_{\mathcal R}$ and $\widetilde{c}_{\mathcal R}$ denote their medians. The validation values were selected from the prespecified global grids as
+\[
+\gamma^{\mathrm{LU}}
+\in
+\argmin_{\gamma\in\Gamma\setminus\Gamma_{\mathcal R}}
+\left|\gamma-\widetilde{\gamma}_{\mathcal R}\right|,
+\qquad
+c^{\mathrm{LU}}
+\in
+\argmin_{c\in\mathcal C\setminus\mathcal C_{\mathcal R}}
+\left|c-\widetilde{c}_{\mathcal R}\right|.
+\]
+When two grid values were equally close, the smaller value in the sorted grid was selected. The contamination mechanism was kept within the same structural group: upper-tail mechanisms paired \texttt{upper\_tail} with \texttt{clustered\_upper}; symmetric mechanisms paired \texttt{symmetric\_t} with \texttt{clustered\_symmetric}; bimodal mechanisms paired the near and far bimodal mixtures; and point-mass mechanisms retained \texttt{point\_mass}. An unused mechanism from the same group was selected when available; otherwise the original mechanism was retained. The distribution family, frozen candidate weights, and sample-size support were unchanged. Thus, relatedness denotes adjacency under a prespecified contamination-profile rule, not an informal judgment. Exact original and locked-unseen profiles for the confirmed specialists are reported in Table~\ref{tab:locked_unseen_profiles}.
+
+Relative gains are accompanied by paired bootstrap intervals~\citep{efron1993bootstrap}. In the archived configuration, seed-level gate status requires positive point gains for both MSE and $q_{0.95}$; the intervals quantify uncertainty separately. Headline confirmation is limited to candidates that remain stable across the validation seeds and retain positive reported $q_{0.95}$ intervals in the relevant validation mode. This stage separates properties of the frozen estimator from artifacts of the discovery cells.
+
+\begin{table}[htbp]
+\centering
+\caption{Discovery and fixed-weight confirmation settings. Confirmation uses the frozen discovery weights and performs no additional genetic algorithm search.}
+\label{tab:phase1_settings}
+\small
+\begin{tabular}{p{0.25\textwidth}p{0.25\textwidth}p{0.40\textwidth}}
+\toprule
+Component & Discovery & Fixed-weight confirmation \\
+\midrule
+Distribution families & 6 & Focal validation regimes from discovery \\
+Scenario universe & 576 per family & Original and deterministically constructed locked-unseen related regimes \\
+Genetic algorithm basis & 10 components & Frozen discovery weights; no new genetic algorithm search \\
+Discovery seeds & 101, 202 & Not rerun \\
+Validation seeds & -- & 303, 404, 505, 606, 707, 808, 909, 1010 \\
+Monte Carlo replicates & $R=40$ & $R=500$ \\
+Bootstrap replicates & $B=100$ & $B=500$ \\
+Benchmarks & Classical admissible set & Catoni-type, MOM, winsorized, tuned Huber, equal weight composite \\
+Final rule & Benchmark gate & Expanded benchmark gate with paired bootstrap intervals \\
+\bottomrule
+\end{tabular}
+\end{table}
