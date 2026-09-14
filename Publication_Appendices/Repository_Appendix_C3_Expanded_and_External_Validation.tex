@@ -1,0 +1,70 @@
+\subsection*{C.9 Expanded-basis rediscovery and post-discovery validation}
+The expanded-basis stage reopens discovery with modern robust estimators available from HPF1 onward instead of adding them only after candidate selection. The genetic algorithm now learns weights over the complete 26-component registry defined in Section~3.1 of the main text, including Catoni-type, median-of-means, winsorized, and tuned Huber estimators.
+
+The regime-first architecture remains unchanged. HPF1, HPF2, specialist halving, and the held-out benchmark gate retain the same roles, allowing the change in the estimator basis to be examined without replacing the broader discovery structure. HPF1 continues to use 60\% scenario exposure, while HPF2 increases from 80\% in the initial stage to 90\% in the expanded stage.
+
+Table~\ref{tab:phase_comparison} summarizes the design of the two discovery stages.
+
+\begin{table}[htbp]
+\centering
+\caption{Design of the two discovery stages. The expanded-basis stage includes modern robust estimators directly in the discovery space instead of introducing them only as subsequent competitors.}
+\label{tab:phase_comparison}
+\small
+\begin{tabular}{@{}P{0.22\textwidth}P{0.28\textwidth}P{0.42\textwidth}@{}}
+\toprule
+Design element & Initial discovery & Expanded-basis rediscovery \\
+\midrule
+Discovery gate & Classical admissible set & Expanded modern set active from HPF1 \\
+Genetic algorithm composite basis & 10 estimators & 26 estimators, including Catoni-type, MOM, winsorized, and Huber tuned components \\
+HPF1 scenario exposure & 60\% & 60\% \\
+HPF2 scenario exposure & 80\% & 90\% \\
+Warm starts & Dirichlet plus regime bank & Dirichlet, regime bank, and confirmed Lognormal weights \\
+Discovery seeds & 101, 202 & 101, 202 \\
+Audits & Post-discovery diagnostics & Profile, global, and interfamily audits integrated into the close of discovery \\
+Post-discovery validation & Expanded fixed-weight confirmation & post-discovery fixed-weight validation ($N_{\mathrm{EST}}=26$) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Inheritance between the two stages is controlled. Only weights that pass the initial fixed-weight confirmation are allowed to enter the expanded-basis stage as protected warm-start candidates. In the completed run, this condition applies to CV-019 and CV-010. Their inclusion preserves information from the previous stage, but does not grant automatic acceptance. They retain external prior provenance and must compete again under the 26-component gate.
+
+After expanded discovery, candidates are evaluated with frozen weights through the post-discovery fixed-weight validation, with $N_{\mathrm{EST}}=26$. The resulting evidence taxonomy assigns each candidate to one of four reporting categories: transfer specialist, discovery-supported local candidate, near-gate candidate, or negative-control success. These categories summarize the strength and scope of the evidence but do not alter the decisions produced by the benchmark gate.
+
+The allocation of computational resources follows the logic of successive halving and Hyperband~\citep{jamieson2016nonstochastic,li2017hyperband}. The initial stage establishes the discovery framework and evaluates composites learned under classical benchmark pressure. The expanded stage then tests whether introducing modern robust components from the beginning changes which regions of the simplex become accessible to the search. Together, the two stages provide a connected examination of conditional optimality, not two separate studies.
+
+\subsection*{C.10 Confirmation and abstention audit design}
+Fixed-weight confirmation was challenged through four complementary audits: a robustness audit based on the frozen component weights and gross-error sensitivity; a bootstrap audit focused on nonsmooth median and modal components; a Benjamini--Hochberg correction across confirmation candidates; and a split-sample check separating candidate selection from performance reporting across the eight validation seeds. These audits did not modify the benchmark gate or the evidence taxonomy.
+
+A complementary abstention audit examined whether benchmark retention could reflect incomplete exploration of the simplex. For each of 17 benchmark-retained regimes and both validation modes, $4000$ weights were sampled from a symmetric Dirichlet distribution with concentration parameter $\alpha=0.30$ and evaluated using the same simulator, admissibility rules, benchmark registry, definition of $q_{0.95}$, $R=500$ Monte Carlo budget, and eight validation seeds. A regime and mode cell confirmed abstention when no sampled vector cleared both gates at all eight seeds. The frozen Weibull specialists served as positive controls, while randomly passing vectors were retained only as future search targets and were not promoted to confirmed discoveries.
+
+The complete audit procedures, including the influence-function interpretation, caveat for nonsmooth bootstrap components, multiplicity rule, split-sample partition, and random-search protocol, are reported in Repository Appendix~B.
+
+\subsection*{C.11 External validation design}
+External validation examined whether the frozen candidates transferred beyond the synthetic super populations. All weights were applied exactly as discovered and validated, without retraining, adaptation, or further optimization on the public datasets.
+
+Because the population mean is not known independently in observational public data, the external target was operationalized as the full-sample mean of each dataset. Each specialist was evaluated according to how accurately it recovered that reference mean from repeated subsamples. The external analysis therefore assesses sampling variability and robustness relative to the full-sample reference. It does not constitute validation against a population mean known independently of the observed dataset.
+
+Tail observations were identified endogenously within each public data marginal, and no synthetic contamination was added. The implementation used the unscaled median absolute deviation
+\[
+\operatorname{MAD}_0(x)
+=
+\operatorname{median}_i\left|x_i-\operatorname{median}_j(x_j)\right|
+\]
+and calculated
+\[
+z_i=\frac{x_i-\operatorname{median}(x)}{s(x)},
+\]
+where $s(x)=\operatorname{MAD}_0(x)$. If this scale was non-finite or non-positive, the implementation used $\operatorname{IQR}(x)/1.349$, followed by the standard deviation if necessary. Depending on the prespecified contamination direction, the empirical tail pool contained observations with $z_i\geq3$, $z_i\leq-3$, or $|z_i|\geq3$. The threshold was fixed before the external battery was completed. It is a prespecified operational cutoff, not a claim that $z=3$ is universally optimal; lower MAD-based cutoffs have also been recommended in the literature~\citep{leys2013outliers}. No parallel analysis at 2.5 or 4 was conducted, so the external counts and profile-specific conclusions are conditional on the $z=3$ rule. Because the unscaled form of MAD was used, numerical comparisons with published cutoffs depend on the scaling convention. In skewed marginals, a flag identifies an observation as operationally irregular under this rule; it does not establish a distinct contamination process~\citep{leys2013outliers,berger2021rtoutliers,miller2023rtoutliers}. The analysis therefore tests transfer conditional on an empirical profile, not performance under arbitrary contamination.
+
+Public sources were assembled while balancing profile quotas and source caps. After loading and eligibility screening, dataset-level evaluations were constructed from the retained sources. These flow counts are reported in Section~4 of the main text. The primary external claim uses the independent parent dataset as its inferential unit, not each generated comparison. Each dataset-level evaluation could generate multiple eligible comparisons across frozen candidates, empirical profiles, validation modes, and subregimes. After profile matching and eligibility screening, the external battery produced 809 dataset-level comparison rows for multiplicity control.
+
+Three prespecified safeguards governed the external analysis. First, a profile gate restricted primary evaluation to specialist and dataset pairs whose empirical distributional profile matched the family associated with the specialist. Nonmatching pairs were retained only as cross-regime audit rows and were excluded from the primary evidence count. When a dataset did not match a validated specialist family, the framework retained the corresponding benchmark.
+
+Second, the primary comparator was selected through a benchmark policy prespecified by empirical profile. A best-across-all-estimators oracle was calculated separately as a secondary audit, but it did not replace the profile-specific primary benchmark and was not used to define the principal external claims.
+
+Third, uncertainty and multiplicity control were applied to the exact reported gain. Paired bootstrap intervals were computed from the paired specialist and benchmark losses, and the original Benjamini--Hochberg procedure~\citep{benjamini1995controlling} was applied at the dataset level across primary profile-eligible, in-regime comparisons. For each eligible candidate, dataset, and mode comparison, the point gate required positive mean and $q_{0.95}$ gains, and the paired bootstrap interval for the prespecified reported gain had to remain above zero. A strict external win also had to survive the dataset-level false discovery rate correction. The broader closure-principle proposal of Xu et al.~\citep{xu2025closure} was not used to define, tune, or justify the correction implemented in this study.
+
+A saturation cap limited each dataset to no more than ten countable wins. Additional within-dataset evaluations were retained as depth probes, explicitly tagged, and excluded from the count of independent datasets. This rule reduces the risk of pseudoreplication by preventing repeated evaluations of the same parent dataset from inflating the reported extent of independent external evidence~\citep{hurlbert1984pseudoreplication,aarts2014solution}.
+
+External evidence was summarized along two complementary dimensions.
+Independent dataset coverage was defined as the number of parent datasets on which at least one profile-eligible candidate achieved a strict win supported by its confidence interval and survived false discovery rate control. Within-dataset stability was defined as the number of corrected subregime confirmations observed within those parent datasets.
