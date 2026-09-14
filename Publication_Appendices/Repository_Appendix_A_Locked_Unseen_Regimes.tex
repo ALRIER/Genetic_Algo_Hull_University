@@ -1,0 +1,46 @@
+\section*{Repository Appendix A: Construction of the locked-unseen related regimes}
+\label{supp:locked_unseen}
+
+The locked-unseen validation tested whether frozen candidate weights transferred to a neighboring contamination profile that had not participated in discovery or in the original held-out gate. For each discovery regime, the procedure read the contamination rates, outlier scales, contamination mechanisms, and sample sizes recorded in the audit metadata. It then selected the nearest unused contamination rate and outlier scale relative to the medians of the original sets. Selection was restricted to the prespecified global grids, with ties resolved toward the smaller value.
+
+Mechanism similarity was defined through prespecified structural groups. Upper-tail profiles paired the upper-tail and clustered-upper mechanisms; symmetric profiles paired the symmetric and clustered-symmetric mechanisms; bimodal profiles paired the near and far bimodal mechanisms; lower-tail profiles remained lower-tail; and point-mass profiles retained the point-mass mechanism. When an unused alternative existed within the same group, it was selected; otherwise, the original mechanism was retained. The distribution family, source candidate, frozen weights, and sample-size support remained unchanged. No retraining, mutation, adaptation, or candidate reselection occurred during this evaluation.
+
+\begin{table}[htbp]
+\centering
+\caption{Exact original and locked-unseen related profiles for the four confirmed specialists. Audit IDs link the reported candidates to the archived fixed-weight validation outputs. The sample-size support was unchanged in every comparison.}
+\label{tab:locked_unseen_profiles}
+\scriptsize
+\begin{tabular}{@{}P{0.14\textwidth}P{0.18\textwidth}P{0.30\textwidth}P{0.30\textwidth}@{}}
+\toprule
+\textbf{Candidate / audit ID} &
+\textbf{Family, regime, seed} &
+\textbf{Original discovery profile} &
+\textbf{Locked unseen profile} \\
+\midrule
+CV-019 / FWVR019 &
+Lognormal, REG02, 101 &
+$\gamma=0.30$; $c=30$; \texttt{mixture\_bimodal\_near}; $n\in\{300,500,1000\}$ &
+$\gamma=0.20$; $c=20$; \texttt{mixture\_bimodal\_far}; $n\in\{300,500,1000\}$ \\
+\addlinespace
+CV-010 / FWVR010 &
+Lognormal, REG01, 202 &
+$\gamma=0.05$; $c=30$; \texttt{point\_mass}; $n\in\{300,500,1000\}$ &
+$\gamma=0.02$; $c=20$; \texttt{point\_mass}; $n\in\{300,500,1000\}$ \\
+\addlinespace
+Q1R011 / FWVR011 &
+Weibull, REG01, 101 &
+$\gamma\in\{0.05,0.10\}$; $c=30$; \texttt{upper\_tail}; $n\in\{300,500,1000\}$ &
+$\gamma=0.02$; $c=20$; \texttt{clustered\_upper}; $n\in\{300,500,1000\}$ \\
+\addlinespace
+Q1R012 / FWVR012 &
+Weibull, REG02, 202 &
+$\gamma\in\{0.05,0.10\}$; $c=30$; \texttt{point\_mass}; $n\in\{300,500,1000\}$ &
+$\gamma=0.02$; $c=20$; \texttt{point\_mass}; $n\in\{300,500,1000\}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The archived construction tables additionally record the reason string
+\texttt{similar\_profile\_not\_in\_discovery\_exact\_cell} together with the selected rate, scale, and mechanism for every evaluated candidate. The four rows above are the subset corresponding to the specialists that reached the confirmed reporting level.
+
+\clearpage
