@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TOKEN_FILE="${1:-/home/alrier/Documents/.zenodo_token}"
-BUCKET_URL="${2:?bucket url required}"
+TOKEN_FILE="${1:?token file required}"
+BUCKET_URL="${2:?bucket URL required}"
 FILE_PATH="${3:?file path required}"
 
-token="$(cat "$TOKEN_FILE")"
+token="$(<"$TOKEN_FILE")"
 filename="$(basename "$FILE_PATH")"
 
 curl --fail --progress-bar \

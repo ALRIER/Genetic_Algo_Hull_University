@@ -1,42 +1,28 @@
 # =============================================================================
 # run_experiment.R
 # =============================================================================
-# Single-entry launcher for the full pipeline.
-# Run this file from a clean R session or terminal.
+# Entry point for the Phase 2 expanded discovery pipeline.
+# Run from a clean R session or terminal with this folder as PROJECT_ROOT.
 #
-# Usage:
-#   # Default structural preflight:
+# Examples:
 #   source("run_experiment.R")
 #
-#   # Full single-machine run:
 #   Sys.setenv(RUN_MODE = "full")
 #   source("run_experiment.R")
 #
-#   # Full cluster run (Linux only):
-#   Sys.setenv(RUN_MODE      = "full",
-#              CLUSTER_HOSTS = "192.168.1.2,192.168.1.3",
-#              SCRIPT_PATH   = "/nfs/project/08_LocationEstimators.R")
-#   source("run_experiment.R")
+# Available modes:
+#   micro         - load modules and run structural checks without the GA
+#   two_min_smoke - run a minimal pipeline check without diagnostics
+#   quick         - run a small one-family pipeline check
+#   smoke_results - run a two-family viability check with a reduced budget
+#   full          - run the complete six-family experiment
+#   none          - load definitions without starting an experiment
 #
-# RUN_MODE values:
-#   "micro"        → preflight only: loads modules and validates core helpers, no GA
-#   "two_min_smoke" → ultra-fast structural pipeline smoke, skips diagnostics
-#   "quick"         → pipeline smoke test: 1 family, small budget
-#   "smoke_results" → viability check: normal + exgaussian, medium budget
-#                     validates GA convergence and result
-#                     quality BEFORE committing to the full run
-#   "full"          → full experiment: all 6 families, production budget
-#                     ~48-60h single machine | ~18-20h on 3-node cluster
-#   "none"          → load definitions only, do not run
-#
-# Module load order:
-#   00–07  : definitions (utils, paths, scenarios, distributions,
-#             estimators, GA core, data prep, fitness)
-#   10     : distributional diagnostics (pre-GA, needs only param_grids)
-#   08     : main experiment (GA, HP search, outputs)
+# Modules 00-07 define shared functions and objects. Module 10 runs
+# distributional diagnostics, and module 08 runs the main experiment.
 # =============================================================================
 
-# ── 0. Set default RUN_MODE if not already set ────────────────────────────────
+# Use the structural preflight unless the caller selects another mode.
 if (!nzchar(Sys.getenv("RUN_MODE"))) {
   Sys.setenv(RUN_MODE = "micro")
 }
@@ -44,8 +30,7 @@ if (!nzchar(Sys.getenv("RUN_MODE"))) {
 cat(sprintf("\n[LAUNCHER] RUN_MODE = %s\n", Sys.getenv("RUN_MODE")))
 cat(sprintf("[LAUNCHER] Working dir = %s\n\n", getwd()))
 
-# ── 1. Resolve project root ───────────────────────────────────────────────────
-# Honours PROJECT_ROOT env var if set, otherwise uses working directory.
+# Resolve the experiment folder from PROJECT_ROOT when provided.
 this_dir <- normalizePath(
   Sys.getenv("PROJECT_ROOT", unset = getwd()),
   winslash = "/", mustWork = FALSE
@@ -61,7 +46,7 @@ this_dir <- normalizePath(
   invisible(NULL)
 }
 
-# ── 2. Load definition modules (00–07) in dependency order ───────────────────
+# Load definition modules in dependency order.
 definition_modules <- c(
   "00_utils_debug_io.R",
   "01_paths_repro.R",
@@ -79,9 +64,7 @@ for (mod in definition_modules) {
 
 cat("\n[LAUNCHER] All definition modules loaded.\n\n")
 
-# ── 3. Micro preflight short-circuit ─────────────────────────────────────────
-# Micro mode is a structural preflight only. It loads module 08, runs the micro
-# checks defined there, and skips diagnostics, GA, and transfer analysis.
+# Preflight modes load the main module without starting the production pipeline.
 if (tolower(Sys.getenv("RUN_MODE")) == "micro") {
   cat("[LAUNCHER] Micro mode: skipping diagnostics and GA. Loading module 08 only.\n\n")
   .src("08_LocationEstimators.R")
@@ -90,7 +73,7 @@ if (tolower(Sys.getenv("RUN_MODE")) == "micro") {
   .src("08_LocationEstimators.R")
 } else {
 
-  # ── 4. Run distributional diagnostics (pre-GA) ─────────────────────────────
+  # Run distributional checks before the GA experiment.
   cat("[LAUNCHER] Running distributional diagnostics (module 10)...\n")
   .src("10_distributional_diagnostics.R")
 
@@ -109,7 +92,7 @@ if (tolower(Sys.getenv("RUN_MODE")) == "micro") {
   )
   cat("[LAUNCHER] Distributional diagnostics complete.\n\n")
 
-  # ── 5. Configure smoke_results mode if selected ────────────────────────────
+  # smoke_results uses a reduced two-family budget before the full experiment.
   if (Sys.getenv("RUN_MODE") == "smoke_results") {
     cat("[LAUNCHER] smoke_results mode: setting 2-family viability budget...\n")
     Sys.setenv(SMOKE_FAMILIES  = "normal,exgaussian",
@@ -122,15 +105,11 @@ if (tolower(Sys.getenv("RUN_MODE")) == "micro") {
     cat("[LAUNCHER] Smoke families: normal + exgaussian\n")
   }
 
-  # ── 6. Run main experiment (module 08) ─────────────────────────────────────
+  # Load module 08 to start the selected experiment mode.
   cat("[LAUNCHER] Starting main experiment (module 08)...\n\n")
   .src("08_LocationEstimators.R")
 
-  # ── 7. Legacy transfer disabled ────────────────────────────────────────────
-  # cross-family transfer is not part of the active pipeline.
-
 }
 
-# ── 6. Done ───────────────────────────────────────────────────────────────────
 cat(sprintf("\n[LAUNCHER] Pipeline complete. RUN_MODE=%s\n", Sys.getenv("RUN_MODE")))
 cat(sprintf("[LAUNCHER] Outputs in: %s\n\n", OUT_ROOT))

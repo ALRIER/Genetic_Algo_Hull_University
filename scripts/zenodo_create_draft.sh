@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TOKEN_FILE="${1:-/home/alrier/Documents/.zenodo_token}"
-METADATA_JSON="${2:-/home/alrier/Documents/zenodo_stage_genetic_algo/zenodo_metadata.json}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-token="$(cat "$TOKEN_FILE")"
+TOKEN_FILE="${1:?token file required}"
+METADATA_JSON="${2:-$REPO_ROOT/.zenodo.json}"
 
-curl -sS \
+token="$(<"$TOKEN_FILE")"
+
+curl --fail --silent --show-error \
   -H "Authorization: Bearer $token" \
   -H "Content-Type: application/json" \
   -X POST \

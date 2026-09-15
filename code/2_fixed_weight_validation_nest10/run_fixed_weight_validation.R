@@ -1,10 +1,13 @@
 # =============================================================================
-# RUN POST-DISCOVERY FIXED-WEIGHT VALIDATION
+# run_fixed_weight_validation.R
 # =============================================================================
-# Usage from terminal:
-#   PROJECT_ROOT=/path/to/original/code \
-#   DISCOVERY_ROOT=/path/to/2026_May_25_Finals \
-#   VALIDATION_OUTPUT_ROOT=/path/to/FIXED_WEIGHT_VALIDATION_OUTPUT \
+# Entry point for Phase 1 post-discovery fixed-weight validation.
+# Candidate weights remain frozen throughout this stage.
+#
+# Example:
+#   PROJECT_ROOT=/path/to/code/1_discovery_nest10 \
+#   DISCOVERY_ROOT=/path/to/results/1_discovery_nest10 \
+#   VALIDATION_OUTPUT_ROOT=/path/to/validation_output \
 #   Rscript run_fixed_weight_validation.R
 # =============================================================================
 
@@ -13,12 +16,12 @@ this_file <- sub("^--file=", "", args[grep("^--file=", args)])
 this_dir <- if (length(this_file)) dirname(normalizePath(this_file, winslash = "/")) else getwd()
 
 source(file.path(this_dir, "config", "fixed_weight_validation_config.R"))
-source(file.path(this_dir, "R", "00_q1_helpers.R"))
+source(file.path(this_dir, "R", "00_validation_helpers.R"))
 source(file.path(this_dir, "R", "01_select_regimes.R"))
-source(file.path(this_dir, "R", "02_extra_benchmarks.R"))
-source(file.path(this_dir, "R", "03_q1_validation_run.R"))
+source(file.path(this_dir, "R", "02_expanded_benchmarks.R"))
+source(file.path(this_dir, "R", "03_fixed_weight_validation_run.R"))
 source(file.path(this_dir, "R", "04_bootstrap_ci.R"))
-source(file.path(this_dir, "R", "05_q1_tables_figures.R"))
+source(file.path(this_dir, "R", "05_tables_figures.R"))
 source(file.path(this_dir, "R", "06_locked_unseen_regimes.R"))
 
 config <- FIXED_WEIGHT_VALIDATION_CONFIG

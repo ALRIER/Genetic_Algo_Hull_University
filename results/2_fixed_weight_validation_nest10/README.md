@@ -1,12 +1,13 @@
-# 02 Original Post-Discovery Fixed-Weight Validation NEST10
+# Phase 1 Fixed-Weight Validation Results (N_EST = 10)
 
-This stage validates the original selected fixed-weight candidates after the first discovery run.
+This folder contains the post-discovery validation of frozen Phase 1 candidates. Candidate weights are evaluated without retraining.
 
-Key contents:
+## Folder contents
 
-- `curated_results`: compact final tables, figures, summaries, and audit files.
-- `raw_full_run_output_with_tasks_checkpoints`: complete raw validation output, including large task-level files and checkpoints.
+- `tables/`: final decision tables and estimator-level validation metrics.
+- `figures/`: validation figures.
+- `root_summaries/`: bootstrap, stability, selected-regime, and seed-level summaries.
+- `audit/`: benchmark registry, configuration snapshot, code hashes, and regime-construction records.
+- `run_metadata/`: task and runtime metadata for the completed validation run.
 
-Use `curated_results` for reporting. Use `raw_full_run_output_with_tasks_checkpoints` only when reconstructing the full run.
-
-The raw folder is intentionally large because it preserves task-level squared-error files and checkpoints.
+Together, these files provide the result and audit layers needed to inspect the fixed-weight validation stage.

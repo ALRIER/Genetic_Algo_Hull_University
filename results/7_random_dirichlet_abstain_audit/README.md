@@ -1,34 +1,21 @@
-# Random Dirichlet Abstention Audit, NEST26
+# Random Dirichlet Abstention Audit (N_EST = 26)
 
-This folder contains the post-taxonomy random-search audit for the NEST26 benchmark-retained regimes.
+This folder contains the random-search audit of the NEST26 regimes classified as `benchmark_retained` after fixed-weight validation.
 
 ## Purpose
 
-The evidence taxonomy in stage 05 labels 17 NEST26 candidates as `benchmark_retained`. This means the fixed GA candidate was not retained as a validated win. The audit asks a narrower follow-up question:
+The audit tests whether the same 26-estimator convex space contains random Dirichlet composites that pass the original dual gate when the selected GA candidate does not. It does not rerun or retrain the genetic algorithm.
 
-> If the selected GA candidate did not pass the gate, does the same 26-estimator convex space still contain random Dirichlet composites that pass the original dual gate?
-
-The audit does not rerun the GA. It samples random Dirichlet weight vectors over the same 26 estimator components, evaluates them with the original simulator, contamination logic, benchmarks, q95 definition, admissibility rules, and validation seeds, then checks whether any draw beats the best admissible benchmark on both mean MSE and q95 MSE across all seeds.
+Random weight vectors are evaluated with the same simulator, contamination rules, benchmark definitions, q95 metric, admissibility rules, and validation seeds used by the fixed-weight validation stage.
 
 ## Inputs
 
-The script uses the repository structure by default:
+- `../5_evidence_taxonomy_nest26/tables/evidence_taxonomy_all_candidates.csv`
+- `../4_fixed_weight_validation_nest26/root_summaries/post_discovery_fixed_weight_validation_selected_regimes.csv`
+- `../../code/3_validation_nest26/`
+- `../../code/4_fixed_weight_validation_nest26/`
 
-- `results/5_evidence_taxonomy_nest26/tables/evidence_taxonomy_all_candidates.csv`
-- `results/4_fixed_weight_validation_nest26/root_summaries/post_discovery_fixed_weight_validation_selected_regimes.csv`
-- `code/3_validation_nest26`
-- `code/4_fixed_weight_validation_nest26`
-
-It also keeps fallback support for the original full-results bundle paths:
-
-- `05_EVIDENCE_TAXONOMY_NEST26/evidence_results_20260611/tables/evidence_taxonomy_all_candidates.csv`
-- `04_EXPANDED_POST_DISCOVERY_FIXED_WEIGHT_VALIDATION_NEST26/raw_full_run_output_with_tasks_checkpoints_20260611/q1_selected_regimes.csv`
-- `07_CODE_ARCHIVE/expanded_and_realworld_experiment_code`
-- `07_CODE_ARCHIVE/original_fixed_weight_validation_code`
-
-The script checks that the sourced estimator basis has `N_EST = 26`.
-
-## Run
+## Reproduction
 
 From the repository root:
 
@@ -36,61 +23,23 @@ From the repository root:
 Rscript code/6_random_dirichlet_abstain_audit/random_dirichlet_gate_audit.R --draws 4000 --R 500
 ```
 
-The completed production run used:
-
-- 17 `benchmark_retained` regimes
-- 2 validation modes: `original_regime` and `locked_unseen_similar`
-- 8 validation seeds: `303,404,505,606,707,808,909,1010`
-- 4000 Dirichlet draws per regime-mode
-- Monte Carlo budget `R = 500`
-- Dirichlet alpha `0.30`
+The recorded run used 17 benchmark-retained regimes, two validation modes, eight validation seeds, 4000 Dirichlet draws per regime-mode, Monte Carlo budget `R = 500`, and Dirichlet alpha `0.30`.
 
 ## Results
 
-Main result files:
+- 34 regime-mode rows were audited.
+- 23 of 34 rows contained no random Dirichlet vector that passed all seeds.
+- 11 of 34 rows contained at least one seed-stable random Dirichlet pass.
+- 9 of 17 unique regimes were confirmed across both validation modes.
+- 8 of 17 unique regimes showed some Dirichlet signal.
+- The transfer-specialist sanity check passed for `Q1R011` and `Q1R012` across all eight seeds in `locked_unseen_similar` mode.
+
+## Result tables
 
 - `tables/abstain_audit_results.csv`: one row per audited regime-mode.
-- `tables/abstain_audit_summary_by_regime.csv`: compact summary collapsed to one row per regime.
-- `tables/dirichlet_signal_regime_modes.csv`: only regime-modes where at least one draw passed all seeds.
-- `tables/gate_sanity_transfer_specialists.csv`: sanity check on the two known transfer specialists.
-- `tables/abstain_audit_counts.csv`: headline counts.
-- `logs/run_full_20260627_115103.log`: terminal log from the production run.
+- `tables/abstain_audit_summary_by_regime.csv`: summary by regime.
+- `tables/dirichlet_signal_regime_modes.csv`: regime-modes with at least one all-seed pass.
+- `tables/gate_sanity_transfer_specialists.csv`: transfer-specialist sanity check.
+- `tables/abstain_audit_counts.csv`: headline audit counts.
 
-Headline results:
-
-- 34 regime-mode rows audited.
-- 23 of 34 regime-mode rows confirmed the abstention: no random Dirichlet draw passed all seeds.
-- 11 of 34 regime-mode rows showed at least one seed-stable random Dirichlet pass.
-- 17 unique regimes audited.
-- 9 of 17 unique regimes were fully confirmed across both validation modes.
-- 8 of 17 unique regimes showed some Dirichlet signal.
-- The transfer-specialist sanity check passed: Q1R011 and Q1R012 each passed 8 of 8 seeds in `locked_unseen_similar`.
-
-Regimes with Dirichlet signal:
-
-- Q1R003, exwald, discovery-supported local candidate: 76 total seed-stable passes.
-- Q1R005, invgauss, discovery-supported local candidate: 22 total seed-stable passes.
-- Q1R018, weibull, near-gate candidate: 14 total seed-stable passes.
-- Q1R006, invgauss, discovery-supported local candidate: 6 total seed-stable passes.
-- Q1R002, exwald, discovery-supported local candidate: 4 total seed-stable passes.
-- Q1R004, invgauss, discovery-supported local candidate: 3 total seed-stable passes.
-- Q1R008, lognormal, discovery-supported local candidate: 1 total seed-stable pass.
-- Q1R009, lognormal, discovery-supported local candidate: 1 total seed-stable pass.
-
-Fully confirmed abstentions:
-
-- Q1R001
-- Q1R007
-- Q1R010
-- Q1R013
-- Q1R014
-- Q1R015
-- Q1R016
-- Q1R017
-- Q1R019
-
-## Interpretation
-
-This audit strengthens the taxonomy rather than replacing it. A confirmed abstention means that the selected GA candidate failed and an independent random search over the same estimator simplex also failed to find a seed-stable winner. A random-search pass means the abstention should be revisited: the convex estimator space contains at least one stable candidate even though the selected fixed GA candidate was not retained.
-
-The strongest follow-up target is Q1R003 in `locked_unseen_similar`, where 72 of 4000 Dirichlet draws passed all eight seeds. The next methodological step is to persist the winning Dirichlet weight vectors and re-evaluate them as candidate specialists.
+A confirmed abstention means that neither the selected fixed GA candidate nor the independent random search produced a seed-stable winner under the same gate. A random-search pass indicates that the estimator space contains at least one stable alternative in that regime-mode.

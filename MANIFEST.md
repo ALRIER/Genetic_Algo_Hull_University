@@ -4,9 +4,10 @@ Research code and summarized results for the genetic-algorithm location-estimato
 
 ## Root
 
-- `code/`: experiment code, organized by stage.
-- `results/`: summary result files, figures, evidence-taxonomy tables, and audit metadata.
-- `results/RESULTS_SELECTION_INDEX.csv`: index of committed result artifacts.
+- `code/`: experiment code organized by stage.
+- `results/`: summarized results, figures, evidence tables, and audit metadata.
+- `results/RESULTS_SELECTION_INDEX.csv`: concise index of key committed result artifacts.
+- `Publication_Appendices/`: extended publication material.
 
 ## Estimator dimensions
 
@@ -15,14 +16,14 @@ Research code and summarized results for the genetic-algorithm location-estimato
 
 ## Code stages
 
-- `code/1_discovery_nest10/`: Phase 1 discovery-stage GA (10-estimator basis, 60–80 exposure).
+- `code/1_discovery_nest10/`: Phase 1 discovery-stage GA using the 10-estimator basis.
 - `code/2_fixed_weight_validation_nest10/`: fixed-weight validation of Phase 1 candidates.
-- `code/3_validation_nest26/`: Phase 2 expanded GA with inheritance (26-estimator basis, HPF2 90%).
+- `code/3_validation_nest26/`: Phase 2 expanded GA using the 26-estimator basis and inherited candidates.
 - `code/4_fixed_weight_validation_nest26/`: fixed-weight validation of Phase 2 candidates.
-- `code/5_realworld_external_battery/`: external public-data battery for frozen specialist estimators.
-- `code/6_random_dirichlet_abstain_audit/`: random-Dirichlet stress test of the regime map.
+- `code/5_realworld_external_battery/`: external public-data validation of frozen candidates.
+- `code/6_random_dirichlet_abstain_audit/`: random-Dirichlet audit of benchmark-retained regimes.
 
-## Results
+## Result stages
 
 - `results/1_discovery_nest10/`
 - `results/2_fixed_weight_validation_nest10/`
@@ -32,7 +33,4 @@ Research code and summarized results for the genetic-algorithm location-estimato
 - `results/6_realworld_external_battery/`
 - `results/7_random_dirichlet_abstain_audit/`
 
-Large checkpoints, per-task outputs, logs, raw downloads, and RDS files are not committed here; see *Data Availability* in `README.md`.
-The committed result layer is intended for review and audit. It keeps final tables,
-diagnostics, reports, run metadata, and split audit-ready CSVs, while excluding the
-multi-gigabyte checkpoint and raw-download folders.
+Large checkpoints, per-task outputs, recovery logs, and raw downloaded datasets are not committed. The repository keeps the code and the result layer needed to inspect the main findings and their audit trail.
