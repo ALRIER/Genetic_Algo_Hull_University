@@ -1,13 +1,15 @@
 # =============================================================================
-# RUN POST-DISCOVERY FIXED-WEIGHT VALIDATION
+# run_fixed_weight_validation.R
 # =============================================================================
-# Usage from terminal:
-#   PROJECT_ROOT=/path/to/original/code \
-#   DISCOVERY_ROOT=/path/to/2026_May_25_Finals \
+# Entry point for Phase 2 post-discovery fixed-weight validation.
+# Candidate weights remain frozen throughout this stage.
+#
+# Example:
+#   PROJECT_ROOT=/path/to/code/3_validation_nest26 \
+#   DISCOVERY_ROOT=/path/to/results/3_validation_nest26 \
 #   Rscript run_fixed_weight_validation.R
 #
-# Ultra-fast functionality check:
-#   FIXED_WEIGHT_VALIDATION_SMOKE=1 ... Rscript run_fixed_weight_validation.R
+# Set FIXED_WEIGHT_VALIDATION_SMOKE=1 for a minimal functionality check.
 # =============================================================================
 
 args <- commandArgs(trailingOnly = FALSE)
@@ -15,12 +17,12 @@ this_file <- sub("^--file=", "", args[grep("^--file=", args)])
 this_dir <- if (length(this_file)) dirname(normalizePath(this_file, winslash = "/")) else getwd()
 
 source(file.path(this_dir, "config", "fixed_weight_validation_config.R"))
-source(file.path(this_dir, "R", "00_q1_helpers.R"))
+source(file.path(this_dir, "R", "00_validation_helpers.R"))
 source(file.path(this_dir, "R", "01_select_regimes.R"))
-source(file.path(this_dir, "R", "02_extra_benchmarks.R"))
-source(file.path(this_dir, "R", "03_q1_validation_run.R"))
+source(file.path(this_dir, "R", "02_expanded_benchmarks.R"))
+source(file.path(this_dir, "R", "03_fixed_weight_validation_run.R"))
 source(file.path(this_dir, "R", "04_bootstrap_ci.R"))
-source(file.path(this_dir, "R", "05_q1_tables_figures.R"))
+source(file.path(this_dir, "R", "05_tables_figures.R"))
 source(file.path(this_dir, "R", "06_locked_unseen_regimes.R"))
 
 q1_apply_smoke_overrides <- function(config) {

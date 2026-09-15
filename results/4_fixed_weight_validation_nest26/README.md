@@ -1,9 +1,13 @@
-# 04 Expanded Post-Discovery Fixed-Weight Validation NEST26
+# Phase 2 Fixed-Weight Validation Results (N_EST = 26)
 
-This stage contains the expanded fixed-weight validation run for the larger estimator set.
+This folder contains the post-discovery validation of frozen Phase 2 candidates using the expanded estimator basis. Candidate weights are evaluated without further optimization.
 
-Key contents:
+## Folder contents
 
-- `raw_full_run_output_with_tasks_checkpoints_20260611`: complete validation output, including checkpoints, task-level files, logs, tables, figures, and audit files.
+- `strict_validation_tables/`: final decisions and estimator-level validation tables.
+- `root_summaries/`: bootstrap, stability, selected-regime, and seed-level summaries.
+- `figures/`: validation figures.
+- `audit/`: benchmark registry, configuration snapshot, code hashes, and regime-construction records.
+- `run_metadata/`: task and runtime metadata for the completed validation run.
 
-This folder is large because it retains the full computational record. For reporting, prefer the distilled evidence taxonomy in `05_EVIDENCE_TAXONOMY_NEST26`.
+The distilled candidate classification produced from this stage is available in `../5_evidence_taxonomy_nest26/`.

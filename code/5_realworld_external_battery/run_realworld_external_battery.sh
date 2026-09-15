@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 export PROJECT_ROOT="${PROJECT_ROOT:-$SCRIPT_DIR}"
 export VALIDATION_RESULTS_ROOT="${VALIDATION_RESULTS_ROOT:-$REPO_ROOT}"
