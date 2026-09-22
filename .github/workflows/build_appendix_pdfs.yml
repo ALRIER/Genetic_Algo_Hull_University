@@ -1,0 +1,41 @@
+name: Build repository appendix PDFs
+
+on:
+  push:
+    paths:
+      - '.appendix_pdf_build/READY'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reconstruct PDFs
+        shell: bash
+        run: |
+          set -euo pipefail
+          build=.appendix_pdf_build
+          out=Publication_Appendices
+          cat "$build/Repository_Appendix_A_Locked_Unseen_Regimes".part* | base64 -d > "$out/Repository_Appendix_A_Locked_Unseen_Regimes.pdf"
+          cat "$build/Repository_Appendix_B_Audits_and_Diagnostics".part* | base64 -d > "$out/Repository_Appendix_B_Audits_and_Diagnostics.pdf"
+          cat "$build/Repository_Appendix_C_Theory_and_Methods".part* | base64 -d > "$out/Repository_Appendix_C_Theory_and_Methods.pdf"
+          file "$out"/*.pdf
+          rm -f "$out/Repository_Appendix_A_Locked_Unseen_Regimes.tex"
+          rm -f "$out/Repository_Appendix_B_Audits_and_Diagnostics.tex"
+          rm -f "$out/Repository_Appendix_C1_Theory_and_Conditional_Properties.tex"
+          rm -f "$out/Repository_Appendix_C2_Search_Simulation_and_Initial_Validation.tex"
+          rm -f "$out/Repository_Appendix_C3_Expanded_and_External_Validation.tex"
+          rm -rf "$build"
+          rm -f .github/workflows/build_appendix_pdfs.yml
+      - name: Commit PDFs
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Convert repository appendices A-C to PDF"
+          git push
