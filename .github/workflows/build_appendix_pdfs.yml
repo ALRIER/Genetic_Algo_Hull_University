@@ -70,7 +70,7 @@ jobs:
             } >> "$work/$name.tex"
             for f in "$@"; do cat "$GITHUB_WORKSPACE/$f" >> "$work/$name.tex"; done
             echo '\\end{document}' >> "$work/$name.tex"
-            (cd "$work" && pdflatex -interaction=nonstopmode -halt-on-error "$name.tex" >/dev/null)
+            (cd "$work" && pdflatex -interaction=nonstopmode -file-line-error -halt-on-error "$name.tex")
             cp "$work/$name.pdf" "$out/$name.pdf"
           }
           build_one "Repository_Appendix_A_Locked_Unseen_Regimes" "Repository Appendix A: Construction of the locked-unseen related regimes" "Publication_Appendices/Repository_Appendix_A_Locked_Unseen_Regimes.tex"
