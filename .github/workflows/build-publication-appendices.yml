@@ -1,0 +1,95 @@
+name: Build publication appendices as PDFs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/build-publication-appendices.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare standalone appendix documents
+        shell: bash
+        run: |
+          cat > appendix_preamble.tex <<'EOF'
+          \documentclass[11pt]{article}
+          \usepackage[margin=1in]{geometry}
+          \usepackage{amsmath,amssymb,amsfonts,amsthm}
+          \usepackage{booktabs}
+          \usepackage{array}
+          \usepackage{multirow}
+          \usepackage{float}
+          \usepackage{placeins}
+          \usepackage{rotating}
+          \usepackage{graphicx}
+          \usepackage[hidelinks]{hyperref}
+          \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+          \DeclareMathOperator*{\argmin}{arg\,min}
+          \DeclareMathOperator*{\argmax}{arg\,max}
+          \newtheorem{proposition}{Proposition}
+          \providecommand{\citep}[2][]{}
+          \providecommand{\citet}[2][]{}
+          \setlength{\parindent}{0pt}
+          \setlength{\parskip}{0.6em}
+          \begin{document}
+          EOF
+
+          cat appendix_preamble.tex > build_A.tex
+          cat Publication_Appendices/Repository_Appendix_A_Locked_Unseen_Regimes.tex >> build_A.tex
+          echo '\end{document}' >> build_A.tex
+
+          cat appendix_preamble.tex > build_B.tex
+          cat >> build_B.tex <<'EOF'
+          \renewcommand{\includegraphics}[2][]{\fbox{\parbox{0.88\linewidth}{Figure referenced in the manuscript assets: \texttt{#2}}}}
+          EOF
+          cat Publication_Appendices/Repository_Appendix_B_Audits_and_Diagnostics.tex >> build_B.tex
+          echo '\end{document}' >> build_B.tex
+
+          cat appendix_preamble.tex > build_C.tex
+          cat Publication_Appendices/Repository_Appendix_C1_Theory_and_Conditional_Properties.tex >> build_C.tex
+          cat Publication_Appendices/Repository_Appendix_C2_Search_Simulation_and_Initial_Validation.tex >> build_C.tex
+          cat Publication_Appendices/Repository_Appendix_C3_Expanded_and_External_Validation.tex >> build_C.tex
+          echo '\end{document}' >> build_C.tex
+
+      - name: Compile PDFs
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: |
+            build_A.tex
+            build_B.tex
+            build_C.tex
+
+      - name: Replace source appendices with readable PDFs
+        shell: bash
+        run: |
+          mv build_A.pdf Publication_Appendices/Repository_Appendix_A_Locked_Unseen_Regimes.pdf
+          mv build_B.pdf Publication_Appendices/Repository_Appendix_B_Audits_and_Diagnostics.pdf
+          mv build_C.pdf Publication_Appendices/Repository_Appendix_C_Theory_and_Methodological_Details.pdf
+          rm -f Publication_Appendices/Repository_Appendix_A_Locked_Unseen_Regimes.tex
+          rm -f Publication_Appendices/Repository_Appendix_B_Audits_and_Diagnostics.tex
+          rm -f Publication_Appendices/Repository_Appendix_C1_Theory_and_Conditional_Properties.tex
+          rm -f Publication_Appendices/Repository_Appendix_C2_Search_Simulation_and_Initial_Validation.tex
+          rm -f Publication_Appendices/Repository_Appendix_C3_Expanded_and_External_Validation.tex
+          rm -f build_A.tex build_B.tex build_C.tex appendix_preamble.tex
+          rm -f *.aux *.log *.out *.fls *.fdb_latexmk
+
+      - name: Commit generated PDFs
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Publication_Appendices
+          if git diff --cached --quiet; then
+            echo "No appendix changes to commit."
+          else
+            git commit -m "Convert publication appendices A-C to PDF"
+            git push
+          fi
